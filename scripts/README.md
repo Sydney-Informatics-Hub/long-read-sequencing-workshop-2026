@@ -21,6 +21,79 @@ This directory contains all of the final scripts we will build during the worksh
 10. `10.plasmid_comparison.sh`: Perform a multiple sequence alignment on the plasmid sequences to detect similarities.
 11. `11.strain_id.sh`: Identify bacterial strains with cgMLST.
 
+## Workshop outline
+
+1. Day 1
+    1. Introduction
+        - Introduction to workshop & learning objectives
+        - General overview of long read sequencing and applications to bacterial genome analysis
+        - Introduce samples we're using and the context of hospital-aquired infections and antibiotic resistance
+        - Format: lecture with slides
+    2. Long read sequencing QC
+        - Introductory lecture with slides
+            - Discuss tools and metrics for QC analysis
+        - Exercises:
+            - Performing qequencing run and FASTQ quality control
+            - Inspecting and interpreting QC reports
+    3. Species identification and contaimination analysis
+        - Introductory lecture with slides
+            - Discuss methods for detecting species of origin of reads, and discuss identifying and removing contaminating reads
+        - Exercises:
+            - Run Kraken2 to detect species of origin of reads
+            - Remove host genes by aligning to human reference and discarding mapped genes
+                - **Note:** could be skipped, left to participants to try out for themselves
+    4. Bacterial genome assembly
+        - Introductory lecture with slides
+            - Discuss how assembly works, esp. in context of bacterial genomics
+                - E.g. trying to identify circularised genomes
+            - Discuss main metrics for assessing assembly quality
+                - N50, L50, etc.
+        - Exercises:
+            - Run Flye to assemble bacterial genomes
+            - Run Plassembler to identify potential plasmids that Flye missed
+            - Run another assembler (e.g. Raven) to create an alternate assembly for consensus assembly
+            - Perform assembly QC and visualisation
+            - Inspect and interpret QC reports
+2. Day 2
+    1. Introduction
+        - Recap day 1
+        - Overview of Day 2 learning objectives
+        - Format: lecture with slides
+    2. Consensus assemblies
+        - Introductory lecture with slides
+            - Discuss the benefits of constructing a consensus assembly
+        - Exercises:
+            - Run Autocycler to generate a consensus assembly
+            - Perform assembly QC and visualisation
+            - Inspect and interpret QC reports
+        - **Note:** could be skipped, left to participants to try out for themselves
+    3. Assembly polishing
+        - Introductory lecture with slides
+            - Discuss the need for assembly polishing and methods available
+        - Exercises:
+            - Run medaka to polish the genome assembly
+            - Perform assembly QC and visualisation
+            - Inspect and interpret QC reports
+    4. Genome annotation
+        - Introductory lecture with slides
+            - Discuss annotation options
+            - Discuss the goal for the lesson: annotating AMR genes
+        - Exercises:
+            - Run AMRFinderPlus on genome assembly
+            - Run Abricate on genome assembly
+            - Integrate and inspect results of AMR gene annotation
+            - Identify location of AMR genes in genome: chromosome vs plasmids
+    5. Comparitive genomics
+        - Introductory lecture with slides
+            - Discuss the goal for the lesson: identifying plasmid sequence similarity between samples, identifying horizontal gene transfer events
+            - Recap the origin of each sample and the timeline of infections
+        - Exercises:
+            - Perform phylogenetic analysis of samples
+            - Identify bacterial strains with cgMLST
+                - **Note:** could be skipped, left to participants to try out for themselves
+            - Perform multiple sequence alignment of plasmids
+            - Interpret results: almost identical plasmids in two different species - horizontal gene transfer
+
 ## Container images
 
 The following container images are being used for each tool:
