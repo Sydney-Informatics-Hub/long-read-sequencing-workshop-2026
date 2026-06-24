@@ -7,4 +7,4 @@ mkdir -p qc/nanoplot
 NanoPlot \
     --summary ${SEQ_SUMMARY} \
     --loglength \
-    -o qc/nanoplot_summary
+    -o qc/nanoplot/summary
