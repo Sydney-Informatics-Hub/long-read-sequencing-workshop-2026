@@ -34,6 +34,16 @@ done
 
 **Note** that this command relies on the `seqkit` tool. We used the Docker image `quay.io/biocontainers/seqkit:2.13.0--he881be0_0` to run the above command.
 
+## Creating pre-filtered FASTQ files
+
+The full FASTQ files were also pre-filtered for use in the assembly lesson, since filtering the sub-sampled FASTQs would result in too few reads for full assembly. The FASTQs were filtered similar to in the original study, using `filtlong` with a minimum read length of 1kb (the same as the study) and a target total number of bases per sample of 250 million (half the value used in the study).
+
+```bash
+for f in *.fastq; do
+    filtlong --min_length 1kb --target_bases 250mb $f > $(basename $f .fastq).filtered.fastq
+done
+```
+
 ## Creating modules on training VMs
 
 The training VMs use BioShell, which makes a wide variety of container images available via the CVMFS shared file system. BioShell also provides `shpc` which allows you to build modules that can expose these container images as regular commands. We used the following general steps to use `shpc` and create modules for the various tools used in the workshop:
