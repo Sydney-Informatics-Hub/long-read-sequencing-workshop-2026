@@ -1,4 +1,5 @@
 #!/bin/bash
+shopt -s expand_aliases
 
 SEQ_SUMMARY=data/sequencing_summary.txt
 

@@ -113,6 +113,10 @@ The following container images are being used for each tool:
 | Bandage | docker://quay.io/biocontainers/bandage:0.9.0--h9948957_0 |
 | medaka | docker://quay.io/biocontainers/medaka:2.2.2--py312h3050eb1_0 |
 
+### Install script
+
+See the installation script [`install.sh`](install.sh) for the commands used to install the above containers via BioShell. Also see the [development documentation](../dev/development.md) for more information on installing BioContainer modules on the VMs.
+
 ## Databases
 
 The following tools require databases:
