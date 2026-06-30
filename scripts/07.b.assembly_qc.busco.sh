@@ -1,5 +1,6 @@
 #!/bin/bash
 shopt -s expand_aliases
+module load busco
 
 set -euo pipefail
 

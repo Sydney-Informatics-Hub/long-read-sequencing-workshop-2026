@@ -1,5 +1,6 @@
 #!/bin/bash
 shopt -s expand_aliases
+module load nanoplot
 
 SEQ_SUMMARY=data/sequencing_summary.txt
 

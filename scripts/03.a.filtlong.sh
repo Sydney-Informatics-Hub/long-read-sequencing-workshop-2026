@@ -1,5 +1,6 @@
 #!/bin/bash
 shopt -s expand_aliases
+module load filtlong
 
 set -euo pipefail
 
