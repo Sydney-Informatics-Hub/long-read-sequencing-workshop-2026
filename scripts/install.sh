@@ -12,3 +12,4 @@ shelley-bio build quast/5.3.0--py313pl5321h5ca1c30_2
 shelley-bio build busco/6.1.0--pyhdfd78af_1
 shelley-bio build bandage/0.9.0--h9948957_0
 shelley-bio build medaka/2.2.2--py312h3050eb1_0
+shelley-bio build bakta/1.12.0--pyhdfd78af_0

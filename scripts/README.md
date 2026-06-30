@@ -17,9 +17,10 @@ This directory contains all of the final scripts we will build during the worksh
 6. `06.consensus.sh`: Consensus assembly creation with Autocycler.
 7. `07.assembly_qc.sh`: Assembly quality control and visualisation with QUAST, BUSCO, MultiQC, and Bandage.
 8. `08.polish.sh`: Assembly polishing with Medaka.
-9. `09.amr_gene_detection.sh`: Detect antimicrobial resistance (AMR) and virulence genes with AMRFinderPlus and ABRicate.
-10. `10.plasmid_comparison.sh`: Perform a multiple sequence alignment on the plasmid sequences to detect similarities.
-11. `11.strain_id.sh`: Identify bacterial strains with cgMLST.
+9. `09.annotate.sh`: Perform genome annotation with Bakta.
+10. `10.amr_gene_detection.sh`: Detect antimicrobial resistance (AMR) and virulence genes with AMRFinderPlus and ABRicate.
+11. `11.plasmid_comparison.sh`: Perform a multiple sequence alignment on the plasmid sequences to detect similarities.
+12. `12.strain_id.sh`: Identify bacterial strains with cgMLST.
 
 ## Workshop outline
 
