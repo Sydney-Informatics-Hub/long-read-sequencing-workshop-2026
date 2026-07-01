@@ -9,8 +9,8 @@ ID="${2}"
 mkdir -p annotate/${ID}
 
 bakta ${ASSEMBLY} \
-    --db /cvmfs/data.galaxyproject.org/byhand/bakta_database/10522951 \
+    --db data/ref/bakta \
     --output annotate/${ID}/ \
     --prefix ${ID} \
     --force \
-    --threads 3\
+    --threads 3
