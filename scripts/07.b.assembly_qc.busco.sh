@@ -8,7 +8,7 @@ ASSEMBLY="${1}"
 ID="${2}"
 
 mkdir -p qc/assembly/busco/
-mkdir qc/assembly/busco/${ID}
+mkdir -p qc/assembly/busco/${ID}
 
 busco \
     --in ${ASSEMBLY} \

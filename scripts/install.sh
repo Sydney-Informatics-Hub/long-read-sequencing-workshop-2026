@@ -13,3 +13,5 @@ shelley-bio build busco/6.1.0--pyhdfd78af_1
 shelley-bio build bandage/0.9.0--h9948957_0
 shelley-bio build medaka/2.2.2--py312h3050eb1_0
 shelley-bio build bakta/1.12.0--pyhdfd78af_0
+shelley-bio build ncbi-amrfinderplus/4.2.7--hf69ffd2_0
+shelley-bio build autocycler/0.5.2--h3ab6199_0

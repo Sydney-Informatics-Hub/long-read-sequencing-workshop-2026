@@ -113,6 +113,9 @@ The following container images are being used for each tool:
 | BUSCO | docker://quay.io/biocontainers/busco:6.1.0--pyhdfd78af_1 |
 | Bandage | docker://quay.io/biocontainers/bandage:0.9.0--h9948957_0 |
 | medaka | docker://quay.io/biocontainers/medaka:2.2.2--py312h3050eb1_0 |
+| bakta | docker://quay.io/biocontainers/bakta:1.12.0--pyhdfd78af_0 |
+| ncbi-amrfinderplus | docker://quay.io/biocontainers/ncbi-amrfinderplus:4.2.7--hf69ffd2_0 |
+| Autocycler | docker://quay.io/biocontainers/autocycler:0.5.2--h3ab6199_0 |
 
 ### Install script
 

@@ -8,8 +8,9 @@ ASSEMBLY="${1}"
 ID="${2}"
 
 mkdir -p qc/assembly/bandage/
-mkdir qc/assembly/bandage/${ID}
+mkdir -p qc/assembly/bandage/${ID}
 
+bandage_exec \
 Bandage image \
     ${ASSEMBLY} \
     qc/assembly/bandage/${ID}/${ID}.assembly.svg

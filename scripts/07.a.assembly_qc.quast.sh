@@ -8,7 +8,7 @@ ASSEMBLY="${1}"
 ID="${2}"
 
 mkdir -p qc/assembly/quast/
-mkdir qc/assembly/quast/${ID}
+mkdir -p qc/assembly/quast/${ID}
 
 quast \
     ${ASSEMBLY} \
