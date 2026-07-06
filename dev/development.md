@@ -22,6 +22,15 @@ SRR11909885.fastq
 
 **Note** that this command relies on the `fasterq-dump` tool, which is part of the `sra-tools` package. We used the `ncbi/sra-tools:3.4.1` Docker image to run the above command.
 
+The following commands were used to download the FASTQs from the [XYZ publication]():
+
+```bash
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR828/003/ERR8282753/ERR8282753.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR828/002/ERR8282752/ERR8282752.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR828/001/ERR8282751/ERR8282751.fastq.gz
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR828/002/ERR8282742/ERR8282742.fastq.gz
+```
+
 ## Creating subsampled FASTQ files
 
 The FASTQs were subsampled to extract 10% of their reads for use within the workshop:
