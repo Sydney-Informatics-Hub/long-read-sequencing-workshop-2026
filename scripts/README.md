@@ -116,6 +116,7 @@ The following container images are being used for each tool:
 | bakta | docker://quay.io/biocontainers/bakta:1.12.0--pyhdfd78af_0 |
 | ncbi-amrfinderplus | docker://quay.io/biocontainers/ncbi-amrfinderplus:4.2.7--hf69ffd2_0 |
 | Autocycler | docker://quay.io/biocontainers/autocycler:0.5.2--h3ab6199_0 |
+| MUMmer | docker://quay.io/biocontainers/mummer:3.23--pl526_6 |
 
 ### Install script
 
