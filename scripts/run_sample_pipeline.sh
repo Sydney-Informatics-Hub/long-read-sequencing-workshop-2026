@@ -6,11 +6,11 @@ set -euo pipefail
 K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari database
 PLASSEMBLER_DB=/home/tdev2/data/ref/plassembler/plasmid_db_plassembler             # Plassembler plasmid database
 BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2        # BUSCO lineage dataset (offline)
-AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/amrfinderplus_V3.12_2024-05-02.2
+AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/4.2/2026-05-15.1
 BAKTA_DB=/home/tdev2/data/ref/bakta_database/7669534
 
 # ─── Thread count ─────────────────────────────────────────────────────────────
-THREADS=1
+THREADS=2
 
 # ─── Skip flags ───────────────────────────────────────────────────────────────
 skip_fastqc=0
@@ -26,7 +26,8 @@ skip_bakta=0
 skip_multiqc=0
 chromosome_contig=""
 OUTPUT_DIR="$(pwd)"
-
+# --skip-fastqc --skip-trim --skip-species-id --skip-flye --skip-plassembler --skip-consensus --skip-polish --skip-assembly-qc --skip-amrfinder --skip-bakta
+# bash run_sample_pipeline.sh --output-dir /home/tdev2/analysis --skip-fastqc --skip-trim --skip-species-id --skip-flye --skip-plassembler --skip-consensus --skip-bakta /home/tdev2/data/SAMEA5226451_A.baumannii/ERR8282753.fastq.gz > /home/tdev2/analysis/logs/ERR8282753/log04 2> /home/tdev2/analysis/logs/ERR8282753/err04
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 usage() {
     echo "Usage: run_sample_pipeline.sh [options] <fastq|fastq.gz>"
@@ -61,19 +62,50 @@ die() {
     exit 1
 }
 
-find_first_file() {
-    local search_dir="$1"
-    shift
-    local pattern
-    for pattern in "$@"; do
-        while IFS= read -r candidate; do
-            if [[ -n "${candidate}" && -s "${candidate}" ]]; then
-                printf '%s\n' "${candidate}"
-                return 0
-            fi
-        done < <(find "${search_dir}" -maxdepth 3 -type f -name "${pattern}" | sort)
-    done
-    return 1
+run_assembly_qc_stage() {
+    local qc_id="$1"
+    local assembly_path="$2"
+    local bandage_graph="${3:-}"
+
+    [[ ${skip_assembly_qc} -eq 0 ]] || return 0
+
+    if [[ ! -s "${assembly_path}" ]]; then
+        log "QC (${qc_id}) skipped (missing assembly: ${assembly_path})"
+        return 0
+    fi
+
+    log "QC (${qc_id}): QUAST"
+    mkdir -p "qc/assembly/quast/${qc_id}"
+    quast \
+        "${assembly_path}" \
+        --labels "${qc_id}" \
+        --output-dir "qc/assembly/quast/${qc_id}" \
+        --threads "${THREADS}"
+
+    log "QC (${qc_id}): BUSCO"
+    mkdir -p "qc/assembly/busco/${qc_id}"
+
+    # Bind /cvmfs so Singularity can find the database
+    export SINGULARITY_COMMAND_OPTS="-B /cvmfs"
+
+    busco \
+        --in "${assembly_path}" \
+        --out "qc/assembly/busco/${qc_id}" \
+        --mode genome \
+        --lineage_dataset "${BUSCO_DB}" \
+        --force \
+        --offline \
+        --cpu "${THREADS}"
+
+    if [[ -n "${bandage_graph}" && -s "${bandage_graph}" ]]; then
+        log "QC (${qc_id}): Bandage"
+        mkdir -p "qc/assembly/bandage/${qc_id}"
+        bandage-exec Bandage image \
+            "${bandage_graph}" \
+            "qc/assembly/bandage/${qc_id}/${qc_id}.assembly.svg"
+    else
+        log "QC (${qc_id}): Bandage skipped (no assembly graph found)"
+    fi
 }
 
 # ─── Argument parsing ─────────────────────────────────────────────────────────
@@ -127,14 +159,14 @@ log "Output dir   : ${OUTPUT_DIR}"
 
 # ─── Step 1 · FastQC ──────────────────────────────────────────────────────────
 if [[ ${skip_fastqc} -eq 0 ]]; then
-    log "Step 1: FastQC"
+    log "Step 1: FastQC (pre-trim)"
 
-    mkdir -p qc/fastqc/${current_id}
+    mkdir -p qc/fastqc/${sample_id}/pre_trim
 
     fastqc \
         -f fastq \
-        -o qc/fastqc/${current_id} \
-        ${current_fastq}
+        -o qc/fastqc/${sample_id}/pre_trim \
+        ${input_fastq}
 fi
 
 # ─── Step 2 · Read trimming (fastplong) ───────────────────────────────────────
@@ -164,6 +196,17 @@ if [[ -s "${trimmed_fastq}" ]]; then
 else
     current_fastq="${input_fastq}"
     current_id="${sample_id}"
+fi
+
+if [[ ${skip_fastqc} -eq 0 ]]; then
+    log "Step 2b: FastQC (post-trim)"
+
+    mkdir -p qc/fastqc/${sample_id}/post_trim
+
+    fastqc \
+        -f fastq \
+        -o qc/fastqc/${sample_id}/post_trim \
+        ${current_fastq}
 fi
 
 # ─── Step 3 · Species identification (Kraken2) ────────────────────────────────
@@ -200,6 +243,11 @@ if [[ ${skip_flye} -eq 0 ]]; then
 
     [[ -s "${flye_dir}/assembly.fasta" ]] || \
         die "Flye assembly missing: ${flye_dir}/assembly.fasta"
+
+    run_assembly_qc_stage \
+        "${current_id}.flye" \
+        "${flye_dir}/assembly.fasta" \
+        "${flye_dir}/assembly_graph.gfa"
 fi
 
 # ─── Step 4b · Plassembler ────────────────────────────────────────────────────
@@ -220,10 +268,26 @@ if [[ ${skip_plassembler} -eq 0 ]]; then
         -t ${THREADS} \
         -f \
         -o assembly/${current_id}/plassembler
+
+    plassembler_qc_assembly=""
+    for candidate in \
+        "assembly/${current_id}/plassembler/plassembler_chromosome.fasta" \
+        "assembly/${current_id}/plassembler/assembly.fasta" \
+        "assembly/${current_id}/plassembler/plassembler_plasmids.fasta"; do
+        if [[ -s "${candidate}" ]]; then
+            plassembler_qc_assembly="${candidate}"
+            break
+        fi
+    done
+
+    run_assembly_qc_stage "${current_id}.plassembler" "${plassembler_qc_assembly}"
 fi
 
 # ─── Step 5 · Autocycler subsampling + consensus ──────────────────────────────
 assembly_for_polish=""
+CONSENSUSDIR=assembly/${current_id}/consensus
+AUTOCYCLERDIR=${CONSENSUSDIR}/autocycler
+existing_consensus_assembly="${AUTOCYCLERDIR}/consensus_assembly.fasta"
 
 if [[ ${skip_consensus} -eq 0 ]]; then
     log "Step 5a: Autocycler subsampling"
@@ -237,6 +301,8 @@ if [[ ${skip_consensus} -eq 0 ]]; then
         --out_dir ${SUBSAMPLE_DIR} \
         --count 4 \
         --genome_size 5000000
+        #  \
+        # --min_read_depth 10
 
     # Prefix subsampled FASTQs with the sample ID
     for f in ${SUBSAMPLE_DIR}/*.fastq; do
@@ -245,17 +311,19 @@ if [[ ${skip_consensus} -eq 0 ]]; then
 
     log "Step 5b: Autocycler consensus"
 
-    CONSENSUSDIR=assembly/${current_id}/consensus
     ASSEMBLYDIR=${CONSENSUSDIR}/assemblies
     mkdir -p ${ASSEMBLYDIR}
 
-    for ASSEMBLER in flye plassembler; do
-        ASSEMBLY=$(find assembly/${current_id}/${ASSEMBLER}/ -maxdepth 1 -type f -name "*.fasta" | head -n 1)
+    for ASSEMBLER in flye plassembler; do        
+        if [[ "${ASSEMBLER}" == "flye" ]]; then
+            ASSEMBLY="assembly/${current_id}/flye/assembly.fasta"
+        elif [[ "${ASSEMBLER}" == "plassembler" ]]; then
+            ASSEMBLY="assembly/${current_id}/plassembler/plassembler_plasmids.fasta"
+        fi
         [[ -s "${ASSEMBLY}" ]] || continue
         ln -sf "${PWD}/${ASSEMBLY}" "${ASSEMBLYDIR}/${current_id}.${ASSEMBLER}.fasta"
     done
 
-    AUTOCYCLERDIR=${CONSENSUSDIR}/autocycler
     mkdir -p ${AUTOCYCLERDIR}
 
     autocycler compress \
@@ -285,27 +353,74 @@ if [[ ${skip_consensus} -eq 0 ]]; then
         --autocycler_dir ${AUTOCYCLERDIR} \
         --name consensus >> ${CONSENSUSDIR}/autocycler_metrics.tsv
 
-    if assembly_for_polish=$(find_first_file "${CONSENSUSDIR}" "consensus*.fasta" "*.fasta"); then
+    assembly_for_polish="${AUTOCYCLERDIR}/consensus_assembly.fasta"
+
+    if [[ -s "${assembly_for_polish}" ]]; then
         log "Using consensus assembly: ${assembly_for_polish}"
+        run_assembly_qc_stage \
+            "${current_id}.consensus" \
+            "${assembly_for_polish}" \
+            "${AUTOCYCLERDIR}/consensus_assembly.gfa"
     else
-        die "Consensus assembly not found under ${CONSENSUSDIR}"
+            die "Consensus assembly ${assembly_for_polish} not found"
     fi
 fi
 
+if [[ -z "${assembly_for_polish}" && -s "${existing_consensus_assembly}" ]]; then
+    assembly_for_polish="${existing_consensus_assembly}"
+    log "Using existing consensus assembly: ${assembly_for_polish}"
+fi
+
 if [[ -z "${assembly_for_polish}" ]]; then
-    assembly_for_polish="${flye_dir}/assembly.fasta"
-    [[ -s "${assembly_for_polish}" ]] || die "No assembly available for polishing/QC"
+    flye_assembly="${flye_dir}/assembly.fasta"
+    plassembler_assembly=""
+
+    for candidate in \
+        "assembly/${current_id}/plassembler/plassembler_chromosome.fasta" \
+        "assembly/${current_id}/plassembler/assembly.fasta"; do
+        if [[ -s "${candidate}" ]]; then
+            plassembler_assembly="${candidate}"
+            break
+        fi
+    done
+
+    if [[ -z "${plassembler_assembly}" && -d "assembly/${current_id}/plassembler" ]]; then
+        restore_nullglob=0
+        shopt -q nullglob && restore_nullglob=1
+        shopt -s nullglob
+
+        for candidate in \
+            assembly/${current_id}/plassembler/*.fasta \
+            assembly/${current_id}/plassembler/*/*.fasta; do
+            if [[ -s "${candidate}" ]]; then
+                plassembler_assembly="${candidate}"
+                break
+            fi
+        done
+
+        if [[ ${restore_nullglob} -eq 0 ]]; then
+            shopt -u nullglob
+        fi
+    fi
+
+    if [[ -s "${flye_assembly}" ]]; then
+        assembly_for_polish="${flye_assembly}"
+        log "Using Flye assembly: ${assembly_for_polish}"
+    elif [[ -n "${plassembler_assembly}" && -s "${plassembler_assembly}" ]]; then
+        assembly_for_polish="${plassembler_assembly}"
+        log "Using Plassembler assembly: ${assembly_for_polish}"
+    else
+        die "No assembly available for polishing/QC"
+    fi
 fi
 
 # ─── Step 6 · Medaka polishing ────────────────────────────────────────────────
 final_assembly="${assembly_for_polish}"
+medaka_dir=assembly/${current_id}/medaka
+existing_polished_assembly="${medaka_dir}/consensus.fasta"
 
 if [[ ${skip_polish} -eq 0 ]]; then
     log "Step 6: Medaka polishing"
-    
-
-    medaka_dir=assembly/${current_id}/medaka
-    mkdir -p ${medaka_dir}
 
     medaka_consensus \
         -i ${current_fastq} \
@@ -313,62 +428,46 @@ if [[ ${skip_polish} -eq 0 ]]; then
         -o ${medaka_dir} \
         -t ${THREADS}
 
-    if final_assembly=$(find_first_file "${medaka_dir}" "consensus*.fasta" "*.fasta"); then
+    final_assembly="${medaka_dir}/consensus.fasta"
+    if [[ -s "${final_assembly}" ]]; then
         log "Using polished assembly: ${final_assembly}"
+        run_assembly_qc_stage "${current_id}.medaka" "${final_assembly}"
     else
         die "Medaka assembly not found under ${medaka_dir}"
     fi
+elif [[ -s "${existing_polished_assembly}" ]]; then
+    final_assembly="${existing_polished_assembly}"
+    log "Using existing polished assembly: ${final_assembly}"
 fi
 
 # ─── Step 7 · Assembly QC ─────────────────────────────────────────────────────
 if [[ ${skip_assembly_qc} -eq 0 ]]; then
     qc_id="${current_id}.final"
 
-    log "Step 7a: QUAST"
-    
-
-    mkdir -p qc/assembly/quast/${qc_id}
-
-    quast \
-        ${final_assembly} \
-        --labels ${qc_id} \
-        --output-dir qc/assembly/quast/${qc_id} \
-        --threads ${THREADS}
-
-    log "Step 7b: BUSCO"
-    
-
-    mkdir -p qc/assembly/busco/${qc_id}
-
-    busco \
-        --in ${final_assembly} \
-        --out qc/assembly/busco/${qc_id} \
-        --mode genome \
-        --lineage_dataset ${BUSCO_DB} \
-        --force \
-        --offline \
-        --cpu ${THREADS}
-
     bandage_graph=""
     if [[ -s "${flye_dir}/assembly_graph.gfa" ]]; then
         bandage_graph="${flye_dir}/assembly_graph.gfa"
-    elif [[ ${skip_consensus} -eq 0 ]]; then
-        bandage_graph=$(find_first_file "assembly/${current_id}/consensus" "*.gfa" || true)
+    elif [[ -d "${AUTOCYCLERDIR}" ]]; then
+        restore_nullglob=0
+        shopt -q nullglob && restore_nullglob=1
+        shopt -s nullglob
+
+        for candidate in \
+            ${AUTOCYCLERDIR}/consensus_assembly.gfa \
+            ${AUTOCYCLERDIR}/clustering/qc_pass/cluster_*/5_final.gfa \
+            ${AUTOCYCLERDIR}/*.gfa; do
+            if [[ -s "${candidate}" ]]; then
+                bandage_graph="${candidate}"
+                break
+            fi
+        done
+
+        if [[ ${restore_nullglob} -eq 0 ]]; then
+            shopt -u nullglob
+        fi
     fi
 
-    if [[ -n "${bandage_graph}" ]]; then
-        log "Step 7c: Bandage"
-        
-
-        mkdir -p qc/assembly/bandage/${qc_id}
-
-        bandage_exec \
-        Bandage image \
-            ${bandage_graph} \
-            qc/assembly/bandage/${qc_id}/${qc_id}.assembly.svg
-    else
-        log "Step 7c: Bandage skipped (no assembly graph found)"
-    fi
+    run_assembly_qc_stage "${qc_id}" "${final_assembly}" "${bandage_graph}"
 fi
 
 # ─── Step 8 · Extract plasmid contigs ─────────────────────────────────────────
@@ -390,6 +489,9 @@ if [[ ${skip_amrfinder} -eq 0 ]]; then
 
     mkdir -p annotate/${current_id}/amrfinder
 
+    # Bind /cvmfs so Singularity can find the database
+    export SINGULARITY_COMMAND_OPTS="-B /cvmfs"
+
     amrfinder \
         -n ${final_assembly} \
         -d ${AMRFINDER_DB} \
@@ -403,6 +505,9 @@ if [[ ${skip_bakta} -eq 0 ]]; then
     
 
     mkdir -p annotate/${current_id}
+
+    # Bind /cvmfs so Singularity can find the database
+    export SINGULARITY_COMMAND_OPTS="-B /cvmfs"
 
     bakta ${final_assembly} \
         --db ${BAKTA_DB} \
