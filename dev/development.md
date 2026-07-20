@@ -200,7 +200,7 @@ The following is an example of creating a simulated contaminated sample containi
 cp SRR11909877.filtered.fastq SRR11909877.filtered.contam.human.fastq
 
 # Append the NA12878 trimmed reads
-cat NA12878_DNA.trimmed.fastq >> SRR11909877.filtered.contam.human.fastq
+cat NA12878.subset.human.fastq >> SRR11909877.filtered.contam.human.fastq
 ```
 
 ## Software

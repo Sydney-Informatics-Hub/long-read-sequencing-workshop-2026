@@ -12,5 +12,6 @@ mkdir -p qc/fastqc/${ID}
 fastqc \
     -f fastq \
     -o qc/fastqc/${ID} \
+    --memory 2048 \
     ${FASTQ}
 
