@@ -8,11 +8,11 @@ FASTQ="${1}"
 ID=$(basename ${FASTQ} .fastq)
 
 mkdir -p trim_filter
-mkdir -p qc/fastplong_filter
+mkdir -p qc/fastplong
 
 fastplong \
     -i ${FASTQ} \
     -q 13 \
     -o trim_filter/${ID}.trimmed.filtered.fastq \
-    -h qc/fastplong_filter/${ID}.fastplong_report.html \
-    -j qc/fastplong_filter/${ID}.fastplong_report.json
+    -h qc/fastplong/${ID}.fastplong_filter_report.html \
+    -j qc/fastplong/${ID}.fastplong_filter_report.json
