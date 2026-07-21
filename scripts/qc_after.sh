@@ -20,8 +20,9 @@ while read -r FASTQ; do
         continue
     fi
 
-    ID=$(basename "$FASTQ" .fastq.gz)
-    ID=$(basename "$ID" .fq.gz)   # also handle .fq.gz
+    ID=$(basename "$FASTQ")
+    ID=${ID%.fastq.gz}
+    ID=${ID%.fastq}
 
     echo "Processing sample: $ID"
 

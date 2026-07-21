@@ -6,7 +6,7 @@ set -euo pipefail
 K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari database
 PLASSEMBLER_DB=/home/tdev2/data/ref/plassembler/plasmid_db_plassembler             # Plassembler plasmid database
 BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2        # BUSCO lineage dataset (offline)
-AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/4.2/2026-05-15.1
+AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/amrfinderplus_V3.11_2022-12-19.1
 BAKTA_DB=/home/tdev2/data/ref/bakta_database/7669534
 
 # ─── Thread count ─────────────────────────────────────────────────────────────
@@ -528,6 +528,20 @@ if [[ ${skip_multiqc} -eq 0 ]]; then
         -f \
         --fullnames \
         qc
+fi
+
+# ─── Step 12 · Compress uncompressed FASTQ files ─────────────────────────────
+log "Step 12: Compressing uncompressed FASTQ files"
+
+mapfile -d '' fastq_files < <(find . -type f -name "*.fastq" -print0)
+
+if [[ ${#fastq_files[@]} -eq 0 ]]; then
+    log "No uncompressed FASTQ files found"
+else
+    for fastq in "${fastq_files[@]}"; do
+        gzip -f "${fastq}"
+    done
+    log "Compressed ${#fastq_files[@]} FASTQ file(s)"
 fi
 
 # ─── Done ─────────────────────────────────────────────────────────────────────
