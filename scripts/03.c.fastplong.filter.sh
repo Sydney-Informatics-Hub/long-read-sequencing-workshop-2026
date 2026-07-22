@@ -13,6 +13,8 @@ mkdir -p qc/fastplong_filter
 fastplong \
     -i ${FASTQ} \
     -q 13 \
+    --mean_qual 13 \
+    --trim_poly_x \
     -o trim_filter/${ID}.trimmed.filtered.fastq \
     -h qc/fastplong_filter/${ID}.fastplong_report.html \
     -j qc/fastplong_filter/${ID}.fastplong_report.json
