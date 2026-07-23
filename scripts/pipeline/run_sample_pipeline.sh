@@ -4,9 +4,9 @@ set -euo pipefail
 
 # ─── Reference data paths ─────────────────────────────────────────────────────
 K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari database
-PLASSEMBLER_DB=/home/tdev2/data/ref/plassembler/plasmid_db_plassembler             # Plassembler plasmid database
+PLASSEMBLER_DB=/home/tdev2/data/ref/plasmid_db_plassembler             # Plassembler plasmid database
 BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2        # BUSCO lineage dataset (offline)
-AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/amrfinderplus_V3.11_2022-12-19.1
+AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/2026-05-15.1_4.2.7
 BAKTA_DB=/home/tdev2/data/ref/bakta_database/7669534
 
 # ─── Thread count ─────────────────────────────────────────────────────────────
