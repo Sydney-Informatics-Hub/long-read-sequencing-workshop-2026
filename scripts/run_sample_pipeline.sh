@@ -279,8 +279,6 @@ if [[ ${skip_plassembler} -eq 0 ]]; then
             break
         fi
     done
-
-    run_assembly_qc_stage "${current_id}.plassembler" "${plassembler_qc_assembly}"
 fi
 
 # ─── Step 5 · Autocycler subsampling + consensus ──────────────────────────────
