@@ -7,50 +7,55 @@ K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari d
 PLASSEMBLER_DB=/home/tdev2/data/ref/plasmid_db_plassembler             # Plassembler plasmid database
 BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2        # BUSCO lineage dataset (offline)
 AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/2026-05-15.1_4.2.7
-BAKTA_DB=/home/tdev2/data/ref/bakta_database/7669534
 
 # ─── Thread count ─────────────────────────────────────────────────────────────
 THREADS=2
 
-# ─── Skip flags ───────────────────────────────────────────────────────────────
-skip_fastqc=0
-skip_trim=0
-skip_species_id=0
-skip_flye=0
-skip_plassembler=0
-skip_consensus=0
-skip_polish=0
-skip_assembly_qc=0
-skip_amrfinder=0
-skip_bakta=0
-skip_multiqc=0
+# ─── Pipeline steps (execution order; also the vocabulary for --start-from) ───
+STEP_ORDER=(fastqc trim species-id flye plassembler consensus polish assembly-qc amrfinder multiqc)
+
+declare -A explicit_skip=()
+start_from=""
 chromosome_contig=""
 OUTPUT_DIR="$(pwd)"
-# --skip-fastqc --skip-trim --skip-species-id --skip-flye --skip-plassembler --skip-consensus --skip-polish --skip-assembly-qc --skip-amrfinder --skip-bakta
-# bash run_sample_pipeline.sh --output-dir /home/tdev2/analysis --skip-fastqc --skip-trim --skip-species-id --skip-flye --skip-plassembler --skip-consensus --skip-bakta /home/tdev2/data/SAMEA5226451_A.baumannii/ERR8282753.fastq.gz > /home/tdev2/analysis/logs/ERR8282753/log04 2> /home/tdev2/analysis/logs/ERR8282753/err04
+
+# Example: resume polishing from existing Flye/Plassembler outputs, treating consensus as excluded:
+# bash run_sample_pipeline.sh --output-dir /home/tdev2/analysis --start-from polish --skip-consensus /home/tdev2/data/SAMEA5226451_A.baumannii/ERR8282753.fastq.gz > log 2> err
+
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 usage() {
     echo "Usage: run_sample_pipeline.sh [options] <fastq|fastq.gz>"
     echo ""
     echo "Run the full analysis pipeline for one sample: QC -> trim -> species ID ->"
-    echo "assembly -> consensus -> polish -> assembly QC -> annotation -> report."
+    echo "assembly -> consensus -> polish -> assembly QC -> AMRFinderPlus -> report."
     echo ""
     echo "Options:"
     echo "  --output-dir DIR      Output working directory (default: current directory)"
-    echo "  --skip-fastqc         Skip FastQC"
-    echo "  --skip-trim           Skip read trimming with fastplong"
-    echo "  --skip-species-id     Skip Kraken2 species identification"
-    echo "  --skip-flye           Skip Flye assembly"
-    echo "  --skip-plassembler    Skip Plassembler assembly"
-    echo "  --skip-consensus      Skip Autocycler consensus assembly"
-    echo "  --skip-polish         Skip Medaka polishing"
-    echo "  --skip-assembly-qc    Skip QUAST, BUSCO, and Bandage QC"
-    echo "  --skip-amrfinder      Skip AMRFinderPlus"
-    echo "  --skip-bakta          Skip Bakta annotation"
-    echo "  --skip-multiqc        Skip final MultiQC summary"
+    echo "  --start-from STEP     Resume from STEP, treating all earlier steps as already"
+    echo "                        run in a previous invocation: their outputs must already"
+    echo "                        exist on disk and will be reused (the pipeline dies with"
+    echo "                        a clear error if they don't). STEP is one of:"
+    echo "                        ${STEP_ORDER[*]}"
+    echo "  --skip-fastqc         Exclude FastQC entirely"
+    echo "  --skip-trim           Exclude read trimming with fastplong"
+    echo "  --skip-species-id     Exclude Kraken2 species identification"
+    echo "  --skip-flye           Exclude Flye assembly"
+    echo "  --skip-plassembler    Exclude Plassembler assembly"
+    echo "  --skip-consensus      Exclude Autocycler consensus; Flye and Plassembler"
+    echo "                        assemblies are polished with Medaka separately instead,"
+    echo "                        each followed by its own AMRFinderPlus run"
+    echo "  --skip-polish         Exclude Medaka polishing"
+    echo "  --skip-assembly-qc    Exclude QUAST, BUSCO, and Bandage QC"
+    echo "  --skip-amrfinder      Exclude AMRFinderPlus"
+    echo "  --skip-multiqc        Exclude final MultiQC summary"
     echo "  --chromosome-contig NAME"
     echo "                        Extract plasmid contigs by excluding this contig header"
     echo "  -h, --help            Show this help"
+    echo ""
+    echo "--skip-X means the step is left out of the pipeline entirely (its absence is"
+    echo "expected downstream). --start-from means everything before STEP was already"
+    echo "run and its output is required; combine the two to say e.g. \"resume from"
+    echo "polishing, and I never want consensus at all\"."
 }
 
 log() {
@@ -60,6 +65,17 @@ log() {
 die() {
     printf 'Error: %s\n' "$*" >&2
     exit 1
+}
+
+step_index() {
+    local target="$1" i
+    for i in "${!STEP_ORDER[@]}"; do
+        if [[ "${STEP_ORDER[$i]}" == "${target}" ]]; then
+            printf '%s' "$i"
+            return 0
+        fi
+    done
+    return 1
 }
 
 run_assembly_qc_stage() {
@@ -108,6 +124,52 @@ run_assembly_qc_stage() {
     fi
 }
 
+find_plassembler_assembly() {
+    local id="$1"
+    local found=""
+
+    for candidate in \
+        "assembly/${id}/plassembler/plassembler_chromosome.fasta" \
+        "assembly/${id}/plassembler/assembly.fasta" \
+        "assembly/${id}/plassembler/plassembler_plasmids.fasta"; do
+        if [[ -s "${candidate}" ]]; then
+            found="${candidate}"
+            break
+        fi
+    done
+
+    if [[ -z "${found}" && -d "assembly/${id}/plassembler" ]]; then
+        local restore_nullglob=0
+        shopt -q nullglob && restore_nullglob=1
+        shopt -s nullglob
+
+        for candidate in \
+            assembly/${id}/plassembler/*.fasta \
+            assembly/${id}/plassembler/*/*.fasta; do
+            if [[ -s "${candidate}" ]]; then
+                found="${candidate}"
+                break
+            fi
+        done
+
+        if [[ ${restore_nullglob} -eq 0 ]]; then
+            shopt -u nullglob
+        fi
+    fi
+
+    printf '%s' "${found}"
+}
+
+find_fastq() {
+    local base="$1"
+
+    if [[ -s "${base}.fastq" ]]; then
+        printf '%s' "${base}.fastq"
+    elif [[ -s "${base}.fastq.gz" ]]; then
+        printf '%s' "${base}.fastq.gz"
+    fi
+}
+
 # ─── Argument parsing ─────────────────────────────────────────────────────────
 args=()
 while [[ $# -gt 0 ]]; do
@@ -115,17 +177,19 @@ while [[ $# -gt 0 ]]; do
         --output-dir)
             [[ $# -ge 2 ]] || die "--output-dir requires a value"
             OUTPUT_DIR="$2"; shift ;;
-        --skip-fastqc)       skip_fastqc=1 ;;
-        --skip-trim)         skip_trim=1 ;;
-        --skip-species-id)   skip_species_id=1 ;;
-        --skip-flye)         skip_flye=1 ;;
-        --skip-plassembler)  skip_plassembler=1 ;;
-        --skip-consensus)    skip_consensus=1 ;;
-        --skip-polish)       skip_polish=1 ;;
-        --skip-assembly-qc)  skip_assembly_qc=1 ;;
-        --skip-amrfinder)    skip_amrfinder=1 ;;
-        --skip-bakta)        skip_bakta=1 ;;
-        --skip-multiqc)      skip_multiqc=1 ;;
+        --start-from)
+            [[ $# -ge 2 ]] || die "--start-from requires a value"
+            start_from="$2"; shift ;;
+        --skip-fastqc)       explicit_skip[fastqc]=1 ;;
+        --skip-trim)         explicit_skip[trim]=1 ;;
+        --skip-species-id)   explicit_skip[species-id]=1 ;;
+        --skip-flye)         explicit_skip[flye]=1 ;;
+        --skip-plassembler)  explicit_skip[plassembler]=1 ;;
+        --skip-consensus)    explicit_skip[consensus]=1 ;;
+        --skip-polish)       explicit_skip[polish]=1 ;;
+        --skip-assembly-qc)  explicit_skip[assembly-qc]=1 ;;
+        --skip-amrfinder)    explicit_skip[amrfinder]=1 ;;
+        --skip-multiqc)      explicit_skip[multiqc]=1 ;;
         --chromosome-contig)
             [[ $# -ge 2 ]] || die "--chromosome-contig requires a value"
             chromosome_contig="$2"; shift ;;
@@ -138,6 +202,57 @@ done
 
 [[ ${#args[@]} -eq 1 ]] || { usage >&2; exit 1; }
 
+# ─── Resolve --start-from / --skip-* into per-step skip & require flags ───────
+start_from_idx=-1
+if [[ -n "${start_from}" ]]; then
+    start_from_idx=$(step_index "${start_from}") || \
+        die "Unknown --start-from step: ${start_from} (expected one of: ${STEP_ORDER[*]})"
+fi
+
+declare -A skip=()
+declare -A required=()
+for i in "${!STEP_ORDER[@]}"; do
+    name="${STEP_ORDER[$i]}"
+    is_excluded=${explicit_skip[${name}]:-0}
+    is_prior=0
+    if [[ ${start_from_idx} -ge 0 && $i -lt ${start_from_idx} ]]; then
+        is_prior=1
+    fi
+
+    if [[ ${is_excluded} -eq 1 || ${is_prior} -eq 1 ]]; then
+        skip[${name}]=1
+    else
+        skip[${name}]=0
+    fi
+
+    if [[ ${is_prior} -eq 1 && ${is_excluded} -eq 0 ]]; then
+        required[${name}]=1
+    else
+        required[${name}]=0
+    fi
+done
+
+skip_fastqc=${skip[fastqc]}
+skip_trim=${skip[trim]}
+skip_species_id=${skip[species-id]}
+skip_flye=${skip[flye]}
+skip_plassembler=${skip[plassembler]}
+skip_consensus=${skip[consensus]}
+skip_polish=${skip[polish]}
+skip_assembly_qc=${skip[assembly-qc]}
+skip_amrfinder=${skip[amrfinder]}
+skip_multiqc=${skip[multiqc]}
+
+require_trim=${required[trim]}
+require_flye=${required[flye]}
+require_plassembler=${required[plassembler]}
+require_consensus=${required[consensus]}
+require_polish=${required[polish]}
+
+# --skip-consensus (an explicit exclusion, not a --start-from side effect) always
+# means: polish Flye and Plassembler assemblies separately, one AMRFinderPlus run each.
+separate_mode=${explicit_skip[consensus]:-0}
+
 input_fastq=$(realpath "${args[0]}")
 [[ -f "${input_fastq}" ]] || die "FASTQ not found: ${input_fastq}"
 
@@ -148,7 +263,8 @@ cd "${OUTPUT_DIR}"
 # Strip .fastq.gz or .fastq to get a bare sample ID
 sample_id=$(basename "${input_fastq}" .fastq.gz)
 sample_id=$(basename "${sample_id}" .fastq)
-trimmed_fastq="trim/${sample_id}.trimmed.fastq"
+trimmed_fastq_base="trim/${sample_id}.trimmed"
+trimmed_fastq="${trimmed_fastq_base}.fastq"
 
 current_fastq="${input_fastq}"
 current_id="${sample_id}"
@@ -172,7 +288,6 @@ fi
 # ─── Step 2 · Read trimming (fastplong) ───────────────────────────────────────
 if [[ ${skip_trim} -eq 0 ]]; then
     log "Step 2: fastplong trimming"
-    
 
     mkdir -p trim
     mkdir -p qc/fastplong
@@ -186,12 +301,17 @@ if [[ ${skip_trim} -eq 0 ]]; then
         -j qc/fastplong/${current_id}.fastplong_report.json
 
     [[ -s "${trimmed_fastq}" ]] || die "Trimmed FASTQ missing: ${trimmed_fastq}"
+elif [[ -z "$(find_fastq "${trimmed_fastq_base}")" && ${require_trim} -eq 1 ]]; then
+    die "Trimmed FASTQ not found: ${trimmed_fastq_base}.fastq(.gz) (required because --start-from assumes trimming already ran)"
 fi
 
 # Always prefer trimmed reads when available, even if trimming is skipped.
-if [[ -s "${trimmed_fastq}" ]]; then
-    current_fastq="${trimmed_fastq}"
-    current_id=$(basename "${current_fastq}" .fastq)
+# (Trimmed reads may have been gzipped by a prior run's compression step.)
+existing_trimmed_fastq=$(find_fastq "${trimmed_fastq_base}")
+if [[ -n "${existing_trimmed_fastq}" ]]; then
+    current_fastq="${existing_trimmed_fastq}"
+    current_id=$(basename "${current_fastq}" .fastq.gz)
+    current_id=$(basename "${current_id}" .fastq)
     log "Using trimmed FASTQ: ${current_fastq}"
 else
     current_fastq="${input_fastq}"
@@ -248,6 +368,12 @@ if [[ ${skip_flye} -eq 0 ]]; then
         "${current_id}.flye" \
         "${flye_dir}/assembly.fasta" \
         "${flye_dir}/assembly_graph.gfa"
+elif [[ -s "${flye_dir}/assembly.fasta" ]]; then
+    log "Step 4a: Flye assembly excluded; using existing assembly: ${flye_dir}/assembly.fasta"
+elif [[ ${require_flye} -eq 1 ]]; then
+    die "Flye assembly not found: ${flye_dir}/assembly.fasta (required because --start-from assumes Flye already ran)"
+else
+    log "Step 4a: Flye assembly excluded; no assembly available from this stage"
 fi
 
 # ─── Step 4b · Plassembler ────────────────────────────────────────────────────
@@ -269,27 +395,39 @@ if [[ ${skip_plassembler} -eq 0 ]]; then
         -f \
         -o assembly/${current_id}/plassembler
 
-    plassembler_qc_assembly=""
-    for candidate in \
-        "assembly/${current_id}/plassembler/plassembler_chromosome.fasta" \
-        "assembly/${current_id}/plassembler/assembly.fasta" \
-        "assembly/${current_id}/plassembler/plassembler_plasmids.fasta"; do
-        if [[ -s "${candidate}" ]]; then
-            plassembler_qc_assembly="${candidate}"
-            break
-        fi
-    done
+    plassembler_qc_assembly=$(find_plassembler_assembly "${current_id}")
+else
+    plassembler_qc_assembly=$(find_plassembler_assembly "${current_id}")
+    if [[ -n "${plassembler_qc_assembly}" ]]; then
+        log "Step 4b: Plassembler excluded; using existing assembly: ${plassembler_qc_assembly}"
+    elif [[ ${require_plassembler} -eq 1 && ! -d "assembly/${current_id}/plassembler" ]]; then
+        die "Plassembler output not found under assembly/${current_id}/plassembler (required because --start-from assumes Plassembler already ran)"
+    else
+        log "Step 4b: Plassembler excluded; no existing assembly found (sample may have no plasmids)"
+    fi
 fi
 
-# ─── Step 5 · Autocycler subsampling + consensus ──────────────────────────────
+# ─── Step 5 · Consensus assembly (Autocycler) ─────────────────────────────────
 assembly_for_polish=""
+declare -a denovo_assemblies=()
+declare -a amrfinder_targets=()
 CONSENSUSDIR=assembly/${current_id}/consensus
 AUTOCYCLERDIR=${CONSENSUSDIR}/autocycler
 existing_consensus_assembly="${AUTOCYCLERDIR}/consensus_assembly.fasta"
 
-if [[ ${skip_consensus} -eq 0 ]]; then
+if [[ ${separate_mode} -eq 1 ]]; then
+    log "Step 5: Consensus excluded (--skip-consensus); Flye/Plassembler assemblies will be polished separately"
+
+    flye_assembly="${flye_dir}/assembly.fasta"
+    plassembler_assembly="${plassembler_qc_assembly}"
+
+    [[ -s "${flye_assembly}" ]] && denovo_assemblies+=("flye::${flye_assembly}")
+    [[ -n "${plassembler_assembly}" && -s "${plassembler_assembly}" ]] && denovo_assemblies+=("plassembler::${plassembler_assembly}")
+
+    [[ ${#denovo_assemblies[@]} -gt 0 ]] || die "No assembly available for polishing/QC"
+
+elif [[ ${skip_consensus} -eq 0 ]]; then
     log "Step 5a: Autocycler subsampling"
-    
 
     SUBSAMPLE_DIR=subsample/${current_id}
     mkdir -p ${SUBSAMPLE_DIR}
@@ -299,8 +437,6 @@ if [[ ${skip_consensus} -eq 0 ]]; then
         --out_dir ${SUBSAMPLE_DIR} \
         --count 4 \
         --genome_size 5000000
-        #  \
-        # --min_read_depth 10
 
     # Prefix subsampled FASTQs with the sample ID
     for f in ${SUBSAMPLE_DIR}/*.fastq; do
@@ -312,13 +448,13 @@ if [[ ${skip_consensus} -eq 0 ]]; then
     ASSEMBLYDIR=${CONSENSUSDIR}/assemblies
     mkdir -p ${ASSEMBLYDIR}
 
-    for ASSEMBLER in flye plassembler; do        
+    for ASSEMBLER in flye plassembler; do
         if [[ "${ASSEMBLER}" == "flye" ]]; then
             ASSEMBLY="assembly/${current_id}/flye/assembly.fasta"
         elif [[ "${ASSEMBLER}" == "plassembler" ]]; then
-            ASSEMBLY="assembly/${current_id}/plassembler/plassembler_plasmids.fasta"
+            ASSEMBLY="${plassembler_qc_assembly}"
         fi
-        [[ -s "${ASSEMBLY}" ]] || continue
+        [[ -n "${ASSEMBLY}" && -s "${ASSEMBLY}" ]] || continue
         ln -sf "${PWD}/${ASSEMBLY}" "${ASSEMBLYDIR}/${current_id}.${ASSEMBLER}.fasta"
     done
 
@@ -353,63 +489,20 @@ if [[ ${skip_consensus} -eq 0 ]]; then
 
     assembly_for_polish="${AUTOCYCLERDIR}/consensus_assembly.fasta"
 
-    if [[ -s "${assembly_for_polish}" ]]; then
-        log "Using consensus assembly: ${assembly_for_polish}"
-        run_assembly_qc_stage \
-            "${current_id}.consensus" \
-            "${assembly_for_polish}" \
-            "${AUTOCYCLERDIR}/consensus_assembly.gfa"
-    else
-            die "Consensus assembly ${assembly_for_polish} not found"
-    fi
-fi
+    [[ -s "${assembly_for_polish}" ]] || die "Consensus assembly ${assembly_for_polish} not found"
 
-if [[ -z "${assembly_for_polish}" && -s "${existing_consensus_assembly}" ]]; then
+    log "Using consensus assembly: ${assembly_for_polish}"
+    run_assembly_qc_stage \
+        "${current_id}.consensus" \
+        "${assembly_for_polish}" \
+        "${AUTOCYCLERDIR}/consensus_assembly.gfa"
+
+elif [[ -s "${existing_consensus_assembly}" ]]; then
     assembly_for_polish="${existing_consensus_assembly}"
-    log "Using existing consensus assembly: ${assembly_for_polish}"
-fi
+    log "Step 5: Consensus excluded; using existing consensus assembly: ${assembly_for_polish}"
 
-if [[ -z "${assembly_for_polish}" ]]; then
-    flye_assembly="${flye_dir}/assembly.fasta"
-    plassembler_assembly=""
-
-    for candidate in \
-        "assembly/${current_id}/plassembler/plassembler_chromosome.fasta" \
-        "assembly/${current_id}/plassembler/assembly.fasta"; do
-        if [[ -s "${candidate}" ]]; then
-            plassembler_assembly="${candidate}"
-            break
-        fi
-    done
-
-    if [[ -z "${plassembler_assembly}" && -d "assembly/${current_id}/plassembler" ]]; then
-        restore_nullglob=0
-        shopt -q nullglob && restore_nullglob=1
-        shopt -s nullglob
-
-        for candidate in \
-            assembly/${current_id}/plassembler/*.fasta \
-            assembly/${current_id}/plassembler/*/*.fasta; do
-            if [[ -s "${candidate}" ]]; then
-                plassembler_assembly="${candidate}"
-                break
-            fi
-        done
-
-        if [[ ${restore_nullglob} -eq 0 ]]; then
-            shopt -u nullglob
-        fi
-    fi
-
-    if [[ -s "${flye_assembly}" ]]; then
-        assembly_for_polish="${flye_assembly}"
-        log "Using Flye assembly: ${assembly_for_polish}"
-    elif [[ -n "${plassembler_assembly}" && -s "${plassembler_assembly}" ]]; then
-        assembly_for_polish="${plassembler_assembly}"
-        log "Using Plassembler assembly: ${assembly_for_polish}"
-    else
-        die "No assembly available for polishing/QC"
-    fi
+else
+    die "Consensus assembly not found: ${existing_consensus_assembly} (required because --start-from assumes consensus already ran)"
 fi
 
 # ─── Step 6 · Medaka polishing ────────────────────────────────────────────────
@@ -418,24 +511,76 @@ medaka_dir=assembly/${current_id}/medaka
 existing_polished_assembly="${medaka_dir}/consensus.fasta"
 
 if [[ ${skip_polish} -eq 0 ]]; then
-    log "Step 6: Medaka polishing"
+    if [[ ${separate_mode} -eq 1 ]]; then
+        log "Step 6: Medaka polishing (separate Flye/Plassembler outputs)"
 
-    medaka_consensus \
-        -i ${current_fastq} \
-        -d ${assembly_for_polish} \
-        -o ${medaka_dir} \
-        -t ${THREADS}
+        final_assembly=""
+        for entry in "${denovo_assemblies[@]}"; do
+            assembler_name="${entry%%::*}"
+            assembler_assembly="${entry#*::}"
+            assembler_medaka_dir="assembly/${current_id}/medaka_${assembler_name}"
 
-    final_assembly="${medaka_dir}/consensus.fasta"
-    if [[ -s "${final_assembly}" ]]; then
+            medaka_consensus \
+                -i ${current_fastq} \
+                -d ${assembler_assembly} \
+                -o ${assembler_medaka_dir} \
+                -t ${THREADS} -b 25 -f
+
+            polished_assembly="${assembler_medaka_dir}/consensus.fasta"
+            [[ -s "${polished_assembly}" ]] || die "Medaka assembly not found under ${assembler_medaka_dir}"
+
+            [[ -z "${final_assembly}" ]] && final_assembly="${polished_assembly}"
+            amrfinder_targets+=("${assembler_name}::${polished_assembly}")
+            log "Using polished ${assembler_name} assembly: ${polished_assembly}"
+            run_assembly_qc_stage "${current_id}.medaka.${assembler_name}" "${polished_assembly}"
+        done
+    else
+        log "Step 6: Medaka polishing"
+
+        medaka_consensus \
+            -i ${current_fastq} \
+            -d ${assembly_for_polish} \
+            -o ${medaka_dir} \
+            -t ${THREADS} -b 25 -f
+
+        final_assembly="${medaka_dir}/consensus.fasta"
+        [[ -s "${final_assembly}" ]] || die "Medaka assembly not found under ${medaka_dir}"
+
         log "Using polished assembly: ${final_assembly}"
         run_assembly_qc_stage "${current_id}.medaka" "${final_assembly}"
-    else
-        die "Medaka assembly not found under ${medaka_dir}"
+        amrfinder_targets+=("final::${final_assembly}")
     fi
+elif [[ ${separate_mode} -eq 1 ]]; then
+    log "Step 6: Medaka polishing excluded; looking for existing per-assembler polished assemblies"
+
+    final_assembly=""
+    for entry in "${denovo_assemblies[@]}"; do
+        assembler_name="${entry%%::*}"
+        assembler_assembly="${entry#*::}"
+        assembler_medaka_dir="assembly/${current_id}/medaka_${assembler_name}"
+        polished_assembly="${assembler_medaka_dir}/consensus.fasta"
+
+        if [[ -s "${polished_assembly}" ]]; then
+            [[ -z "${final_assembly}" ]] && final_assembly="${polished_assembly}"
+            amrfinder_targets+=("${assembler_name}::${polished_assembly}")
+            log "Using existing polished ${assembler_name} assembly: ${polished_assembly}"
+        elif [[ ${require_polish} -eq 1 ]]; then
+            die "Medaka assembly not found under ${assembler_medaka_dir} (required because --start-from assumes polishing already ran)"
+        else
+            [[ -z "${final_assembly}" ]] && final_assembly="${assembler_assembly}"
+            amrfinder_targets+=("${assembler_name}::${assembler_assembly}")
+            log "No polished ${assembler_name} assembly found; using unpolished assembly: ${assembler_assembly}"
+        fi
+    done
 elif [[ -s "${existing_polished_assembly}" ]]; then
     final_assembly="${existing_polished_assembly}"
     log "Using existing polished assembly: ${final_assembly}"
+    amrfinder_targets+=("final::${final_assembly}")
+elif [[ ${require_polish} -eq 1 ]]; then
+    die "Medaka assembly not found under ${medaka_dir} (required because --start-from assumes polishing already ran)"
+else
+    amrfinder_targets+=("final::${assembly_for_polish}")
+    log "No polished assembly found; using unpolished assembly: ${assembly_for_polish}"
 fi
 
 # ─── Step 7 · Assembly QC ─────────────────────────────────────────────────────
@@ -483,41 +628,30 @@ fi
 # ─── Step 9 · AMRFinderPlus ───────────────────────────────────────────────────
 if [[ ${skip_amrfinder} -eq 0 ]]; then
     log "Step 9: AMRFinderPlus"
-    
 
     mkdir -p annotate/${current_id}/amrfinder
 
     # Bind /cvmfs so Singularity can find the database
     export SINGULARITY_COMMAND_OPTS="-B /cvmfs"
 
-    amrfinder \
-        -n ${final_assembly} \
-        -d ${AMRFINDER_DB} \
-        --threads ${THREADS} \
-        > annotate/${current_id}/amrfinder/${current_id}.tsv
+    [[ ${#amrfinder_targets[@]} -gt 0 ]] || die "No assembly available for AMRFinderPlus"
+
+    for entry in "${amrfinder_targets[@]}"; do
+        assembly_name="${entry%%::*}"
+        assembly_path="${entry#*::}"
+        report_path="annotate/${current_id}/amrfinder/${current_id}.${assembly_name}.tsv"
+
+        amrfinder \
+            -n ${assembly_path} \
+            -d ${AMRFINDER_DB} \
+            --threads ${THREADS} \
+            > ${report_path}
+    done
 fi
 
-# ─── Step 10 · Bakta annotation ───────────────────────────────────────────────
-if [[ ${skip_bakta} -eq 0 ]]; then
-    log "Step 10: Bakta annotation"
-    
-
-    mkdir -p annotate/${current_id}
-
-    # Bind /cvmfs so Singularity can find the database
-    export SINGULARITY_COMMAND_OPTS="-B /cvmfs"
-
-    bakta ${final_assembly} \
-        --db ${BAKTA_DB} \
-        --output annotate/${current_id}/ \
-        --prefix ${current_id} \
-        --force \
-        --threads ${THREADS}
-fi
-
-# ─── Step 11 · MultiQC summary ────────────────────────────────────────────────
+# ─── Step 10 · MultiQC summary ─────────────────────────────────────────────────
 if [[ ${skip_multiqc} -eq 0 ]]; then
-    log "Step 11: MultiQC"
+    log "Step 10: MultiQC"
 
     mkdir -p multiqc
 
@@ -528,8 +662,8 @@ if [[ ${skip_multiqc} -eq 0 ]]; then
         qc
 fi
 
-# ─── Step 12 · Compress uncompressed FASTQ files ─────────────────────────────
-log "Step 12: Compressing uncompressed FASTQ files"
+# ─── Step 11 · Compress uncompressed FASTQ files ──────────────────────────────
+log "Step 11: Compressing uncompressed FASTQ files"
 
 mapfile -d '' fastq_files < <(find . -type f -name "*.fastq" -print0)
 
