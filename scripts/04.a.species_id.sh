@@ -5,7 +5,7 @@ module load kraken2
 set -euo pipefail
 
 FASTQ="${1}"
-ID=$(basename ${FASTQ} .fastq)
+ID=$(basename ${FASTQ} .fastq.gz)
 K2DB=data/ref/kalamari
 
 mkdir -p qc/species_id/report
