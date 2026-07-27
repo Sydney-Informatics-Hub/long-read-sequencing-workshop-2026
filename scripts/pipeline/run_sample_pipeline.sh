@@ -143,9 +143,11 @@ find_plassembler_assembly() {
         shopt -q nullglob && restore_nullglob=1
         shopt -s nullglob
 
-        for candidate in \
-            assembly/${id}/plassembler/*.fasta \
-            assembly/${id}/plassembler/*/*.fasta; do
+        # Top level only: Plassembler's own working subdirectories (flye_output/,
+        # unicycler_output/, ...) hold intermediate/scratch files, including a copy
+        # of the input Flye assembly, not real plasmid output. Recursing into them
+        # would misidentify those as a Plassembler assembly.
+        for candidate in assembly/${id}/plassembler/*.fasta; do
             if [[ -s "${candidate}" ]]; then
                 found="${candidate}"
                 break
