@@ -5,12 +5,12 @@ module load filtlong
 set -euo pipefail
 
 FASTQ="${1}"
-ID=$(basename ${FASTQ} .fastq)
+ID=$(basename ${FASTQ} .fastq.gz)
 
 mkdir -p filter
 
 filtlong \
     --min_length 1kb \
-    --target_bases 50mb \
+    --keep_percent 50 \
     ${FASTQ} \
-    > filter/${ID}.filtered.fastq
+    | gzip -c > filter/${ID}.filtered.fastq.gz

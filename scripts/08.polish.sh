@@ -14,4 +14,5 @@ medaka_consensus \
     -i ${FASTQ} \
     -d ${ASSEMBLY} \
     -o assembly/${ID}/medaka \
+    -b 50 \
     -t 3

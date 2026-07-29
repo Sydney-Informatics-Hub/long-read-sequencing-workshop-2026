@@ -203,6 +203,15 @@ cp SRR11909877.filtered.fastq SRR11909877.filtered.contam.human.fastq
 cat NA12878.subset.human.fastq >> SRR11909877.filtered.contam.human.fastq
 ```
 
+### Sequencing summary file
+
+The example sequencing summary file was obtained from the GitHub repository of the `floundeR` R package. The summary file is 10,000 lines long.
+
+```R
+wget https://github.com/sagrudd/floundeR/raw/refs/heads/main/inst/extdata/sequencing_summary.txt.bz2
+bunzip2 sequencing_summary.txt.bz2
+```
+
 ## Software
 
 ### Creating modules on training VMs

@@ -130,3 +130,111 @@ The following tools require databases:
 | ---- | ----------------- | ----- |
 | Kraken2 | //cvmfs/data.galaxyproject.org/managed/kraken2_databases/kalamari | Kalamari database is curated and only 2GB in size, which is suitable for the workshop, while the standard Kraken2 database is ~60GB in size and can't fit into memory on the VMs. |
 | Plassembler | N/A | Download with `plassembler download -d <db directory>`. Size is 437MB, can be pre-loaded on the VMs. |
+
+## Run order
+
+### Ryan Wick samples (`barcode*.fastq.gz`)
+
+1. FASTQC
+
+```bash
+for f in data/fastqs/barcode*.fastq.gz; do
+    ./long-read-sequencing-workshop-2026/scripts/02.fastqc.sh $f
+done
+```
+
+2. fastplong with adapter trimming, Q13 filter, and poly-X filter
+
+```bash
+for f in data/fastqs/barcode*.fastq.gz; do
+    ./long-read-sequencing-workshop-2026/scripts/03.c.fastplong.filter.sh $f
+done
+```
+
+3. Re-run FASTQC on trimmed/filtered FASTQs
+
+```bash
+for f in trim_filter/*.fastq; do
+    ./long-read-sequencing-workshop-2026/scripts/02.fastqc.sh $f
+done
+```
+
+4. Species ID
+
+```bash
+for f in trim_filter/*.fastq; do
+    ./long-read-sequencing-workshop-2026/scripts/04.a.species_id.sh $f
+done
+```
+
+5. Flye assembly
+
+```bash
+for f in trim_filter/*.fastq; do
+    ID=$(basename $f .trimmed.filtered.fastq)
+    ./long-read-sequencing-workshop-2026/scripts/05.a.assembly.flye.sh $f $ID
+done
+```
+
+### Outbreak samples (`{SRR,ERR}*.fastq.gz`)
+
+1. FASTQC
+
+```bash
+for f in data/fastqs/{SRR,ERR}*.fastq.gz; do
+    ./long-read-sequencing-workshop-2026/scripts/02.fastqc.sh $f
+done
+```
+
+2. fastplong to remove adapters and poly-X
+
+```bash
+for f in data/fastqs/barcode*.fastq.gz; do
+    ./long-read-sequencing-workshop-2026/scripts/03.b.fastplong.adapters.sh $f
+done
+```
+
+3. filtlong with 1kb minimum length and 50% best reads filters
+
+```bash
+for f in trim/{SRR,ERR}*.fastq.gz; do
+    ./long-read-sequencing-workshop-2026/scripts/03.a.filtlong.sh $f
+done
+```
+
+3. Re-run FASTQC on trimmed/filtered FASTQs
+
+```bash
+for f in {trim,filter}/*.fastq.gz; do
+    ./long-read-sequencing-workshop-2026/scripts/02.fastqc.sh $f
+done
+```
+
+4. Species ID
+
+```bash
+for f in filter/*.fastq.gz; do
+    ./long-read-sequencing-workshop-2026/scripts/04.a.species_id.sh $f
+done
+```
+
+5. Flye assembly
+
+```bash
+for f in filter/*.fastq.gz; do
+    ID=$(basename $f .trimmed.filtered.fastq.gz)
+    ./long-read-sequencing-workshop-2026/scripts/05.a.assembly.flye.sh $f $ID
+done
+```
+
+6. Polishing
+
+```bash
+# TODO
+```
+
+7. AMRFinder
+
+```bash
+
+```
