@@ -7,3 +7,5 @@ Unveiling microbial diversity: harnessing long-read sequencing technology
     Daniel P. Agustinho, Yilei Fu, Vipin K. Menon, Ginger A. Metcalf, Todd J. Treangen & Fritz J. Sedlazeck 
 
 Nature Methods volume 21, pages 954–966 (2024) Cite this article 
+
+https://training.galaxyproject.org/training-material/topics/microbiome/tutorials/pathogen-detection-from-nanopore-foodborne-data/tutorial.html
