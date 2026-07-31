@@ -9,3 +9,15 @@ Unveiling microbial diversity: harnessing long-read sequencing technology
 Nature Methods volume 21, pages 954–966 (2024) Cite this article 
 
 https://training.galaxyproject.org/training-material/topics/microbiome/tutorials/pathogen-detection-from-nanopore-foodborne-data/tutorial.html
+
+https://www.sciencedirect.com/science/article/pii/S2666166722003860
+
+https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/quality-control/slides-plain.html
+
+https://nanoporetech.com/news/news-oxford-nanopore-releases-rev-d-flow-cells-enabling-increase-data-yields
+
+https://pmc.ncbi.nlm.nih.gov/articles/PMC11840941/
+
+https://academic.oup.com/bioinformaticsadvances/article/5/1/vbaf010/7989317
+
+https://academic.oup.com/nar/article/54/3/gkag023/8454528?login=false#551724511
