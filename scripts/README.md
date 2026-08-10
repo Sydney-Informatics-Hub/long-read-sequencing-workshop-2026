@@ -108,6 +108,10 @@ The following container images are being used for each tool:
 | filtlong | docker://quay.io/biocontainers/filtlong:0.3.1--h077b44d_0 |
 | Kraken2 | docker://quay.io/biocontainers/kraken2:2.17.1--pl5321h077b44d_0 |
 | Flye | docker://quay.io/biocontainers/flye:2.9.6--py313h7fbb527_1 |
+| Raven |  |
+| Canu |  |
+| seqkit | docker://quay.io/biocontainers/seqkit:2.13.0--he881be0_0 |
+| seqtk | docker://quay.io/biocontainers/seqtk:1.4--h577a1d6_3 |
 | Plassembler | docker://quay.io/biocontainers/plassembler:1.8.2--pyhdfd78af_0 |
 | QUAST | docker://quay.io/biocontainers/quast:5.3.0--py313pl5321h5ca1c30_2 |
 | BUSCO | docker://quay.io/biocontainers/busco:6.1.0--pyhdfd78af_1 |
