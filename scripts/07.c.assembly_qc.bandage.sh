@@ -10,7 +10,7 @@ ID="${2}"
 mkdir -p qc/assembly/bandage/
 mkdir -p qc/assembly/bandage/${ID}
 
-bandage_exec \
+bandage-exec \
 Bandage image \
     ${ASSEMBLY} \
     qc/assembly/bandage/${ID}/${ID}.assembly.svg
