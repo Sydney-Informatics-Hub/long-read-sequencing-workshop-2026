@@ -23,3 +23,5 @@ https://academic.oup.com/bioinformaticsadvances/article/5/1/vbaf010/7989317
 https://academic.oup.com/nar/article/54/3/gkag023/8454528?login=false#551724511
 
 https://pmc.ncbi.nlm.nih.gov/articles/PMC12090612/
+
+https://cloud-span.github.io/nerc-metagenomics03-qc-assembly/01-QC-quality-raw-reads/index.html
