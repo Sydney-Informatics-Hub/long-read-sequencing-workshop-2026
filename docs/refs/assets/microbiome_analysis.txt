@@ -1,4 +1,0 @@
-Integrated multi-omics analyses of microbial communities: a review of the current state and future directions
-Muzaffer Arıkan ,
-Thilo Muth
-Molecular Omics, Volume 19, Issue 8, 1 October 2023, Pages 607–623, https://doi.org/10.1039/D3MO00089C
