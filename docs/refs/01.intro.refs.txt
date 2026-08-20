@@ -39,3 +39,5 @@ https://academic.oup.com/nar/article/54/3/gkag023/8454528?login=false#551724511
 https://nanoporetech.com/document/data-analysis
 
 https://nanoporetech.com/platform/accuracy
+
+https://nanoporetech.com/blog/news-blog-kilobases-whales-short-history-ultra-long-reads-and-high-throughput-genome
