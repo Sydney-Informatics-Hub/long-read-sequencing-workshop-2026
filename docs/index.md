@@ -8,7 +8,7 @@ The workshop has been designed around a dataset of sequencing data obtained from
 
 The 2026 delivery of this workshop will be as 2 half-day sessions, delivered online through Zoom. The first day will introduce participants to long read sequencing concepts and guide them through quality control, read filtering and pre-processing, and species identification and contamination detection. The second day will explore *de novo* genome assembly, assembly quality control, and downstream genome annotation. **Note** that not all of the lessons present in these materials will be covered during the workshop. Instead, the most vital concepts will be covered, while other lessons will be left for participants to complete at their leisure.
 
-The following table lists the lesson and their planned delivery during the workshop. Lessons with `N/A` listed under the `Day` column are additional content that won't be covered on the day but can be completed in your own time.
+The following table lists the lessons and their planned delivery during the workshop. Lessons with `N/A` listed under the `Day` column are additional content that won't be covered on the day but can be completed in your own time.
 
 | Lesson # | Title | Day | Description |
 | -------- | ----- | --- | ----------- |
@@ -24,7 +24,7 @@ The following table lists the lesson and their planned delivery during the works
 | 10 | Alternative polishing methods | N/A | Exploring other methods for *de novo* assembly polishing (additional content) |
 | 11 | Assembly quality control | 2 | Interpreting standard quality control metrics for *de novo* genome assembly |
 | 12 | Genome annotation and AMR gene detection | 2 | Annotating *de novo* bacterial genome assemblies to identify antimicrobial resistance (AMR) genes |
-| 13 | Comparitive genomics | N/A | Phylogenetic and sequence similarity comparisons of assemblies (additional content) |
+| 13 | Comparative genomics | N/A | Phylogenetic and sequence similarity comparisons of assemblies (additional content) |
 
 ## Trainers
 
