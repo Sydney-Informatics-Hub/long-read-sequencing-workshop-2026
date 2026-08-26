@@ -42,3 +42,5 @@ Sequencing summary from
 https://github.com/sagrudd/floundeR/raw/refs/heads/main/inst/extdata/sequencing_summary.txt.bz2
 https://zenodo.org/records/5730295
 https://github.com/wdecoster/nanotest/blob/8b87b70886141dd020a80ec80ebcbe6d9520021b/sequencing_summary.txt#L4
+
+https://nanoporetech.github.io/ont-output-specifications/latest/protocol_formats/sequencing_summary/
