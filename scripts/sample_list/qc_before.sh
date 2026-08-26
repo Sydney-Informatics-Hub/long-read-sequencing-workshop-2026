@@ -41,6 +41,7 @@ while read -r FASTQ; do
         --fastq "$FASTQ" \
         -p "${ID}_" \
         --loglength \
+        --N50 \
         -o qc_before/nanoplot/"$ID"/
 
 done < "$SAMPLE_LIST"
