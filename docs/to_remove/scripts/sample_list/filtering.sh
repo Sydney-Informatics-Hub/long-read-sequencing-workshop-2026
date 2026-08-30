@@ -23,16 +23,18 @@ while read -r FASTQ; do
     ID=$(basename "$FASTQ" .fastq.gz)
     FOLD=$(dirname "$FASTQ")
 
-    # gunzip "$FASTQ"
+    gunzip "$FASTQ"
   
-    # echo "Processing sample: $ID"
+    echo "Processing sample: $ID"
 
-    # mkdir -p filter
+    mkdir -p filter
     # NanoFilt -q 7 --length 1000 < "$FOLD/$ID.fastq" > "filter/filtered_$ID.fastq"
-    # filtlong --keep_percent 90 --target_bases 50mb "filter/filtered_$ID.fastq" > "filter/subsampled_$ID.fastq"
+    filtlong \
+        --min_length 1kb \
+        --keep_percent 50 \
+        "$FOLD/$ID.fastq" > "filter/$ID.filtered.fastq"
     
-    gzip "filter/filtered_$ID.fastq"
-    gzip "filter/subsampled_$ID.fastq"
+    gzip "filter/$ID.filtered.fastq"
     gzip "$FOLD/$ID.fastq"
 
 done < "$SAMPLE_LIST"

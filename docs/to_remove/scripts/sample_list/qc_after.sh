@@ -9,7 +9,9 @@ if [[ ! -f "$SAMPLE_LIST" ]]; then
     exit 1
 fi
 
-mkdir -p qc_after
+mkdir -p qc_after/fastqc
+mkdir -p qc_after/nanoplot
+mkdir -p qc_after/multiqc
 
 while read -r FASTQ; do
     # Skip empty lines
@@ -26,25 +28,21 @@ while read -r FASTQ; do
 
     echo "Processing sample: $ID"
 
-    for PREFIX in filtered_ subsampled_; do
-        NEW_ID="${PREFIX}${ID}"
+    # FASTQC
+    mkdir -p qc_after/fastqc/"$ID"
+    fastqc \
+        -f fastq \
+        -o qc_after/fastqc/"$ID" \
+        "$FASTQ"
 
-        # FASTQC
-        mkdir -p qc_after/fastqc/"$NEW_ID"
-        fastqc \
-            -f fastq \
-            -o qc_after/fastqc/"$NEW_ID" \
-            "filter/$NEW_ID.fastq.gz"
-
-        # NANOPLOT
-        mkdir -p qc_after/nanoplot/"$NEW_ID"
-        NanoPlot \
-            --fastq "filter/$NEW_ID.fastq.gz" \
-            -p "${NEW_ID}_" \
-            --loglength \
-            -o qc_after/nanoplot/"$NEW_ID"/
-    done
-
+    # NANOPLOT
+    mkdir -p qc_after/nanoplot/"$ID"
+    NanoPlot \
+        --fastq "$FASTQ" \
+        -p "${ID}_" \
+        --loglength \
+        --N50 \
+        -o qc_after/nanoplot/"$ID"/
 
 done < "$SAMPLE_LIST"
 
