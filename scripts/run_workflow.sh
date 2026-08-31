@@ -19,7 +19,7 @@ THREADS=4
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 log() {
-    printf '\n[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
+    printf '\n[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >&2
 }
 
 die() {
@@ -132,8 +132,6 @@ flye \
 
 # ─── Step 5 · Plasmid recovery (Plassembler) ───────────────────────────────────
 log "Step 5: Plasmid recovery with Plassembler"
-
-mkdir -p plassembler
 
 plassembler-exec plassembler long \
     -l "${filtered_fastq}" \
