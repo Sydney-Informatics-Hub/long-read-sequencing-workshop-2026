@@ -33,6 +33,19 @@ while read -r FASTQ; do
         --min_length 1kb \
         --keep_percent 50 \
         "$FOLD/$ID.fastq" > "filter/$ID.filtered.fastq"
+
+    mkdir -p trim_filter
+    mkdir -p fastplong_filter
+
+    fastplong \
+        --in ${FASTQ} \
+        --qualified_quality_phred 13 \
+        --mean_qual 13 \
+        --low_complexity_filter \
+        --complexity_threshold 10 \
+        --out trim_filter/${ID}.trimmed.filtered.fastq.gz \
+        --html fastplong_filter/${ID}.fastplong_report.html \
+        --json fastplong_filter/${ID}.fastplong_report.json
     
     gzip "filter/$ID.filtered.fastq"
     gzip "$FOLD/$ID.fastq"
