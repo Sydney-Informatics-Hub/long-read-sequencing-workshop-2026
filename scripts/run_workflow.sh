@@ -6,7 +6,7 @@ set -euo pipefail
 # for one FASTQ file: QC -> filter -> species ID -> assembly -> plasmid recovery ->
 # assembly QC -> polish -> assembly QC again -> AMR gene detection.
 #
-# Usage: run_sample_pipeline.sh <sample.fastq.gz>
+# Usage: run_sample_pipeline.sh <sample.fastq.gz> [medaka_extra_arg]
 
 # ─── Reference data paths ─────────────────────────────────────────────────────
 K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari database
@@ -14,12 +14,15 @@ PLASSEMBLER_DB=/home/tdev2/data/ref/plasmid_db_plassembler   # Plassembler plasm
 BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
 AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/2026-05-15.1_4.2.7
 
-# ─── Thread count ─────────────────────────────────────────────────────────────
+# ─── Thread count ────────────────────────────────────────────────────────────────
 THREADS=4
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 log() {
-    printf '\n[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >&2
+    local msg
+    msg=$(printf '\n[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*")
+    printf '%s' "${msg}"
+    printf '%s' "${msg}" >&2
 }
 
 die() {
@@ -28,10 +31,14 @@ die() {
 }
 
 # ─── Argument parsing ─────────────────────────────────────────────────────────
-[[ $# -eq 1 ]] || die "Usage: $(basename "$0") <sample.fastq.gz>"
+usage="Usage: $(basename "$0") <sample.fastq.gz> [medaka_extra_arg]"
+
+[[ $# -eq 1 || $# -eq 2 ]] || die "${usage}"
 
 input_fastq=$(realpath "$1")
 [[ -f "${input_fastq}" ]] || die "FASTQ not found: ${input_fastq}"
+
+medaka_extra_arg="${2:-}"
 
 sample_id=$(basename "${input_fastq}" .fastq.gz)
 sample_id=$(basename "${sample_id}" .fastq)
@@ -186,16 +193,15 @@ log "Step 7: Polish assembly with Medaka"
 medaka_consensus \
     -i "${filtered_fastq}" \
     -d "${draft_assembly}" \
+    ${medaka_extra_arg} \
     -o medaka \
     -t "${THREADS}" \
-    --bacteria
+    -b 50
 
 polished_assembly="medaka/consensus.fasta"
 [[ -s "${polished_assembly}" ]] || die "Polished assembly missing: ${polished_assembly}"
 
 log "Step 7b: Assembly QC (QUAST + BUSCO) on the polished assembly"
-
-mkdir -p busco/polished
 
 quast \
     "${polished_assembly}" \
@@ -221,11 +227,6 @@ amrfinder \
     -d "${AMRFINDER_DB}" \
     --threads "${THREADS}" \
     > "amrfinder/${sample_id}.amrfinder.tsv"
-
-# contig_diagram.py is a separate, manual visualisation step (see 12.annotation.md)
-# that combines the Flye contig info with the AMRFinderPlus summary above; its
-# command-line interface isn't documented in this training's materials, so it
-# isn't automated here.
 
 # ─── Done ───────────────────────────────────────────────────────────────────
 log "Pipeline completed for ${sample_id}"
