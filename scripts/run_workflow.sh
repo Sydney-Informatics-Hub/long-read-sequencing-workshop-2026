@@ -13,7 +13,7 @@ K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari d
 PLASSEMBLER_DB=/home/tdev2/data/ref/plasmid_db_plassembler   # Plassembler plasmid database
 BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
 AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/2026-05-15.1_4.2.7
-MEDAKA_IMAGE_PATH=/home/tdev2/sing_images/medaka_1.0.0--py36h148d290_0
+MEDAKA_IMAGE_PATH=/home/tdev2/sing_images/medaka_1.3.3--py38h130def0_0
 MEDAKA_MODEL=r941_min_high_g360
 
 # ─── Thread count ────────────────────────────────────────────────────────────────
@@ -49,11 +49,11 @@ log "Input FASTQ : ${input_fastq}"
 # ─── Step 1 · QC on raw reads ──────────────────────────────────────────────────
 log "Step 1: QC on raw reads (FastQC + NanoPlot + MultiQC)"
 
-mkdir -p "qc_before/fastqc/${sample_id}" "qc_before/nanoplot/${sample_id}"
+mkdir -p "qc_raw/fastqc/${sample_id}" "qc_raw/nanoplot/${sample_id}"
 
 fastqc \
     -f fastq \
-    -o "qc_before/fastqc/${sample_id}" \
+    -o "qc_raw/fastqc/${sample_id}" \
     "${input_fastq}"
 
 NanoPlot \
@@ -61,14 +61,14 @@ NanoPlot \
     -p "${sample_id}_" \
     --loglength \
     --N50 \
-    -o "qc_before/nanoplot/${sample_id}/"
+    -o "qc_raw/nanoplot/${sample_id}/"
 
-mkdir -p qc_before/multiqc
+mkdir -p qc_raw/multiqc
 multiqc \
-    -o qc_before/multiqc \
+    -o qc_raw/multiqc \
     -f \
     --fullnames \
-    qc_before
+    qc_raw
 
 # ─── Step 2 · Filter reads ─────────────────────────────────────────────────────
 log "Step 2: Filter reads with Filtlong"
@@ -84,11 +84,11 @@ filtlong \
 
 log "Step 2b: QC on filtered reads (FastQC + NanoPlot + MultiQC)"
 
-mkdir -p "qc_after/fastqc/${sample_id}" "qc_after/nanoplot/${sample_id}"
+mkdir -p "qc_filtered/fastqc/${sample_id}" "qc_filtered/nanoplot/${sample_id}"
 
 fastqc \
     -f fastq \
-    -o "qc_after/fastqc/${sample_id}" \
+    -o "qc_filtered/fastqc/${sample_id}" \
     "${filtered_fastq}"
 
 NanoPlot \
@@ -96,14 +96,14 @@ NanoPlot \
     -p "${sample_id}_" \
     --loglength \
     --N50 \
-    -o "qc_after/nanoplot/${sample_id}/"
+    -o "qc_filtered/nanoplot/${sample_id}/"
 
-mkdir -p qc_after/multiqc
+mkdir -p qc_filtered/multiqc
 multiqc \
-    -o qc_after/multiqc \
+    -o qc_filtered/multiqc \
     -f \
     --fullnames \
-    qc_after
+    qc_filtered
 
 # ─── Step 3 · Species identification (Kraken2) ─────────────────────────────────
 log "Step 3: Species identification with Kraken2"
