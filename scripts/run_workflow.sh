@@ -6,13 +6,15 @@ set -euo pipefail
 # for one FASTQ file: QC -> filter -> species ID -> assembly -> plasmid recovery ->
 # assembly QC -> polish -> assembly QC again -> AMR gene detection.
 #
-# Usage: run_sample_pipeline.sh <sample.fastq.gz> [medaka_extra_arg]
+# Usage: run_sample_pipeline.sh <sample.fastq.gz>
 
 # ─── Reference data paths ─────────────────────────────────────────────────────
 K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari database
 PLASSEMBLER_DB=/home/tdev2/data/ref/plasmid_db_plassembler   # Plassembler plasmid database
 BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
 AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/2026-05-15.1_4.2.7
+MEDAKA_IMAGE_PATH=/home/tdev2/sing_images/medaka_1.0.0--py36h148d290_0
+MEDAKA_MODEL=r941_min_high_g360
 
 # ─── Thread count ────────────────────────────────────────────────────────────────
 THREADS=4
@@ -31,14 +33,12 @@ die() {
 }
 
 # ─── Argument parsing ─────────────────────────────────────────────────────────
-usage="Usage: $(basename "$0") <sample.fastq.gz> [medaka_extra_arg]"
+usage="Usage: $(basename "$0") <sample.fastq.gz>"
 
-[[ $# -eq 1 || $# -eq 2 ]] || die "${usage}"
+[[ $# -eq 1 ]] || die "${usage}"
 
 input_fastq=$(realpath "$1")
 [[ -f "${input_fastq}" ]] || die "FASTQ not found: ${input_fastq}"
-
-medaka_extra_arg="${2:-}"
 
 sample_id=$(basename "${input_fastq}" .fastq.gz)
 sample_id=$(basename "${sample_id}" .fastq)
@@ -190,10 +190,10 @@ fi
 # ─── Step 7 · Polish the assembly (Medaka) ─────────────────────────────────────
 log "Step 7: Polish assembly with Medaka"
 
-medaka_consensus \
+singularity exec "${MEDAKA_IMAGE_PATH}" medaka_consensus \
     -i "${filtered_fastq}" \
     -d "${draft_assembly}" \
-    ${medaka_extra_arg} \
+    -m "${MEDAKA_MODEL}" \
     -o medaka \
     -t "${THREADS}" \
     -b 50
