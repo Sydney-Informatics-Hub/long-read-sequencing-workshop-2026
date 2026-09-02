@@ -1,0 +1,1438 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../05.assembly/">
+      
+      
+        <link rel="next" href="../07.assembly_qc/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lesson 6 - Plasmid assembly and recovery - Long Read Sequencing Workshop 2026</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-TNWWV3HK57"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-TNWWV3HK57",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-TNWWV3HK57",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lesson-6-de-novo-plasmid-assembly" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Long Read Sequencing Workshop 2026" class="md-header__button md-logo" aria-label="Long Read Sequencing Workshop 2026" data-md-component="logo">
+      
+  <img src="../assets/usyd-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Long Read Sequencing Workshop 2026
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lesson 6 - Plasmid assembly and recovery
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Sydney-Informatics-Hub/long-read-sequencing-workshop-2026" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Sydney-Informatics-Hub/long-read-sequencing-workshop-2026
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Long Read Sequencing Workshop 2026" class="md-nav__button md-logo" aria-label="Long Read Sequencing Workshop 2026" data-md-component="logo">
+      
+  <img src="../assets/usyd-logo.png" alt="logo">
+
+    </a>
+    Long Read Sequencing Workshop 2026
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Sydney-Informatics-Hub/long-read-sequencing-workshop-2026" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Sydney-Informatics-Hub/long-read-sequencing-workshop-2026
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00.setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00.quiz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quiz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00.samples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Samples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00.glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Day 1
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Day 1
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01.intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1 - Introduction to long read sequencing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02.qc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2 - Quality control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03.preprocess/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3 - Pre-processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04.species/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4 - Species identification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05.assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5 - Genome assembly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Day 2
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Day 2
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6 - Plasmid assembly and recovery
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6 - Plasmid assembly and recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#61-introduction-to-plasmid-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Introduction to plasmid detection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#62-plassembler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 plassembler
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.2 plassembler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#621-tool-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.1 Tool inputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#622-tool-outputs-and-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.2 Tool outputs and statistics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#623-comparing-plassembler-and-flye-plasmid-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.3 Comparing plassembler and flye plasmid calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#63-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Exercise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3 Exercise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#631-run-plassembler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.1 Run plassembler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#632-inspect-the-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.2 Inspect the outputs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3.2 Inspect the outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6321-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.2.1 Questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#633-compare-the-plassembler-and-flye-plasmid-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.3 Compare the plassembler and flye plasmid calls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3.3 Compare the plassembler and flye plasmid calls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6331-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.3.1 Questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#634-add-any-new-plasmids-to-your-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.4 Add any new plasmids to your assembly
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07.assembly_qc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7 - Assembly quality control and visualisation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08.polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8 - Genome assembly polishing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09.annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9 - Genome annotation and AMR screening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00.tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tips and recommendations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#61-introduction-to-plasmid-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Introduction to plasmid detection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#62-plassembler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 plassembler
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.2 plassembler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#621-tool-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.1 Tool inputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#622-tool-outputs-and-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.2 Tool outputs and statistics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#623-comparing-plassembler-and-flye-plasmid-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.3 Comparing plassembler and flye plasmid calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#63-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Exercise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3 Exercise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#631-run-plassembler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.1 Run plassembler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#632-inspect-the-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.2 Inspect the outputs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3.2 Inspect the outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6321-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.2.1 Questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#633-compare-the-plassembler-and-flye-plasmid-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.3 Compare the plassembler and flye plasmid calls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3.3 Compare the plassembler and flye plasmid calls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6331-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.3.1 Questions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#634-add-any-new-plasmids-to-your-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.4 Add any new plasmids to your assembly
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="lesson-6-de-novo-plasmid-assembly">Lesson 6 - <em>De novo</em> plasmid assembly</h1>
+<div class="admonition hint">
+<p class="admonition-title">Learning objectives</p>
+<ul>
+<li>Explain the limitations of tools like <code>flye</code> for reconstructing plasmid sequences</li>
+<li>Use specialised tools like <code>plassembler</code> to perform <em>de novo</em> assembly of plasmids from long reads</li>
+</ul>
+</div>
+<h2 id="61-introduction-to-plasmid-detection">6.1 Introduction to plasmid detection</h2>
+<p>In <a href="../05.assembly/">Lesson 5</a>, we briefly introduced the tool <code>plassembler</code> and its goal to specifically assemble bacterial plasmids. The detection of plasmids in the bacterial genome is of particular importance, especially within the context of identifying antimicrobial resistance genes present in a bacterial isolate. Plasmids are small, circular sequences of DNA that are supplementary to the main chromosome. While they aren't vital to the functioning and maintenance of the cell, they typically contain genes required for antimicrobial resistance. Additionally, plasmids are <strong>mobile</strong>, meaning they can be passed from cell to cell, and even between different species. This means that AMR genes present on a plasmid can spread between species. As such, being able to accurately detect, assemble, and analyse plasmids in bacterial sequencing data is vital when studying antimicrobial resistance.</p>
+<p>Sequencing plasmids suffers from the same problems as sequencing the main bacterial chromosome; frequent repetitive sequences make assembly from short-read sequencing difficult to near impossible. Long read sequencing is essential for generating an accurate assembly of plasmids. However, at the same time, long read sequencing can often result in under-representation of smaller plasmids, particularly those less than 20kb in size. This can be due to these plasmids resisting fragmentation during the library preparation process, meaning fewer sequencing reads ultimately derive from these plasmids, and generic assemblers can end up discarding these reads due to low coverage.</p>
+<h2 id="62-plassembler">6.2 <code>plassembler</code></h2>
+<p><a href="https://github.com/gbouras13/plassembler"><code>plassembler</code></a> (<a href="https://doi.org/10.1093/bioinformatics/btad409">Bouras <em>et al.</em>, 2023</a>) is a tool built specifically for recovering bacterial plasmids that general-purpose assemblers like <code>flye</code> can miss or mis-assemble. It works <em>alongside</em> either <code>flye</code> or <code>raven</code>, working on the assumption that the chromosome has already been successfully assembled by that tool, and focusing on re-assembling the reads that don't align to it, which should, in theory, contain all the plasmid DNA.</p>
+<p>At a high level, <code>plassembler</code> runs through the following steps:</p>
+<ol>
+<li><strong>Start from a long-read-only assembly.</strong> <code>plassembler</code> needs a <code>flye</code> or <code>raven</code> assembly of the full read set as a starting point. It can generate this itself, or you can hand it one you've already produced.</li>
+<li><strong>Classify contigs as chromosome or putative plasmids.</strong> Any contig longer than a user-specified length threshold (1mb by default) is treated as chromosomal; everything shorter is treated as a <em>candidate</em> plasmid contig.</li>
+<li><strong>Extract the reads that don't belong to the chromosome.</strong> All reads are mapped back against the assembly with <code>minimap2</code>. Reads that map to the chromosome are discarded, while those mapping to the small, candidate plasmid contigs, along with any reads that didn't map anywhere at all, are kept.</li>
+<li><strong>Reassemble just those reads.</strong> The remaining reads are reassembled from scratch with <code>unicycler</code> (another bacterial-specific assembly tool). Because the chromosomal reads have been removed, small or low-abundance plasmids that would otherwise be swamped by chromosomal coverage, or discarded outright by a whole-genome assembler's coverage filters, get a much better chance of assembling cleanly and circularising.</li>
+<li><strong>Estimate copy number.</strong> Reads are mapped back to both the chromosome and the newly assembled plasmid contigs, and the relative sequencing depth is used to estimate each plasmid's copy number per cell.</li>
+<li><strong>Check against a plasmid database.</strong> Each recovered contig is compared against <a href="https://ccb-microbe.cs.uni-saarland.de/plsdb/">PLSDB</a>, a curated database of published plasmid sequences. This tells you whether you've recovered a novel plasmid or one that closely matches something that has already been characterised.</li>
+</ol>
+<p><img alt="" src="../assets/06.plassembler.svg" /></p>
+<h3 id="621-tool-inputs">6.2.1 Tool inputs</h3>
+<p><code>plassembler</code> needs two things to run on long-read-only data: your reads, and a database used for the PLSDB comparison step. You download the database once with:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>plassembler<span class="w"> </span>download<span class="w"> </span>-d<span class="w"> </span>/path/to/plassembler_db
+</code></pre></div>
+<p>This downloads a compact (~437MB), pre-built sketch of PLSDB.</p>
+<p>The other key input is the <code>flye</code> assembly. You have two options here:</p>
+<ul>
+<li>Let <code>plassembler</code> run <code>flye</code> itself, by simply not providing an existing assembly.</li>
+<li>Supply the <code>flye</code> assembly you've already generated, using <code>--flye_assembly</code> (pointing at <code>assembly.fasta</code>) and <code>--flye_info</code> (pointing at <code>assembly_info.txt</code>).</li>
+</ul>
+<p>Since we already generated a <code>flye</code> assembly of our sample in <a href="../05.assembly/">Lesson 5</a>, we should reuse it rather than have <code>plassembler</code> redo that work.</p>
+<p>A typical command, reusing an existing <code>flye</code> assembly, looks like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>plassembler<span class="w"> </span>long<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span>-l<span class="w"> </span>/path/to/sample.fastq<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span>-d<span class="w"> </span>/path/to/plassembler_db<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span>--flye_assembly<span class="w"> </span>/path/to/flye/assembly.fasta<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span>--flye_info<span class="w"> </span>/path/to/flye/assembly_info.txt<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span>-t<span class="w"> </span>&lt;int&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span>-o<span class="w"> </span>/path/to/output/plassembler
+</code></pre></div>
+<h3 id="622-tool-outputs-and-statistics">6.2.2 Tool outputs and statistics</h3>
+<p>Running <code>plassembler</code> populates the output directory with several files, including:</p>
+<ul>
+<li><strong><code>_plasmids.fasta</code></strong>: the final, assembled plasmid contigs, with each header annotated with its estimated copy number. An empty file will be created if no plasmids are detected.</li>
+<li><strong><code>_plasmids.gfa</code></strong>: the corresponding assembly graph, viewable in <a href="https://rrwick.github.io/Bandage/">Bandage</a> just like a <code>flye</code> assembly graph.</li>
+<li><strong><code>_summary.tsv</code></strong>: a per-contig summary table giving each plasmid's length, estimated copy number, circularity, and (where one exists) its closest match in PLSDB.</li>
+<li><strong><code>flye_output/</code></strong>: the underlying <code>flye</code> assembly, if <code>plassembler</code> ran <code>flye</code> itself rather than being given one.</li>
+</ul>
+<h3 id="623-comparing-plassembler-and-flye-plasmid-calls">6.2.3 Comparing <code>plassembler</code> and <code>flye</code> plasmid calls</h3>
+<p>Because <code>plassembler</code> starts from the small, non-chromosomal contigs and unmapped reads left over from a <code>flye</code> (or <code>raven</code>) assembly, its output and that of the main assembler will potentially overlap and will need to be manually reconciled. There are three broad outcomes to expect:</p>
+<ul>
+<li><strong>Agreement.</strong> <code>plassembler</code> recovers a plasmid whose length is close to one <code>flye</code> already reported as a small, circular, high-coverage contig. This is the reassuring case: two independent assembly approaches converged on the same sequence, which is good evidence it's a genuine plasmid.</li>
+<li><strong><code>plassembler</code> finds something <code>flye</code> didn't (or improves on it).</strong> This is <code>plassembler</code>'s main selling point. A plasmid may be entirely absent from <code>flye</code>'s output (e.g. discarded as low-coverage), present but fragmented into pieces, or present but linear rather than circular. <code>plassembler</code>'s targeted reassembly can often close and circularise contigs that <code>flye</code> wasn't able to.</li>
+<li><strong><code>plassembler</code> finds <em>fewer</em> plasmids than <code>flye</code>'s small contigs would suggest, or none at all.</strong> This can mean that the additional contigs <code>flye</code> picked up were mis-assembled fragments of the chromosome, collapsed repeats, or contaminating DNA, and <code>plassembler</code>'s more careful read classification and reassembly step corrected this error. An empty <code>_plasmids.fasta</code> is a valid result if the underlying reads genuinely can't support a circularised plasmid, or if the sample simply doesn't carry one. However, <code>plassembler</code> can be sensitive to read coverage, so it is also possible that it simply didn't have enough reads left over after discarding the chromosomal reads to correctly assemble the plasmids.</li>
+</ul>
+<p>In short, agreement between both tools is good evidence for the existence of a plasmid, while disagreement should be <strong>manually inspected</strong>.</p>
+<p>When a plasmid candidate appears in only one tool's output, or the two tools disagree on the genome structure, a few checks can help you judge whether it's likely to be real:</p>
+<ul>
+<li><strong>Coverage relative to the chromosome.</strong> Genuine plasmids are usually maintained at a similar or higher copy number than the chromosome, so their per-base coverage (<code>flye</code>'s <code>cov.</code> column, or <code>plassembler</code>'s estimated copy number) should be comparable to or greater than the chromosome's. A small contig with <em>chromosome-level or lower</em> coverage is more likely to be a mis-assembled chromosomal fragment.</li>
+<li><strong>Circularity.</strong> A contig that closes into a circle (in either tool's output, or visually in Bandage) is much stronger evidence of a real plasmid than a linear contig of similar size, since plasmids are naturally circular molecules.</li>
+<li><strong>PLSDB hits.</strong> A confident match in <code>plassembler</code>'s PLSDB comparison is strong independent evidence that a contig is a genuine, previously characterised plasmid, since it's very unlikely for a mis-assembled chromosomal fragment to closely match a known plasmid sequence.</li>
+<li><strong>Sequence content.</strong> Looking at what genes are encoded on a candidate contig can also help: plasmid backbones typically carry genes for replication, mobilisation/conjugation, and (often) antimicrobial resistance, whereas a mis-assembled chromosomal fragment will tend to carry genes typical of core chromosomal function. This is a preview of the annotation work in later lessons, but it's a useful sanity check to keep in mind even now.</li>
+<li><strong>Length and repeat content.</strong> A <code>flye</code> contig flagged as a <code>repeat</code> (see the <code>assembly_info.txt</code> columns in <a href="../05.assembly/">Lesson 5</a>), or one whose length looks suspiciously similar to a known repetitive element (e.g. an rRNA operon), is more likely to be a collapsed repeat than a standalone plasmid.</li>
+</ul>
+<p>No single one of these checks is definitive on its own, but taken together they let you build a reasonably confident picture of which candidate contigs are real plasmids.</p>
+<h2 id="63-exercise">6.3 Exercise</h2>
+<p>In this exercise, you will run <code>plassembler</code> on your assigned sample, reusing the <code>flye</code> assembly from <a href="../05.assembly/">Lesson 5</a>, then inspect its output to see whether it recovered any plasmids that <code>flye</code> alone missed.</p>
+<h3 id="631-run-plassembler">6.3.1 Run plassembler</h3>
+<p>Run <code>plassembler</code> using your assigned FASTQ file and the <code>flye</code> assembly you generated in <a href="../05.assembly/">Lesson 5</a>. Place the output in a new directory called <code>plassembler</code> and use 4 CPU threads. Use the pre-downloaded plassembler database located at <code>~/data/ref/plassembler</code>.</p>
+<details class="success">
+<summary>Solution</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>plassembler<span class="w"> </span>long<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span>-l<span class="w"> </span>/path/to/sampleXX.fastq.gz<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span>-d<span class="w"> </span>~/data/ref/plassembler<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span>--flye_assembly<span class="w"> </span>flye/assembly.fasta<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span>--flye_info<span class="w"> </span>flye/assembly_info.txt<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span>-t<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span>-o<span class="w"> </span>plassembler
+</code></pre></div>
+<p>Remember to substitute your sample name for <code>sampleXX</code>, and use the full path to your trimmed and filtered FASTQ file. This assumes you ran <code>flye</code> into a directory called <code>flye</code>, as in the <a href="../05.assembly/#631-run-flye">Lesson 5 exercise</a>.</p>
+</details>
+<h3 id="632-inspect-the-outputs">6.3.2 Inspect the outputs</h3>
+<p>Once <code>plassembler</code> has finished, inspect the summary table:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>column<span class="w"> </span>-t<span class="w"> </span>plassembler/*_summary.tsv
+</code></pre></div>
+<p>You can also cross-check the contig lengths against the ones <code>flye</code> reported in <code>flye/assembly_info.txt</code>, to see whether <code>plassembler</code> has genuinely found something new, or simply reassembled a plasmid <code>flye</code> had already recovered.</p>
+<h4 id="6321-questions">6.3.2.1 Questions</h4>
+<ol>
+<li><strong>Did <code>plassembler</code> detect any additional contigs in your sample compared to <code>flye</code> alone?</strong> If so, how many?</li>
+<li><strong>Were the recovered contigs circular, or were some linear?</strong></li>
+<li><strong>Did any of the contigs get a hit against PLSDB?</strong> If so, what does that tell you about the plasmid?</li>
+<li><strong>How do the estimated copy numbers compare to what you'd expect?</strong> Recall from <a href="../05.assembly/">Lesson 5</a> that plasmids are often maintained at a higher copy number per cell than the chromosome.</li>
+</ol>
+<div class="admonition hint">
+<p class="admonition-title">Discussion points</p>
+<ul>
+<li>Finding zero additional contigs is a perfectly valid result: it simply means <code>flye</code> had already recovered everything <code>plassembler</code> could find from these reads (or that your sample carries no plasmids at all).</li>
+<li>A contig that remains linear (rather than circularising) may indicate that reads are still too sparse or too short to bridge the whole plasmid, even after the extra targeted reassembly.</li>
+<li>A high-confidence PLSDB hit is a strong piece of independent evidence that a contig genuinely is a plasmid (and possibly which incompatibility group or host range it belongs to), rather than a mis-assembled fragment of chromosome.</li>
+</ul>
+</div>
+<h3 id="633-compare-the-plassembler-and-flye-plasmid-calls">6.3.3 Compare the <code>plassembler</code> and <code>flye</code> plasmid calls</h3>
+<p>Using <code>flye/assembly_info.txt</code> and <code>plassembler/*_summary.tsv</code>, work out which small contigs from each tool most plausibly represent the same underlying plasmid (matching on approximate length is usually enough), and which contigs are unique to one tool or the other.</p>
+<p>For each candidate plasmid contig (whether it came from <code>flye</code>, <code>plassembler</code>, or both), use the checks discussed in <a href="#623-comparing-plassembler-and-flye-plasmid-calls">6.2.3</a> to decide whether you think it's a genuine plasmid or likely an assembly artefact:</p>
+<ul>
+<li>Compare its coverage (<code>flye</code>'s <code>cov.</code> column, or <code>plassembler</code>'s estimated copy number) to the chromosome's coverage.</li>
+<li>Check whether it's circular.</li>
+<li>Check whether it has a PLSDB hit.<ul>
+<li>For <code>plassembler</code> contigs, this information is contained within the <code>plassembler_summary.tsv</code> file.</li>
+<li>For <code>flye</code> contigs, you can query the PLSDB database with a FASTA sequence <a href="https://ccb-microbe.cs.uni-saarland.de/plsdb2025/search">directly on the website</a>.</li>
+</ul>
+</li>
+<li>Check whether <code>flye</code> flagged it as a <code>repeat</code>.</li>
+</ul>
+<details class="success">
+<summary>Solution</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>column<span class="w"> </span>-t<span class="w"> </span>flye/assembly_info.txt
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>column<span class="w"> </span>-t<span class="w"> </span>plassembler/*_summary.tsv
+</code></pre></div>
+<p>There's no single command that does this comparison for you; it comes down to reading both tables side by side. Match contigs between the two tools by comparing their lengths (allow some slack, since <code>plassembler</code>'s reassembly won't produce an identical sequence length to <code>flye</code>'s), then, for each candidate, weigh up its coverage relative to the chromosome, its circularity, and (for <code>plassembler</code> contigs) any PLSDB hit, to reach a verdict of "likely real plasmid" or "likely artefact".</p>
+</details>
+<h4 id="6331-questions">6.3.3.1 Questions</h4>
+<ol>
+<li><strong>Which contigs appear in both tools' output, which appear only in <code>flye</code>'s, and which appear only in <code>plassembler</code>'s?</strong></li>
+<li><strong>For any contig unique to <code>flye</code>, does its coverage and circularity support it being a genuine plasmid, or does it look more like a mis-assembled chromosomal fragment? Can you query its sequence in PLSDB?</strong></li>
+<li><strong>For any contig unique to <code>plassembler</code>, is there independent evidence (a PLSDB hit, high copy number, circularity) supporting it as a real, novel recovery, rather than an artefact of the targeted reassembly?</strong></li>
+<li><strong>Based on all of this, which contigs would you carry forward into your final assembly, and which would you discard?</strong></li>
+</ol>
+<div class="admonition hint">
+<p class="admonition-title">Discussion points</p>
+<ul>
+<li>Neither tool is automatically "correct" when they disagree; treat each candidate contig on its own merits using the evidence above, rather than trusting whichever tool happened to produce it.</li>
+<li>It's entirely possible to conclude that none of the small contigs from either tool represent real plasmids, or conversely that your sample carries several. Both are valid outcomes, and this exercise is about building a defensible argument either way, not reaching a predetermined answer.</li>
+<li>Keep in mind that these checks are all circumstantial evidence, not proof. Gene annotation and consensus assemblies will give you further tools to build confidence in your plasmid calls.</li>
+</ul>
+</div>
+<h3 id="634-add-any-new-plasmids-to-your-assembly">6.3.4 Add any new plasmids to your assembly</h3>
+<p>If <code>plassembler</code> detected additional contigs that aren't already present in your <code>flye</code> assembly, add them to your assembly FASTA by concatenating the two FASTA files:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cat<span class="w"> </span>flye/assembly.fasta<span class="w"> </span>plassembler/*_plasmids.fasta<span class="w"> </span>&gt;<span class="w"> </span>assembly.fasta
+</code></pre></div>
+<div class="admonition success">
+<p class="admonition-title">Wrap-up</p>
+<p>You've now used a plasmid-specific tool to recover small or low-coverage plasmids that a general-purpose assembler like <code>flye</code> can struggle with, and folded any new sequences back into your assembly. Next, we'll look at how quality control of your assembly, and, optionally, how to combine multiple assemblies into one consensus genome.</p>
+</div>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../05.assembly/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Lesson 5 - Genome assembly">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Lesson 5 - Genome assembly
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../07.assembly_qc/" class="md-footer__link md-footer__link--next" aria-label="Next: Lesson 7 - Assembly quality control and visualisation">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Lesson 7 - Assembly quality control and visualisation
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.footer", "content.code.copy", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
