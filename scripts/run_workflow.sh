@@ -131,7 +131,7 @@ log "Step 4: De novo assembly with Flye"
 mkdir -p flye
 
 flye \
-    --nano-hq "${filtered_fastq}" \
+    --nano-raw "${filtered_fastq}" \
     --out-dir flye \
     --threads "${THREADS}"
 

@@ -7,10 +7,8 @@ nav:
   - Home: index.md 
   # Example top-level page
   - Setup: 00.setup.md
-  - Samples: 00.samples.md
-  - Training format: 00.format.md
-  - Tips and recommendations: 00.tips.md
   - Quiz: 00.quiz.md
+  - Samples: 00.samples.md
   - Glossary: 00.glossary.md
   - Day 1:
     - Lesson 1 - Introduction to long read sequencing: 01.intro.md
@@ -23,6 +21,7 @@ nav:
     - Lesson 7 - Assembly quality control and visualisation: 07.assembly_qc.md
     - Lesson 8 - Genome assembly polishing: 08.polish.md
     - Lesson 9 - Genome annotation and AMR screening: 09.annotation.md
+  - Tips and recommendations: 00.tips.md
   # Example nested page
   # - Part 1:
   #   - Introduction: part1/intro.md
