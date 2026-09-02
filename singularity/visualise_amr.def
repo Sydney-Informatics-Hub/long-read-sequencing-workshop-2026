@@ -1,0 +1,21 @@
+Bootstrap: docker
+From: python:3.11-slim
+
+%post
+    set -eu
+
+    pip install --no-cache-dir --upgrade pip
+    pip install --no-cache-dir \
+        pygenomeviz \
+        pycirclize \
+        matplotlib \
+        numpy
+
+%environment
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    export MPLBACKEND=Agg
+
+%runscript
+    exec python3 "$@"
+
