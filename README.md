@@ -1,45 +1,37 @@
-# template-mkdocs
+# Australian BioCommons Long Read Sequencing Workshop 2026
 
-## Setup
+These are the training materials for the 2026 Australian BioCommons workshop for long read sequencing data analysis (title TBD 🚧). This workshop was developed and presented by [Sydney Informatics Hub](https://www.sydney.edu.au/research/facilities/sydney-informatics-hub.html) (SIH) at the University of Sydney, [Queensland Cyber Infrastructure Foundation](https://www.qcif.edu.au/) (QCIF), and [Australian BioCommons](https://www.biocommons.org.au/).
 
-- Create new repository using this as a template
+This workshop is designed to take you through the process of analysing Oxford Nanoport Technologies (ONT) long read sequencing data within the context of bacterial genome assembly and analysis. It is intended for researchers and bioinformaticians working within the microbiology field who are interested in learning more about long read sequencing analysis and how it can be applied to their research.
 
-- In the cloned repository: Settings -> Pages -> Build and deployment:
+## Pre-requisites
 
-    - Source: Deploy from a branch
-    - Branch: `gh-pages`
-    - Folder: `/ (root)`
+🚧
 
-- Set up `mkdocs` locally
+## Learning objectives
 
-Using `mamba`:
+🚧
 
-```bash
-mamba create -n mkdocs -c conda-forge mkdocs-material
-mamba activate mkdocs
-```
+## For developers
 
-```console
-.
-├── docs # all contents for pages here
-│   ├── assets
-│   │   └── usyd-logo.png
-│   ├── extra.css # usyd styling
-│   └── index.md # home page
-├── .github # GH action to auto publish when pushed to main
-│   └── workflows
-│       └── mkdocs_deploy.yml
-├── mkdocs.yml # config for extensions, contents/navbar, etc.
-└── README.md
-```
+These materials are written in Markdown and are intended to be rendered using [Material for MkDocs](https://github.com/squidfunk/mkdocs-material). All of the pre-requisite software for developing and locally rendering the materials are defined within a [uv](https://docs.astral.sh/uv/) project. To render the materials locally, follow these steps:
 
-## Usage
-
-To preview changes in your browser:
+1. Install uv [as per the documentation](https://docs.astral.sh/uv/getting-started/installation/):
 
 ```bash
-# mamba activate mkdocs
-mkdocs serve
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-All pushes to main will render the content and publish to github pages automatically.
+2. Syncronise the project's virtual environment
+
+```bash
+uv sync
+```
+
+3. Run `mkdocs serve`:
+
+```bash
+uv run mkdocs serve
+```
+
+4. Open the materials in a web browser at: `http://localhost:8000`

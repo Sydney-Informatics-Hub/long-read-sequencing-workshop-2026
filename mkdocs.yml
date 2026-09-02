@@ -1,12 +1,28 @@
-site_name: template-mkdocs
-repo_url: https://github.com/Sydney-Informatics-Hub/template-mkdocs
-repo_name: Sydney-Informatics-Hub/template-mkdocs
+site_name: Long Read Sequencing Workshop 2026
+repo_url: https://github.com/Sydney-Informatics-Hub/long-read-sequencing-workshop-2026
+repo_name: Sydney-Informatics-Hub/long-read-sequencing-workshop-2026
 
 nav:
   # Landing page
   - Home: index.md 
   # Example top-level page
-  #- Setup: setup.md
+  - Setup: 00.setup.md
+  - Samples: 00.samples.md
+  - Training format: 00.format.md
+  - Tips and recommendations: 00.tips.md
+  - Quiz: 00.quiz.md
+  - Glossary: 00.glossary.md
+  - Day 1:
+    - Lesson 1 - Introduction to long read sequencing: 01.intro.md
+    - Lesson 2 - Quality control: 02.qc.md
+    - Lesson 3 - Pre-processing: 03.preprocess.md
+    - Lesson 4 - Species identification: 04.species.md
+    - Lesson 5 - Genome assembly: 05.assembly.md
+  - Day 2:
+    - Lesson 6 - Plasmid assembly and recovery: 06.plasmids.md
+    - Lesson 7 - Assembly quality control and visualisation: 07.assembly_qc.md
+    - Lesson 8 - Genome assembly polishing: 08.polish.md
+    - Lesson 9 - Genome annotation and AMR screening: 09.annotation.md
   # Example nested page
   # - Part 1:
   #   - Introduction: part1/intro.md
@@ -17,6 +33,7 @@ theme:
   features:
     - navigation.footer
     - content.code.copy
+    - content.tabs.link
   palette:
     - scheme: default
       primary: custom
@@ -40,6 +57,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.superfences:
       preserve_tabs: true
+  - pymdownx.tabbed:
+      alternate_style: true
   - attr_list
   - md_in_html
   - pymdownx.superfences
