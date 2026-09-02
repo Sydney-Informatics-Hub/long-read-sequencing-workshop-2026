@@ -1,6 +1,6 @@
-site_name: template-mkdocs
-repo_url: https://github.com/Sydney-Informatics-Hub/template-mkdocs
-repo_name: Sydney-Informatics-Hub/template-mkdocs
+site_name: Long Read Sequencing Workshop 2026
+repo_url: https://github.com/Sydney-Informatics-Hub/long-read-sequencing-workshop-2026
+repo_name: Sydney-Informatics-Hub/long-read-sequencing-workshop-2026
 
 nav:
   # Landing page
