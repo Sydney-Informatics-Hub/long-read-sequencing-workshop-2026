@@ -9,11 +9,11 @@ set -euo pipefail
 # Usage: run_sample_pipeline.sh <sample.fastq.gz>
 
 # ─── Reference data paths ─────────────────────────────────────────────────────
-K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari database
-PLASSEMBLER_DB=/home/tdev2/data/ref/plasmid_db_plassembler   # Plassembler plasmid database
-BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
-AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/2026-05-15.1_4.2.7
-MEDAKA_IMAGE_PATH=/home/tdev2/sing_images/medaka_1.3.3--py38h130def0_0
+K2DB=/home/tdev3/data/ref/kalamari                          # Kraken2 Kalamari database
+PLASSEMBLER_DB=/home/tdev3/data/ref/plasmid_db_plassembler   # Plassembler plasmid database
+BUSCO_DB=/home/tdev3/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
+AMRFINDER_DB=/home/tdev3/data/ref/amrfinderplus_db/2026-08-07.1
+MEDAKA_IMAGE_PATH=/home/tdev3/sing_images/medaka_1.3.3--py38h130def0_0
 MEDAKA_MODEL=r941_min_high_g360
 
 # ─── Thread count ────────────────────────────────────────────────────────────────
