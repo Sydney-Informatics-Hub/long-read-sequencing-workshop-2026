@@ -1,0 +1,3 @@
+Sample	nanostat-Median_read_length_fastq	nanostat-Mean_read_length_fastq	nanostat-Read_length_N50_fastq	nanostat-Median_read_quality_fastq	nanostat-Mean_read_quality_fastq	nanostat-Number_of_reads_fastq	nanostat-Total_bases_fastq	fastqc-percent_duplicates	fastqc-percent_gc	fastqc-avg_sequence_length	fastqc-median_sequence_length	fastqc-percent_fails	fastqc-total_sequences
+ERR8282751.filtered.fastq.gz								0.7037510943497978	51.0	14851.37743282376	12999	20.0	0.029698
+ERR8282751_NanoStats.txt	12542.0	14850.9	16721.0	13.4	13.3	29.698	441.04067399999997						

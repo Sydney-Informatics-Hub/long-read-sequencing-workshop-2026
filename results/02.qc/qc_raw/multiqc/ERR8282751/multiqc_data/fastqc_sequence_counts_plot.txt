@@ -1,0 +1,2 @@
+Sample	Unique Reads	Duplicate Reads
+ERR8282751.fastq.gz	119831.0	1178.0

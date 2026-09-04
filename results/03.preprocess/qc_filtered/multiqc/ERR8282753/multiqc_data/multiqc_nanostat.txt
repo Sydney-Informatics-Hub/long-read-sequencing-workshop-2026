@@ -1,0 +1,2 @@
+Sample	Mean read length_fastq	Mean read quality_fastq	Median read length_fastq	Median read quality_fastq	Number of reads_fastq	Read length N50_fastq	STDEV read length_fastq	Total bases_fastq	>Q10_fastq	>Q15_fastq	>Q20_fastq	>Q25_fastq	>Q30_fastq
+ERR8282753_NanoStats.txt	15370.5	13.5	13222.0	13.7	7884.0	17305.0	7943.7	121181099.0	7884.0	772.0	0.0	0.0	0.0

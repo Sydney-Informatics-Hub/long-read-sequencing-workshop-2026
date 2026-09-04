@@ -1,0 +1,3 @@
+Module	Section	Sample Name	Source
+NanoStat	all_sections	ERR8282753_NanoStats.txt	/home/tdev3/analysis_err_753/qc_raw/nanoplot/ERR8282753/ERR8282753_NanoStats.txt
+FastQC	all_sections	ERR8282753.fastq.gz	/home/tdev3/analysis_err_753/qc_raw/fastqc/ERR8282753/ERR8282753_fastqc.zip

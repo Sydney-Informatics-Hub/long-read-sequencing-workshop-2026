@@ -1,0 +1,2 @@
+Sample	Median length	Mean length	Read N50	Median Qual	Mean Qual	# Reads (K)	Total Bases (Mb)
+ERR8282751_NanoStats.txt	4898.0	7288.9	11490.0	12.7	11.9	121.009	882.028542

@@ -1,0 +1,317 @@
+2026-09-03 23:59:19,788 NanoPlot 1.47.0 started with arguments Namespace(threads=4, verbose=False, store=False, raw=False, huge=False, outdir='qc_filtered/nanoplot/ERR8282751/', no_static=False, prefix='ERR8282751_', tsv_stats=False, only_report=False, info_in_report=False, maxlength=None, minlength=None, drop_outliers=False, downsample=None, loglength=True, percentqual=False, alength=False, minqual=None, runtime_until=None, readtype='1D', barcoded=False, no_supplementary=False, color='#4CB391', colormap='Greens', format=['png'], plots=['kde', 'dot'], legacy=None, listcolors=False, listcolormaps=False, no_N50=False, N50=True, title=None, font_scale=1, dpi=300, hide_stats=False, fastq=['filtered/ERR8282751.filtered.fastq.gz'], fasta=None, fastq_rich=None, fastq_minimal=None, summary=None, bam=None, ubam=None, cram=None, pickle=None, feather=None, path='qc_filtered/nanoplot/ERR8282751/ERR8282751_')
+2026-09-03 23:59:19,788 Python version is: 3.13.13 | packaged by conda-forge | (main, Apr  8 2026, 02:00:33) [GCC 14.3.0]
+2026-09-03 23:59:19,815 Nanoget: Starting to collect statistics from plain fastq file.
+2026-09-03 23:59:19,816 Nanoget: Decompressing gzipped fastq filtered/ERR8282751.filtered.fastq.gz
+2026-09-03 23:59:44,214 Reduced DataFrame memory usage from 0.4532814025878906Mb to 0.4532814025878906Mb
+2026-09-03 23:59:44,238 Nanoget: Gathered all metrics of 29698 reads
+2026-09-03 23:59:44,326 Calculated statistics
+2026-09-03 23:59:44,327 Using sequenced read lengths for plotting.
+2026-09-03 23:59:44,329 Using log10 scaled read lengths.
+2026-09-03 23:59:44,334 NanoPlot:  Valid color #4CB391.
+2026-09-03 23:59:44,334 NanoPlot:  Valid colormap Greens.
+2026-09-03 23:59:44,337 NanoPlot:  Creating length plots for Read length.
+2026-09-03 23:59:44,337 NanoPlot: Using 29698 reads with read length N50 of 16721bp and maximum of 75054bp.
+2026-09-03 23:59:44,662 Chromium init'ed with kwargs {}
+2026-09-03 23:59:44,662 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:44,664 Temp directory created: /tmp/tmpjdx20r2o.
+2026-09-03 23:59:44,664 Opening browser.
+2026-09-03 23:59:44,665 Temp directory created: /tmp/tmpigy7xd_6.
+2026-09-03 23:59:44,665 Temporary directory at: /tmp/tmpigy7xd_6
+2026-09-03 23:59:44,772 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:44,772 shutil.rmtree worked.
+2026-09-03 23:59:44,772 Closing browser.
+2026-09-03 23:59:44,789 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:44,790 shutil.rmtree worked.
+2026-09-03 23:59:44,790 Cancelling tasks.
+2026-09-03 23:59:44,790 Exiting Kaleido/Choreo.
+2026-09-03 23:59:44,791 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_WeightedHistogramReadlength.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:44,796 Chromium init'ed with kwargs {}
+2026-09-03 23:59:44,796 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:44,797 Temp directory created: /tmp/tmpx63s3n89.
+2026-09-03 23:59:44,797 Opening browser.
+2026-09-03 23:59:44,798 Temp directory created: /tmp/tmphntp9p7r.
+2026-09-03 23:59:44,798 Temporary directory at: /tmp/tmphntp9p7r
+2026-09-03 23:59:44,943 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:44,943 shutil.rmtree worked.
+2026-09-03 23:59:44,943 Closing browser.
+2026-09-03 23:59:44,979 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:44,980 shutil.rmtree worked.
+2026-09-03 23:59:44,980 Cancelling tasks.
+2026-09-03 23:59:44,980 Exiting Kaleido/Choreo.
+2026-09-03 23:59:44,981 No static plots are saved due to an export problem:
+2026-09-03 23:59:44,981 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:44,995 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:44,995 shutil.rmtree worked.
+2026-09-03 23:59:44,996 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:44,996 shutil.rmtree worked.
+2026-09-03 23:59:45,058 Chromium init'ed with kwargs {}
+2026-09-03 23:59:45,059 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:45,059 Temp directory created: /tmp/tmpu45r4fn9.
+2026-09-03 23:59:45,059 Opening browser.
+2026-09-03 23:59:45,060 Temp directory created: /tmp/tmpfdmrgvnc.
+2026-09-03 23:59:45,060 Temporary directory at: /tmp/tmpfdmrgvnc
+2026-09-03 23:59:45,200 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,201 shutil.rmtree worked.
+2026-09-03 23:59:45,201 Closing browser.
+2026-09-03 23:59:45,218 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,218 shutil.rmtree worked.
+2026-09-03 23:59:45,218 Cancelling tasks.
+2026-09-03 23:59:45,219 Exiting Kaleido/Choreo.
+2026-09-03 23:59:45,220 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_WeightedLogTransformed_HistogramReadlength.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:45,224 Chromium init'ed with kwargs {}
+2026-09-03 23:59:45,224 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:45,224 Temp directory created: /tmp/tmp_qv0rmag.
+2026-09-03 23:59:45,225 Opening browser.
+2026-09-03 23:59:45,225 Temp directory created: /tmp/tmpy2ilbprn.
+2026-09-03 23:59:45,225 Temporary directory at: /tmp/tmpy2ilbprn
+2026-09-03 23:59:45,362 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,363 shutil.rmtree worked.
+2026-09-03 23:59:45,363 Closing browser.
+2026-09-03 23:59:45,380 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,381 shutil.rmtree worked.
+2026-09-03 23:59:45,381 Cancelling tasks.
+2026-09-03 23:59:45,382 Exiting Kaleido/Choreo.
+2026-09-03 23:59:45,383 No static plots are saved due to an export problem:
+2026-09-03 23:59:45,383 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:45,404 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,404 shutil.rmtree worked.
+2026-09-03 23:59:45,404 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,404 shutil.rmtree worked.
+2026-09-03 23:59:45,468 Chromium init'ed with kwargs {}
+2026-09-03 23:59:45,468 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:45,469 Temp directory created: /tmp/tmpluauk_r8.
+2026-09-03 23:59:45,469 Opening browser.
+2026-09-03 23:59:45,470 Temp directory created: /tmp/tmphh3s889q.
+2026-09-03 23:59:45,470 Temporary directory at: /tmp/tmphh3s889q
+2026-09-03 23:59:45,613 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,613 shutil.rmtree worked.
+2026-09-03 23:59:45,613 Closing browser.
+2026-09-03 23:59:45,630 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,631 shutil.rmtree worked.
+2026-09-03 23:59:45,631 Cancelling tasks.
+2026-09-03 23:59:45,631 Exiting Kaleido/Choreo.
+2026-09-03 23:59:45,632 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_Non_weightedHistogramReadlength.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:45,637 Chromium init'ed with kwargs {}
+2026-09-03 23:59:45,638 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:45,638 Temp directory created: /tmp/tmpfnbbaxe2.
+2026-09-03 23:59:45,639 Opening browser.
+2026-09-03 23:59:45,639 Temp directory created: /tmp/tmpt3hvkj5e.
+2026-09-03 23:59:45,640 Temporary directory at: /tmp/tmpt3hvkj5e
+2026-09-03 23:59:45,739 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,739 shutil.rmtree worked.
+2026-09-03 23:59:45,739 Closing browser.
+2026-09-03 23:59:45,757 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,757 shutil.rmtree worked.
+2026-09-03 23:59:45,757 Cancelling tasks.
+2026-09-03 23:59:45,758 Exiting Kaleido/Choreo.
+2026-09-03 23:59:45,758 No static plots are saved due to an export problem:
+2026-09-03 23:59:45,759 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:45,870 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,871 shutil.rmtree worked.
+2026-09-03 23:59:45,871 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:45,871 shutil.rmtree worked.
+2026-09-03 23:59:45,935 Chromium init'ed with kwargs {}
+2026-09-03 23:59:45,935 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:45,935 Temp directory created: /tmp/tmp9p3tnck5.
+2026-09-03 23:59:45,936 Opening browser.
+2026-09-03 23:59:45,936 Temp directory created: /tmp/tmp5uj67ffj.
+2026-09-03 23:59:45,937 Temporary directory at: /tmp/tmp5uj67ffj
+2026-09-03 23:59:46,050 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:46,051 shutil.rmtree worked.
+2026-09-03 23:59:46,051 Closing browser.
+2026-09-03 23:59:46,070 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:46,070 shutil.rmtree worked.
+2026-09-03 23:59:46,070 Cancelling tasks.
+2026-09-03 23:59:46,070 Exiting Kaleido/Choreo.
+2026-09-03 23:59:46,071 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_Non_weightedLogTransformed_HistogramReadlength.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:46,073 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:46,073 shutil.rmtree worked.
+2026-09-03 23:59:46,078 Chromium init'ed with kwargs {}
+2026-09-03 23:59:46,079 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:46,079 Temp directory created: /tmp/tmpoktemhpb.
+2026-09-03 23:59:46,080 Opening browser.
+2026-09-03 23:59:46,080 Temp directory created: /tmp/tmptzsskw0x.
+2026-09-03 23:59:46,081 Temporary directory at: /tmp/tmptzsskw0x
+2026-09-03 23:59:46,225 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:46,226 shutil.rmtree worked.
+2026-09-03 23:59:46,226 Closing browser.
+2026-09-03 23:59:46,244 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:46,244 shutil.rmtree worked.
+2026-09-03 23:59:46,244 Cancelling tasks.
+2026-09-03 23:59:46,245 Exiting Kaleido/Choreo.
+2026-09-03 23:59:46,245 No static plots are saved due to an export problem:
+2026-09-03 23:59:46,246 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:46,246 NanoPlot: Creating yield by minimal length plot for Read length.
+2026-09-03 23:59:46,294 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:46,294 shutil.rmtree worked.
+2026-09-03 23:59:46,931 Chromium init'ed with kwargs {}
+2026-09-03 23:59:46,931 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:46,931 Temp directory created: /tmp/tmpytow_dxc.
+2026-09-03 23:59:46,932 Opening browser.
+2026-09-03 23:59:46,933 Temp directory created: /tmp/tmp6w3tt3ed.
+2026-09-03 23:59:46,933 Temporary directory at: /tmp/tmp6w3tt3ed
+2026-09-03 23:59:47,078 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,082 shutil.rmtree worked.
+2026-09-03 23:59:47,082 Closing browser.
+2026-09-03 23:59:47,099 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,100 shutil.rmtree worked.
+2026-09-03 23:59:47,100 Cancelling tasks.
+2026-09-03 23:59:47,100 Exiting Kaleido/Choreo.
+2026-09-03 23:59:47,101 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_Yield_By_Length.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:47,107 Chromium init'ed with kwargs {}
+2026-09-03 23:59:47,107 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:47,107 Temp directory created: /tmp/tmpoiekw3h8.
+2026-09-03 23:59:47,108 Opening browser.
+2026-09-03 23:59:47,109 Temp directory created: /tmp/tmpa8g2kmsb.
+2026-09-03 23:59:47,109 Temporary directory at: /tmp/tmpa8g2kmsb
+2026-09-03 23:59:47,255 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,255 shutil.rmtree worked.
+2026-09-03 23:59:47,256 Closing browser.
+2026-09-03 23:59:47,273 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,273 shutil.rmtree worked.
+2026-09-03 23:59:47,273 Cancelling tasks.
+2026-09-03 23:59:47,274 Exiting Kaleido/Choreo.
+2026-09-03 23:59:47,275 No static plots are saved due to an export problem:
+2026-09-03 23:59:47,275 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:47,275 Created length plots
+2026-09-03 23:59:47,276 NanoPlot: Creating Read lengths vs Average read quality plots using 29698 reads.
+2026-09-03 23:59:47,313 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,313 shutil.rmtree worked.
+2026-09-03 23:59:47,477 Chromium init'ed with kwargs {}
+2026-09-03 23:59:47,477 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:47,478 Temp directory created: /tmp/tmpy49b0u_d.
+2026-09-03 23:59:47,478 Opening browser.
+2026-09-03 23:59:47,479 Temp directory created: /tmp/tmpots772dp.
+2026-09-03 23:59:47,479 Temporary directory at: /tmp/tmpots772dp
+2026-09-03 23:59:47,634 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,634 shutil.rmtree worked.
+2026-09-03 23:59:47,634 Closing browser.
+2026-09-03 23:59:47,654 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,654 shutil.rmtree worked.
+2026-09-03 23:59:47,654 Cancelling tasks.
+2026-09-03 23:59:47,654 Exiting Kaleido/Choreo.
+2026-09-03 23:59:47,656 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_LengthvsQualityScatterPlot_dot.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:47,662 Chromium init'ed with kwargs {}
+2026-09-03 23:59:47,662 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:47,663 Temp directory created: /tmp/tmpyddjfihi.
+2026-09-03 23:59:47,663 Opening browser.
+2026-09-03 23:59:47,664 Temp directory created: /tmp/tmpv53rxer0.
+2026-09-03 23:59:47,664 Temporary directory at: /tmp/tmpv53rxer0
+2026-09-03 23:59:47,669 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,669 shutil.rmtree worked.
+2026-09-03 23:59:47,808 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,808 shutil.rmtree worked.
+2026-09-03 23:59:47,808 Closing browser.
+2026-09-03 23:59:47,826 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:47,826 shutil.rmtree worked.
+2026-09-03 23:59:47,826 Cancelling tasks.
+2026-09-03 23:59:47,826 Exiting Kaleido/Choreo.
+2026-09-03 23:59:47,827 No static plots are saved due to an export problem:
+2026-09-03 23:59:47,827 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:47,914 Chromium init'ed with kwargs {}
+2026-09-03 23:59:47,915 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:47,915 Temp directory created: /tmp/tmpscr1nsdz.
+2026-09-03 23:59:47,915 Opening browser.
+2026-09-03 23:59:47,916 Temp directory created: /tmp/tmp5ze45q7e.
+2026-09-03 23:59:47,916 Temporary directory at: /tmp/tmp5ze45q7e
+2026-09-03 23:59:48,050 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,051 shutil.rmtree worked.
+2026-09-03 23:59:48,051 Closing browser.
+2026-09-03 23:59:48,070 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,070 shutil.rmtree worked.
+2026-09-03 23:59:48,070 Cancelling tasks.
+2026-09-03 23:59:48,070 Exiting Kaleido/Choreo.
+2026-09-03 23:59:48,071 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_LengthvsQualityScatterPlot_kde.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:48,079 Chromium init'ed with kwargs {}
+2026-09-03 23:59:48,079 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:48,079 Temp directory created: /tmp/tmp_b19bhtn.
+2026-09-03 23:59:48,080 Opening browser.
+2026-09-03 23:59:48,081 Temp directory created: /tmp/tmp0292iw5n.
+2026-09-03 23:59:48,081 Temporary directory at: /tmp/tmp0292iw5n
+2026-09-03 23:59:48,085 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,085 shutil.rmtree worked.
+2026-09-03 23:59:48,228 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,229 shutil.rmtree worked.
+2026-09-03 23:59:48,229 Closing browser.
+2026-09-03 23:59:48,248 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,249 shutil.rmtree worked.
+2026-09-03 23:59:48,249 Cancelling tasks.
+2026-09-03 23:59:48,249 Exiting Kaleido/Choreo.
+2026-09-03 23:59:48,250 No static plots are saved due to an export problem:
+2026-09-03 23:59:48,250 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:48,251 NanoPlot: Creating Read lengths vs Average read quality plots using 29698 reads.
+2026-09-03 23:59:48,436 Chromium init'ed with kwargs {}
+2026-09-03 23:59:48,436 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:48,437 Temp directory created: /tmp/tmpsbvzzmp9.
+2026-09-03 23:59:48,437 Opening browser.
+2026-09-03 23:59:48,438 Temp directory created: /tmp/tmp0ovvc84q.
+2026-09-03 23:59:48,438 Temporary directory at: /tmp/tmp0ovvc84q
+2026-09-03 23:59:48,575 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,575 shutil.rmtree worked.
+2026-09-03 23:59:48,575 Closing browser.
+2026-09-03 23:59:48,593 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,594 shutil.rmtree worked.
+2026-09-03 23:59:48,594 Cancelling tasks.
+2026-09-03 23:59:48,594 Exiting Kaleido/Choreo.
+2026-09-03 23:59:48,595 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_LengthvsQualityScatterPlot_loglength_dot.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:48,603 Chromium init'ed with kwargs {}
+2026-09-03 23:59:48,603 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:48,604 Temp directory created: /tmp/tmpuupxlbjl.
+2026-09-03 23:59:48,604 Opening browser.
+2026-09-03 23:59:48,606 Temp directory created: /tmp/tmpk2r6zwoz.
+2026-09-03 23:59:48,606 Temporary directory at: /tmp/tmpk2r6zwoz
+2026-09-03 23:59:48,736 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,737 shutil.rmtree worked.
+2026-09-03 23:59:48,737 Closing browser.
+2026-09-03 23:59:48,755 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,755 shutil.rmtree worked.
+2026-09-03 23:59:48,755 Cancelling tasks.
+2026-09-03 23:59:48,755 Exiting Kaleido/Choreo.
+2026-09-03 23:59:48,757 No static plots are saved due to an export problem:
+2026-09-03 23:59:48,757 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:48,787 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,787 shutil.rmtree worked.
+2026-09-03 23:59:48,788 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:48,788 shutil.rmtree worked.
+2026-09-03 23:59:48,853 Chromium init'ed with kwargs {}
+2026-09-03 23:59:48,853 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:48,854 Temp directory created: /tmp/tmpa39keuq1.
+2026-09-03 23:59:48,854 Opening browser.
+2026-09-03 23:59:48,855 Temp directory created: /tmp/tmpy53y3rrk.
+2026-09-03 23:59:48,855 Temporary directory at: /tmp/tmpy53y3rrk
+2026-09-03 23:59:49,003 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,004 shutil.rmtree worked.
+2026-09-03 23:59:49,004 Closing browser.
+2026-09-03 23:59:49,024 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,024 shutil.rmtree worked.
+2026-09-03 23:59:49,025 Cancelling tasks.
+2026-09-03 23:59:49,025 Exiting Kaleido/Choreo.
+2026-09-03 23:59:49,026 DPI helper failed for qc_filtered/nanoplot/ERR8282751/ERR8282751_LengthvsQualityScatterPlot_loglength_kde.png: ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.'); falling back to explicit px size
+2026-09-03 23:59:49,034 Chromium init'ed with kwargs {}
+2026-09-03 23:59:49,034 Found chromium path: /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome
+2026-09-03 23:59:49,034 Temp directory created: /tmp/tmp2_8tux1k.
+2026-09-03 23:59:49,035 Opening browser.
+2026-09-03 23:59:49,036 Temp directory created: /tmp/tmp0qc50naf.
+2026-09-03 23:59:49,036 Temporary directory at: /tmp/tmp0qc50naf
+2026-09-03 23:59:49,182 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,183 shutil.rmtree worked.
+2026-09-03 23:59:49,183 Closing browser.
+2026-09-03 23:59:49,200 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,201 shutil.rmtree worked.
+2026-09-03 23:59:49,201 Cancelling tasks.
+2026-09-03 23:59:49,201 Exiting Kaleido/Choreo.
+2026-09-03 23:59:49,202 No static plots are saved due to an export problem:
+2026-09-03 23:59:49,202 ('The browser seemed to close immediately after starting.', 'You can set the `logging.Logger` level lower to see more output.', 'You may try installing a known working copy of Chrome by running ', '`$ choreo_get_chrome`.It may be your browser auto-updated and will now work upon restart. The browser we tried to start is located at /home/tdev3/.local/share/choreographer/deps/chrome-linux64/chrome.')
+2026-09-03 23:59:49,202 Created LengthvsQual plot
+2026-09-03 23:59:49,203 Writing html report.
+2026-09-03 23:59:49,222 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,222 shutil.rmtree worked.
+2026-09-03 23:59:49,222 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,222 shutil.rmtree worked.
+2026-09-03 23:59:49,247 Finished!
+2026-09-03 23:59:49,343 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,343 shutil.rmtree worked.
+2026-09-03 23:59:49,343 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,343 shutil.rmtree worked.
+2026-09-03 23:59:49,344 TemporaryDirectory.cleanup() worked.
+2026-09-03 23:59:49,344 shutil.rmtree worked.
