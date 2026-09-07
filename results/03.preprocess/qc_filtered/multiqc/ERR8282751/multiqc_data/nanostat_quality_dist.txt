@@ -1,2 +1,0 @@
-Sample	Reads Q15-20	Reads Q10-15
-ERR8282751_NanoStats.txt	1037.0	28661.0
