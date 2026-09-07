@@ -49,26 +49,19 @@ log "Input FASTQ : ${input_fastq}"
 # ─── Step 1 · QC on raw reads ──────────────────────────────────────────────────
 log "Step 1: QC on raw reads (FastQC + NanoPlot + MultiQC)"
 
-mkdir -p "qc_raw/fastqc/${sample_id}" "qc_raw/nanoplot/${sample_id}"
+mkdir -p "qc/${sample_id}/fastqc/raw" "qc/${sample_id}/nanoplot/raw"
 
 fastqc \
     -f fastq \
-    -o "qc_raw/fastqc/${sample_id}" \
+    -o "qc/${sample_id}/fastqc/raw/" \
     "${input_fastq}"
 
 NanoPlot \
     --fastq "${input_fastq}" \
-    -p "${sample_id}_" \
+    -p "${sample_id}_raw_" \
     --loglength \
     --N50 \
-    -o "qc_raw/nanoplot/${sample_id}/"
-
-mkdir -p qc_raw/multiqc
-multiqc \
-    -o qc_raw/multiqc \
-    -f \
-    --fullnames \
-    qc_raw
+    -o "qc/${sample_id}/nanoplot/raw/"
 
 # ─── Step 2 · Filter reads ─────────────────────────────────────────────────────
 log "Step 2: Filter reads with Filtlong"
@@ -84,26 +77,26 @@ filtlong \
 
 log "Step 2b: QC on filtered reads (FastQC + NanoPlot + MultiQC)"
 
-mkdir -p "qc_filtered/fastqc/${sample_id}" "qc_filtered/nanoplot/${sample_id}"
+mkdir -p "qc/${sample_id}/fastqc/filtered" "qc/${sample_id}/nanoplot/filtered"
 
 fastqc \
     -f fastq \
-    -o "qc_filtered/fastqc/${sample_id}" \
+    -o "qc/${sample_id}/fastqc/filtered" \
     "${filtered_fastq}"
 
 NanoPlot \
     --fastq "${filtered_fastq}" \
-    -p "${sample_id}_" \
+    -p "${sample_id}_filtered_" \
     --loglength \
     --N50 \
-    -o "qc_filtered/nanoplot/${sample_id}/"
+    -o "qc/${sample_id}/nanoplot/filtered/"
 
-mkdir -p qc_filtered/multiqc
+mkdir -p "qc/${sample_id}/multiqc/"
 multiqc \
-    -o qc_filtered/multiqc \
+    -o "qc/${sample_id}/multiqc/" \
     -f \
     --fullnames \
-    qc_filtered
+    qc/${sample_id}
 
 # ─── Step 3 · Species identification (Kraken2) ─────────────────────────────────
 log "Step 3: Species identification with Kraken2"
