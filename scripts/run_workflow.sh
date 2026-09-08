@@ -48,7 +48,7 @@ sample_id=$(basename "${sample_id}" .fastq)
 log "Sample ID   : ${sample_id}"
 log "Input FASTQ : ${input_fastq}"
 
-# === Step 1 · QC on raw reads ==================================================
+# === Step 1 - QC on raw reads ==================================================
 log "Step 1: QC on raw reads (FastQC + NanoPlot + MultiQC)"
 
 mkdir -p "qc_raw/fastqc/${sample_id}" "qc_raw/nanoplot/${sample_id}"
@@ -72,7 +72,7 @@ multiqc \
     --fullnames \
     qc_raw
 
-# === Step 2 · Filter reads =====================================================
+# === Step 2 - Filter reads =====================================================
 log "Step 2: Filter reads with Filtlong"
 
 mkdir -p filtered
@@ -107,7 +107,7 @@ multiqc \
     --fullnames \
     qc_filtered
 
-# === Step 3 · Species identification (Kraken2) =================================
+# === Step 3 - Species identification (Kraken2) =================================
 log "Step 3: Species identification with Kraken2"
 
 mkdir -p kraken2
@@ -127,7 +127,7 @@ multiqc \
     -f \
     kraken2
 
-# === Step 4 · De novo assembly (Flye) ==========================================
+# === Step 4 - De novo assembly (Flye) ==========================================
 log "Step 4: De novo assembly with Flye"
 
 mkdir -p flye
@@ -139,7 +139,30 @@ flye \
 
 [[ -s flye/assembly.fasta ]] || die "Flye assembly missing: flye/assembly.fasta"
 
-# === Step 5 · Plasmid recovery (Plassembler) ===================================
+# === Step 4.1 - PLSDB search of Flye plasmids ==================================
+log "Step 4.1: Flye plasmid search against PLSDB"
+
+# Split FASTA into separate sequence files
+seqkit split flye/assembly.fasta --by-id
+SPLIT_CONTIG_DIR=flye/assembly.fasta.split
+
+# Run mash screen using Plassembler database (PLSDB)
+for CONTIG in ${SPLIT_CONTIG_DIR}/assembly.part_*.fasta; do
+    PLSDB_RESULTS=${SPLIT_CONTIG_DIR}/$(basename ${CONTIG} .fasta).plsdb_results.tsv
+    echo -e "Identity\tShared Hashes\tMedian Multiplicity\tP-value\tNUCCORE_ACC\tDescription" > ${PLSDB_RESULTS}
+    mash screen \
+        -i 0.99 \
+        -v 0.1 \
+        ${PLASSEMBLER_DB}/plsdb_2023_11_03_v2.msh \
+        ${CONTIG} >> ${PLSDB_RESULTS}
+    echo "====================" >> ${PLSDB_RESULTS}
+    head -n 1 ${PLASSEMBLER_DB}/plsdb_2023_11_03_v2.tsv | cut -f 2-9 >> ${PLSDB_RESULTS}
+    cut -f 5 ${PLSDB_RESULTS} | while read PLASMID; do
+        grep -P "\t${PLASMID}\t" ${PLASSEMBLER_DB}/plsdb_2023_11_03_v2.tsv | cut -f 2-9 >> ${PLSDB_RESULTS}
+    done
+done
+
+# === Step 5 - Plasmid recovery (Plassembler) ===================================
 log "Step 5: Plasmid recovery with Plassembler"
 
 plassembler long \
@@ -160,7 +183,7 @@ else
     cp flye/assembly.fasta "${draft_assembly}"
 fi
 
-# === Step 6 · Assembly QC on the draft assembly ================================
+# === Step 6 - Assembly QC on the draft assembly ================================
 log "Step 6: Assembly QC (QUAST + BUSCO + Bandage) on the draft assembly"
 
 mkdir -p quast/draft busco bandage
@@ -189,7 +212,7 @@ if [[ -s "${plassembler_plasmids[0]}" ]]; then
         "bandage/${sample_id}.plassembler_plasmids_graph.svg"
 fi
 
-# === Step 7 · Polish the assembly (Medaka) =====================================
+# === Step 7 - Polish the assembly (Medaka) =====================================
 log "Step 7: Polish assembly with Medaka"
 
 medaka_consensus \
@@ -219,7 +242,7 @@ busco \
     --offline \
     --cpu "${THREADS}"
 
-# === Step 8 · AMR gene detection (AMRFinderPlus) ===============================
+# === Step 8 - AMR gene detection (AMRFinderPlus) ===============================
 log "Step 8: AMR gene detection with AMRFinderPlus"
 
 mkdir -p amrfinder
