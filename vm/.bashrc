@@ -117,6 +117,8 @@ if ! shopt -oq posix; then
 fi
 
 # Load modules
+## Ensure CVMFS is available
+export SINGULARITY_COMMAND_OPTS="-B /cvmfs"
 module load singularity
 module load multiqc
 module load nanoplot
