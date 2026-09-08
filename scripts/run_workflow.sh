@@ -8,18 +8,18 @@ set -euo pipefail
 #
 # Usage: run_sample_pipeline.sh <sample.fastq.gz>
 
-# ─── Reference data paths ─────────────────────────────────────────────────────
+# === Reference data paths =====================================================
 K2DB=/home/tdev2/data/ref/kalamari                          # Kraken2 Kalamari database
 PLASSEMBLER_DB=/home/tdev2/data/ref/plasmid_db_plassembler   # Plassembler plasmid database
 BUSCO_DB=/home/tdev2/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
-AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/2026-05-15.1_4.2.7
-MEDAKA_IMAGE_PATH=/home/tdev2/sing_images/medaka_1.3.3--py38h130def0_0
+AMRFINDER_DB=/home/tdev2/data/ref/amrfinderplus_db/latest
+# MEDAKA_IMAGE_PATH=/home/tdev2/sing_images/medaka_1.3.3--py38h130def0_0
 MEDAKA_MODEL=r941_min_high_g360
 
-# ─── Thread count ────────────────────────────────────────────────────────────────
+# === Thread count ================================================================
 THREADS=4
 
-# ─── Helpers ──────────────────────────────────────────────────────────────────
+# === Helpers ==================================================================
 log() {
     local msg
     msg=$(printf '\n[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*")
@@ -32,7 +32,7 @@ die() {
     exit 1
 }
 
-# ─── Argument parsing ─────────────────────────────────────────────────────────
+# === Argument parsing =========================================================
 usage="Usage: $(basename "$0") <sample.fastq.gz>"
 
 [[ $# -eq 1 ]] || die "${usage}"
@@ -46,7 +46,7 @@ sample_id=$(basename "${sample_id}" .fastq)
 log "Sample ID   : ${sample_id}"
 log "Input FASTQ : ${input_fastq}"
 
-# ─── Step 1 · QC on raw reads ──────────────────────────────────────────────────
+# === Step 1 · QC on raw reads ==================================================
 log "Step 1: QC on raw reads (FastQC + NanoPlot + MultiQC)"
 
 mkdir -p "qc_raw/fastqc/${sample_id}" "qc_raw/nanoplot/${sample_id}"
@@ -70,7 +70,7 @@ multiqc \
     --fullnames \
     qc_raw
 
-# ─── Step 2 · Filter reads ─────────────────────────────────────────────────────
+# === Step 2 · Filter reads =====================================================
 log "Step 2: Filter reads with Filtlong"
 
 mkdir -p filtered
@@ -105,7 +105,7 @@ multiqc \
     --fullnames \
     qc_filtered
 
-# ─── Step 3 · Species identification (Kraken2) ─────────────────────────────────
+# === Step 3 · Species identification (Kraken2) =================================
 log "Step 3: Species identification with Kraken2"
 
 mkdir -p kraken2
@@ -125,22 +125,22 @@ multiqc \
     -f \
     kraken2
 
-# ─── Step 4 · De novo assembly (Flye) ──────────────────────────────────────────
+# === Step 4 · De novo assembly (Flye) ==========================================
 log "Step 4: De novo assembly with Flye"
 
 mkdir -p flye
 
 flye \
-    --nano-hq "${filtered_fastq}" \
+    --nano-raw "${filtered_fastq}" \
     --out-dir flye \
     --threads "${THREADS}"
 
 [[ -s flye/assembly.fasta ]] || die "Flye assembly missing: flye/assembly.fasta"
 
-# ─── Step 5 · Plasmid recovery (Plassembler) ───────────────────────────────────
+# === Step 5 · Plasmid recovery (Plassembler) ===================================
 log "Step 5: Plasmid recovery with Plassembler"
 
-plassembler-exec plassembler long \
+plassembler long \
     -l "${filtered_fastq}" \
     -d "${PLASSEMBLER_DB}" \
     --flye_assembly flye/assembly.fasta \
@@ -158,7 +158,7 @@ else
     cp flye/assembly.fasta "${draft_assembly}"
 fi
 
-# ─── Step 6 · Assembly QC on the draft assembly ────────────────────────────────
+# === Step 6 · Assembly QC on the draft assembly ================================
 log "Step 6: Assembly QC (QUAST + BUSCO + Bandage) on the draft assembly"
 
 mkdir -p quast/draft busco bandage
@@ -177,20 +177,20 @@ busco \
     --offline \
     --cpu "${THREADS}"
 
-bandage-exec Bandage image \
+Bandage image \
     flye/assembly_graph.gfa \
     "bandage/${sample_id}.flye_assembly_graph.svg"
 
 if [[ -s "${plassembler_plasmids[0]}" ]]; then
-    bandage-exec Bandage image \
+    Bandage image \
         plassembler/*_plasmids.gfa \
         "bandage/${sample_id}.plassembler_plasmids_graph.svg"
 fi
 
-# ─── Step 7 · Polish the assembly (Medaka) ─────────────────────────────────────
+# === Step 7 · Polish the assembly (Medaka) =====================================
 log "Step 7: Polish assembly with Medaka"
 
-singularity exec "${MEDAKA_IMAGE_PATH}" medaka_consensus \
+medaka_consensus \
     -i "${filtered_fastq}" \
     -d "${draft_assembly}" \
     -m "${MEDAKA_MODEL}" \
@@ -217,7 +217,7 @@ busco \
     --offline \
     --cpu "${THREADS}"
 
-# ─── Step 8 · AMR gene detection (AMRFinderPlus) ───────────────────────────────
+# === Step 8 · AMR gene detection (AMRFinderPlus) ===============================
 log "Step 8: AMR gene detection with AMRFinderPlus"
 
 mkdir -p amrfinder
@@ -228,7 +228,7 @@ amrfinder \
     --threads "${THREADS}" \
     > "amrfinder/${sample_id}.amrfinder.tsv"
 
-# ─── Done ───────────────────────────────────────────────────────────────────
+# === Done ===================================================================
 log "Pipeline completed for ${sample_id}"
 log "Draft assembly    : ${draft_assembly}"
 log "Polished assembly : ${polished_assembly}"
