@@ -1,5 +1,7 @@
 #!/bin/bash
 
+shopt -s expand_aliases
+
 set -euo pipefail
 
 # Runs the full single-sample workflow used across this training, start to finish,
