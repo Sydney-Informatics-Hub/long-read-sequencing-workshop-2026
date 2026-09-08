@@ -1,0 +1,4 @@
+Sample	Complete and single-copy BUSCOs	Fragmented BUSCOs	Missing BUSCOs
+short_summary.specific.bacteria_odb12.2.draft.txt	97.0	15.0	4.0
+short_summary.specific.bacteria_odb12.2.polished.txt	112.0	3.0	1.0
+short_summary.txt	112.0	3.0	1.0

@@ -1,0 +1,4 @@
+Sample	lineage_dataset	complete	complete_single_copy	complete_duplicated	fragmented	missing	total
+short_summary.specific.bacteria_odb12.2.draft.txt	bacteria_odb12.2	106.0	106.0	0.0	6.0	4.0	116.0
+short_summary.specific.bacteria_odb12.2.polished.txt	bacteria_odb12.2	113.0	113.0	0.0	1.0	2.0	116.0
+short_summary.txt	bacteria_odb12.2	113.0	113.0	0.0	1.0	2.0	116.0

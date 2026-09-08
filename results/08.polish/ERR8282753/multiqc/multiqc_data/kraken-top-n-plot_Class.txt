@@ -1,0 +1,2 @@
+Sample	Gammaproteobacteria	Betaproteobacteria	Unclassified
+ERR8282753.k2report	10855.0	1.0	153.0

@@ -1,0 +1,2 @@
+Sample	Moraxellaceae	Enterobacteriaceae	Pseudomonadaceae	Yersiniaceae	Erwiniaceae	Other	Unclassified
+ERR8282753.k2report	10790.0	52.0	7.0	4.0	1.0	2.0	153.0
