@@ -28,7 +28,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -h|--help)
-            echo "Usage: $0 --fasta /path/to/assembly.fasta --db /path/to/plassembler/db/dir [--output /path/to/output.tsv]"
+            echo "Usage: $0 --fasta /path/to/assembly.fasta --db /path/to/plassembler/db/dir [--output /path/to/output.txt]"
             exit 0
             ;;
         *)
@@ -56,7 +56,7 @@ if [ ! -f "${DB_MSH_FILE}" ] || [ ! -f "${DB_TSV_FILE}" ]; then
 fi
 
 if [ -z "${OUTPUT}" ]; then
-    OUTPUT="${FASTA}.plsdb_results.tsv"
+    OUTPUT="${FASTA}.plsdb_results.txt"
 fi
 
 if [ -f "${OUTPUT}" ]; then
@@ -70,8 +70,8 @@ SPLIT_CONTIG_DIR="${FASTA}.split"
 
 # Run mash screen
 rm -f "${OUTPUT}"
+rm -f "${OUTPUT}.tmp"{1,2}
 for CONTIG in ${SPLIT_CONTIG_DIR}/*.fasta; do
-    rm -f "${OUTPUT}.tmp"{1,2}
     singularity exec /cvmfs/singularity.galaxyproject.org/all/plassembler:1.8.2--pyhdfd78af_0 \
     mash screen \
         -i 0.99 \
@@ -87,4 +87,5 @@ for CONTIG in ${SPLIT_CONTIG_DIR}/*.fasta; do
     echo "====================" >> "${OUTPUT}"
     head -n 1 ${DB_TSV_FILE} | cut -f 2-9 >> "${OUTPUT}"
     cat "${OUTPUT}.tmp2" >> "${OUTPUT}"
+    rm -f "${OUTPUT}.tmp"{1,2}
 done
