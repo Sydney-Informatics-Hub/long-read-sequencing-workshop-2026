@@ -210,6 +210,13 @@ busco \
     --offline \
     --cpu "${THREADS}"
 
+mkdir -p multiqc
+multiqc \
+    -o "multiqc" \
+    -f \
+    --fullnames \
+    .
+
 # ─── Step 8 · AMR gene detection (AMRFinderPlus) ───────────────────────────────
 log "Step 8: AMR gene detection with AMRFinderPlus"
 
