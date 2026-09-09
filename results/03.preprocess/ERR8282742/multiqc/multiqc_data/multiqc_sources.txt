@@ -1,5 +1,5 @@
 Module	Section	Sample Name	Source
-NanoStat	all_sections	ERR8282742_filtered_NanoStats.txt	/home/tdev3/analysis/qc/ERR8282742/nanoplot/filtered/ERR8282742_filtered_NanoStats.txt
-NanoStat	all_sections	ERR8282742_raw_NanoStats.txt	/home/tdev3/analysis/qc/ERR8282742/nanoplot/raw/ERR8282742_raw_NanoStats.txt
-FastQC	all_sections	ERR8282742.filtered.fastq.gz	/home/tdev3/analysis/qc/ERR8282742/fastqc/filtered/ERR8282742.filtered_fastqc.zip
-FastQC	all_sections	ERR8282742.fastq.gz	/home/tdev3/analysis/qc/ERR8282742/fastqc/raw/ERR8282742_fastqc.zip
+NanoStat	all_sections	ERR8282742_filtered_NanoStats.txt	/home/tdev3/analysis_742_150/qc/ERR8282742/nanoplot/filtered/ERR8282742_filtered_NanoStats.txt
+NanoStat	all_sections	ERR8282742_raw_NanoStats.txt	/home/tdev3/analysis_742_150/qc/ERR8282742/nanoplot/raw/ERR8282742_raw_NanoStats.txt
+FastQC	all_sections	ERR8282742.filtered.fastq.gz	/home/tdev3/analysis_742_150/qc/ERR8282742/fastqc/filtered/ERR8282742.filtered_fastqc.zip
+FastQC	all_sections	ERR8282742.fastq.gz	/home/tdev3/analysis_742_150/qc/ERR8282742/fastqc/raw/ERR8282742_fastqc.zip

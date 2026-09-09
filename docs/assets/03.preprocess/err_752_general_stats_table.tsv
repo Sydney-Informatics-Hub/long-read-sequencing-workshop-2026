@@ -1,5 +1,5 @@
 ﻿Sample	Read N50	Dups	GC	Median len	Seqs
 ERR8282752.fastq.gz	.	0.36020916091806043	52	4999	0.12247899999999999
-ERR8282752.filtered.fastq.gz	.	0.1068982796058151	52	10999	0.029935
-ERR8282752_filtered_NanoStats.txt	15624	.	.	.	.
+ERR8282752.filtered.fastq.gz	.	0.06806425265450855	52	18999	0.007346
+ERR8282752_filtered_NanoStats.txt	21213	.	.	.	.
 ERR8282752_raw_NanoStats.txt	10688	.	.	.	.

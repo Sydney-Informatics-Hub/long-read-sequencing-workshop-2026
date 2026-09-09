@@ -71,7 +71,7 @@ filtered_fastq="filtered/${sample_id}.filtered.fastq.gz"
 
 filtlong \
     --min_length 1kb \
-    --keep_percent 50 \
+    --target_bases 150mb \
     "${input_fastq}" \
     | gzip > "${filtered_fastq}"
 
