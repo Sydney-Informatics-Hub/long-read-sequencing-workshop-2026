@@ -22,9 +22,16 @@ Install (conda/mamba):
 
 Or as a BioContainer (pyGenomeViz is a bioconda package, so it ships as
 one -- no local install needed; confirmed present at
-quay.io/biocontainers/pygenomeviz, tag 0.4.4--pyhdfd78af_0 as of writing --
-check quay.io/repository/biocontainers/pygenomeviz?tab=tags for anything
-newer):
+quay.io/biocontainers/pygenomeviz, tag 0.4.4--pyhdfd78af_0 as of writing).
+
+IMPORTANT: bioconda/biocontainers has been stuck on pyGenomeViz 0.4.4 since
+2023 -- pyGenomeViz did a breaking 1.0 API rewrite upstream (now at 1.7.0 on
+PyPI) that bioconda's recipe was never updated to track. This script is
+written against the 0.4.4 API on purpose, to match what the container
+actually provides (`pip install pygenomeviz` outside a container will give
+you the newer, incompatible 1.x API instead -- don't mix the two). Check
+quay.io/repository/biocontainers/pygenomeviz?tab=tags in case that's
+changed:
     docker run --rm -v "$PWD":/data -w /data \\
         quay.io/biocontainers/pygenomeviz:0.4.4--pyhdfd78af_0 \\
         python3 amr_cassette_diagram.py --amrfinder-tsv ... --outfile ...
@@ -58,7 +65,6 @@ import csv
 from dataclasses import dataclass
 from pathlib import Path
 
-import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 from matplotlib.image import imread
 from matplotlib.patches import Patch
@@ -192,26 +198,32 @@ def render_cassette_panel(contig: str, hits: list[Hit], class_colours: dict[str,
     span = hi - lo
     cassette_span = max(h.stop for h in hits) - min(h.start for h in hits)
 
-    gv = GenomeViz(fig_track_height=FIG_TRACK_HEIGHT, feature_track_ratio=FEATURE_TRACK_RATIO)
-    gv.set_scale_bar(labelsize=SCALEBAR_LABELSIZE)
+    # tick_style="bar" is pyGenomeViz 0.4.4's way of requesting a scale
+    # bar (there is no separate set_scale_bar() method in this version).
+    gv = GenomeViz(
+        fig_track_height=FIG_TRACK_HEIGHT, feature_track_ratio=FEATURE_TRACK_RATIO,
+        tick_style="bar", tick_labelsize=SCALEBAR_LABELSIZE,
+    )
     track = gv.add_feature_track(
         contig, span, labelsize=TRACK_LABELSIZE,
-        line_kws=dict(lw=BACKBONE_LW, color="grey"),
+        linewidth=BACKBONE_LW, linecolor="grey",
     )
-    track.add_sublabel(
+    track.set_sublabel(
         f"{lo + 1:,}-{hi:,} bp excerpt (cassette span {cassette_span:,} bp)",
         size=SUBLABEL_SIZE,
     )
 
     for h in hits:
-        rgba = mcolors.to_rgba(class_colours[h.element_class], alpha=coverage_to_alpha(h.pct_coverage))
         label = h.symbol + (" (partial)" if h.method in PARTIAL_METHODS else "")
         track.add_feature(
             h.start - lo, h.stop - lo, h.strand,
             plotstyle="bigarrow",
-            fc=rgba, ec="black", lw=0.6,
-            label=label,
-            text_kws=dict(size=FEATURE_LABEL_SIZE, rotation=30, vpos="top", hpos="left"),
+            facecolor=class_colours[h.element_class], edgecolor="black", linewidth=0.6,
+            label=label, labelsize=FEATURE_LABEL_SIZE, labelrotation=30,
+            labelvpos="top", labelhpos="left",
+            # alpha isn't a top-level add_feature() param in 0.4.4 -- pass
+            # it through to the underlying matplotlib Patch instead.
+            patch_kws={"alpha": coverage_to_alpha(h.pct_coverage)},
         )
 
     fig = gv.plotfig()
