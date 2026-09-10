@@ -1,0 +1,2 @@
+Sample	Moraxellales	Enterobacterales	Pseudomonadales	Burkholderiales	Unclassified
+ERR8282753.k2report	10790.0	58.0	7.0	1.0	153.0

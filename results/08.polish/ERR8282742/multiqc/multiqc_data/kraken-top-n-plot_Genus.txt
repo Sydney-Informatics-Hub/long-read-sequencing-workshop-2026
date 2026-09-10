@@ -1,0 +1,2 @@
+Sample	Pseudomonas	Delftia	Klebsiella	Cronobacter	Xanthomonas	Other	Unclassified
+ERR8282742.k2report	8631.0	160.0	59.0	29.0	13.0	161.0	229.0

@@ -1,0 +1,2 @@
+Sample	Pseudomonas putida	Delftia acidovorans	Pseudomonas aeruginosa	Pseudomonas syringae group genomosp. 3	Pseudomonas sp. VLB120	Other	Unclassified
+ERR8282742.k2report	8256.0	160.0	136.0	97.0	28.0	376.0	229.0

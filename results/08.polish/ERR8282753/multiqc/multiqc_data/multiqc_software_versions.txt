@@ -1,0 +1,3 @@
+Sample	BUSCO	FastQC
+BUSCO	6.1.0	
+FastQC		0.12.1

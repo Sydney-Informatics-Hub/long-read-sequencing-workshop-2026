@@ -1,0 +1,2 @@
+Sample	Enterobacterales	Moraxellales	Pseudomonadales	Unclassified
+ERR8282751.k2report	6928.0	6.0	1.0	1.0

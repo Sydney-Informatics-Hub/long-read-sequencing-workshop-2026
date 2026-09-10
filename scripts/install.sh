@@ -16,3 +16,8 @@ shelley build bakta/1.12.0--pyhdfd78af_0
 shelley build ncbi-amrfinderplus/4.2.7--hf69ffd2_0
 shelley build autocycler/0.5.2--h3ab6199_0
 shelley build mummer/3.23--pl526_6
+
+cd ~
+mkdir -p sing_images
+cd sing_images
+wget -O medaka_1.3.3--py38h130def0_0 https://depot.galaxyproject.org/singularity/medaka%3A1.3.3--py38h130def0_0
