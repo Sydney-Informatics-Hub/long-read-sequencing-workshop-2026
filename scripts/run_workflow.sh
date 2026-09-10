@@ -182,8 +182,8 @@ if [[ -s "${plassembler_plasmids[0]}" ]]; then
         "${plassembler_gfa[0]}" \
         "assembly_qc/bandage/${sample_id}.plassembler_plasmids_graph.svg"
 
-    # Combined chromosome + plasmid graph, contigs labelled by name and
-    # length (see utilities/combine_bandage_graphs.sh for how). Best-effort:
+    # Combined Flye + Plassembler graph, contigs labelled by source program,
+    # name, and length (see utilities/combine_bandage_graphs.sh for how). Best-effort:
     # a failure here shouldn't take down the rest of the pipeline over what
     # is just an extra visualisation on top of the two Bandage images above.
     "${COMBINE_BANDAGE_GRAPHS_SCRIPT}" \
