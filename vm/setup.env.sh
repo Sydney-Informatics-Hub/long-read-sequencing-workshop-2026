@@ -22,3 +22,16 @@ shelley build bakta/1.12.0--pyhdfd78af_0
 shelley build ncbi-amrfinderplus/4.2.7--hf69ffd2_0
 shelley build autocycler/0.5.2--h3ab6199_0
 shelley build pygenomeviz/0.4.4--pyhdfd78af_0
+
+# Setup scripts and .bashrc/.bash_aliases files
+cd ${HOME}
+
+rm -rf scripts
+
+git clone https://github.com/Sydney-Informatics-Hub/long-read-sequencing-workshop-2026.git
+
+cp -r long-read-sequencing-workshop-2026/scripts .
+cp long-read-sequencing-workshop-2026/vm/.bashrc .
+cp long-read-sequencing-workshop-2026/vm/.bash_aliases .
+
+rm -rf long-read-sequencing-workshop-2026
