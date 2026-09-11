@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Create data directory
-mkdir -p data/ref
-cd data/ref
+mkdir -p ${HOME}/data/ref
+cd ${HOME}/data/ref
 
 # Link CVMFS databases
 ln -s /cvmfs/data.galaxyproject.org/managed/kraken2_databases/kalamari

@@ -16,8 +16,11 @@ PLASSEMBLER_DB=${HOME}/data/ref/plasmid_db_plassembler   # Plassembler plasmid d
 BUSCO_DB=${HOME}/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
 AMRFINDER_DB=${HOME}/data/ref/amrfinderplus_db/2026-08-07.1
 MEDAKA_MODEL=r941_min_high_g360
-AMR_CASSETTE_DIAGRAM_SCRIPT="$(dirname "$(realpath "$0")")/utilities/amr_cassette_diagram.py"
-COMBINE_BANDAGE_GRAPHS_SCRIPT="$(dirname "$(realpath "$0")")/utilities/combine_bandage_graphs.sh"
+UTILITY_SCRIPT_DIR="${HOME}/scripts/utilities"
+AMR_CASSETTE_DIAGRAM_SCRIPT="${UTILITY_SCRIPT_DIR}/amr_cassette_diagram.py"
+COMBINE_BANDAGE_GRAPHS_SCRIPT="${UTILITY_SCRIPT_DIR}/combine_bandage_graphs.sh"
+SEARCH_PLSDB_SCRIPT="${UTILITY_SCRIPT_DIR}/search_plsdb.sh"
+MERGE_CONTIGS_SCRIPT="${UTILITY_SCRIPT_DIR}/merge_contigs.sh"
 
 # === Thread count ================================================================
 THREADS=4
@@ -136,7 +139,7 @@ flye \
 log "Step 4.1: Flye plasmid search against PLSDB"
 
 # Split FASTA into separate sequence files
-"$(dirname "$(realpath "$0")")/../vm/search_plsdb" \
+"${SEARCH_PLSDB_SCRIPT}" \
     --fasta flye/assembly.fasta \
     --db ${PLASSEMBLER_DB} \
     --output flye/assembly.plsdb.txt
@@ -159,7 +162,7 @@ plassembler_plasmids=(plassembler/*_plasmids.fasta)
 # === Step 5.1 - Combine Flye and Plassembler FASTA files =======================
 # Get chromosome ID from flye output (longest contig)
 CHROM=$(awk -v FS="\t" 'NR > 1 { if ($2 > l) { l = $2; c = $1 } } END { print c }' flye/assembly_info.txt)
-"$(dirname "$(realpath "$0")")/../vm/merge_contigs" \
+"${MERGE_CONTIGS_SCRIPT}" \
     --flye flye/assembly.fasta \
     --plassembler "${plassembler_plasmids[0]}" \
     --chromosome "${CHROM}" \
