@@ -14,8 +14,10 @@ set -euo pipefail
 K2DB=${HOME}/data/ref/kalamari                          # Kraken2 Kalamari database
 PLASSEMBLER_DB=${HOME}/data/ref/plasmid_db_plassembler   # Plassembler plasmid database
 BUSCO_DB=${HOME}/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
-AMRFINDER_DB=${HOME}/data/ref/amrfinderplus_db/latest
+AMRFINDER_DB=${HOME}/data/ref/amrfinderplus_db/2026-08-07.1
 MEDAKA_MODEL=r941_min_high_g360
+AMR_CASSETTE_DIAGRAM_SCRIPT="$(dirname "$(realpath "$0")")/utilities/amr_cassette_diagram.py"
+COMBINE_BANDAGE_GRAPHS_SCRIPT="$(dirname "$(realpath "$0")")/utilities/combine_bandage_graphs.sh"
 
 # === Thread count ================================================================
 THREADS=4
@@ -50,26 +52,19 @@ log "Input FASTQ : ${input_fastq}"
 # === Step 1 - QC on raw reads ==================================================
 log "Step 1: QC on raw reads (FastQC + NanoPlot + MultiQC)"
 
-mkdir -p "qc_raw/fastqc/${sample_id}" "qc_raw/nanoplot/${sample_id}"
+mkdir -p "read_qc/${sample_id}/fastqc/raw" "read_qc/${sample_id}/nanoplot/raw"
 
 fastqc \
     -f fastq \
-    -o "qc_raw/fastqc/${sample_id}" \
+    -o "read_qc/${sample_id}/fastqc/raw/" \
     "${input_fastq}"
 
 NanoPlot \
     --fastq "${input_fastq}" \
-    -p "${sample_id}_" \
+    -p "${sample_id}_raw_" \
     --loglength \
     --N50 \
-    -o "qc_raw/nanoplot/${sample_id}/"
-
-mkdir -p qc_raw/multiqc
-multiqc \
-    -o qc_raw/multiqc \
-    -f \
-    --fullnames \
-    qc_raw
+    -o "read_qc/${sample_id}/nanoplot/raw/"
 
 # === Step 2 - Filter reads =====================================================
 log "Step 2: Filter reads with Filtlong"
@@ -79,32 +74,31 @@ filtered_fastq="filtered/${sample_id}.filtered.fastq.gz"
 
 filtlong \
     --min_length 1kb \
-    --keep_percent 50 \
+    --target_bases 150mb \
     "${input_fastq}" \
     | gzip > "${filtered_fastq}"
 
 log "Step 2b: QC on filtered reads (FastQC + NanoPlot + MultiQC)"
 
-mkdir -p "qc_filtered/fastqc/${sample_id}" "qc_filtered/nanoplot/${sample_id}"
+mkdir -p "read_qc/${sample_id}/fastqc/filtered" "read_qc/${sample_id}/nanoplot/filtered"
 
 fastqc \
     -f fastq \
-    -o "qc_filtered/fastqc/${sample_id}" \
+    -o "read_qc/${sample_id}/fastqc/filtered" \
     "${filtered_fastq}"
 
 NanoPlot \
     --fastq "${filtered_fastq}" \
-    -p "${sample_id}_" \
+    -p "${sample_id}_filtered_" \
     --loglength \
     --N50 \
-    -o "qc_filtered/nanoplot/${sample_id}/"
+    -o "read_qc/${sample_id}/nanoplot/filtered/"
 
-mkdir -p qc_filtered/multiqc
 multiqc \
-    -o qc_filtered/multiqc \
+    -o "read_qc" \
     -f \
     --fullnames \
-    qc_filtered
+    read_qc
 
 # === Step 3 - Species identification (Kraken2) =================================
 log "Step 3: Species identification with Kraken2"
@@ -174,30 +168,42 @@ merge_contigs \
 # === Step 6 - Assembly QC on the draft assembly ================================
 log "Step 6: Assembly QC (QUAST + BUSCO + Bandage) on the draft assembly"
 
-mkdir -p quast/draft busco bandage
+mkdir -p assembly_qc/quast/draft assembly_qc/busco assembly_qc/bandage
 
 quast \
     "${draft_assembly}" \
     --labels "${sample_id}.draft" \
-    --output-dir quast/draft \
+    --output-dir assembly_qc/quast/draft \
     --threads "${THREADS}"
 
 busco \
     --in "${draft_assembly}" \
     --lineage_dataset "${BUSCO_DB}" \
-    --out busco/draft \
+    --out assembly_qc/busco/draft \
     --mode genome \
     --offline \
     --cpu "${THREADS}"
 
 Bandage image \
     flye/assembly_graph.gfa \
-    "bandage/${sample_id}.flye_assembly_graph.svg"
+    "assembly_qc/bandage/${sample_id}.flye_assembly_graph.svg"
 
 if [[ -s "${plassembler_plasmids[0]}" ]]; then
+    plassembler_gfa=(plassembler/*_plasmids.gfa)
+
     Bandage image \
-        plassembler/*_plasmids.gfa \
-        "bandage/${sample_id}.plassembler_plasmids_graph.svg"
+        "${plassembler_gfa[0]}" \
+        "assembly_qc/bandage/${sample_id}.plassembler_plasmids_graph.svg"
+
+    # Combined Flye + Plassembler graph, contigs labelled by source program,
+    # name, and length (see utilities/combine_bandage_graphs.sh for how). Best-effort:
+    # a failure here shouldn't take down the rest of the pipeline over what
+    # is just an extra visualisation on top of the two Bandage images above.
+    "${COMBINE_BANDAGE_GRAPHS_SCRIPT}" \
+        flye/assembly_graph.gfa \
+        "${plassembler_gfa[0]}" \
+        "assembly_qc/bandage/${sample_id}.combined_assembly_graph.svg" \
+        || log "Warning: combined Bandage graph failed, continuing without it"
 fi
 
 # === Step 7 - Polish the assembly (Medaka) =====================================
@@ -219,16 +225,22 @@ log "Step 7b: Assembly QC (QUAST + BUSCO) on the polished assembly"
 quast \
     "${polished_assembly}" \
     --labels "${sample_id}.polished" \
-    --output-dir quast/polished \
+    --output-dir assembly_qc/quast/polished \
     --threads "${THREADS}"
 
 busco \
     --in "${polished_assembly}" \
     --lineage_dataset "${BUSCO_DB}" \
-    --out busco/polished \
+    --out assembly_qc/busco/polished \
     --mode genome \
     --offline \
     --cpu "${THREADS}"
+
+multiqc \
+    -o assembly_qc \
+    -f \
+    --fullnames \
+    assembly_qc
 
 # === Step 8 - AMR gene detection (AMRFinderPlus) ===============================
 log "Step 8: AMR gene detection with AMRFinderPlus"
@@ -238,11 +250,19 @@ mkdir -p amrfinder
 amrfinder \
     -n "${polished_assembly}" \
     -d "${AMRFINDER_DB}" \
+    --plus \
     --threads "${THREADS}" \
-    > "amrfinder/${sample_id}.amrfinder.tsv"
+    > "amrfinder/${sample_id}.amrfinder_plus.tsv"
+
+# === Step 9 - AMR gene-cassette diagram (pyGenomeViz) ==========================
+log "Step 9: AMR gene-cassette diagram"
+
+pygenomeviz-exec python3 "${AMR_CASSETTE_DIAGRAM_SCRIPT}" \
+    --amrfinder-tsv "amrfinder/${sample_id}.amrfinder_plus.tsv"
 
 # === Done ===================================================================
 log "Pipeline completed for ${sample_id}"
 log "Draft assembly    : ${draft_assembly}"
 log "Polished assembly : ${polished_assembly}"
-log "AMRFinderPlus      : amrfinder/${sample_id}.amrfinder.tsv"
+log "AMRFinderPlus      : amrfinder/${sample_id}.amrfinder_plus.tsv"
+log "AMR cassette plots : amrfinder/${sample_id}.amrfinder_plus.<contig>.png"

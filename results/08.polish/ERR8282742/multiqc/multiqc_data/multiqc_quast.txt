@@ -1,0 +1,3 @@
+Sample	# contigs (>= 0 bp)	# contigs (>= 1000 bp)	# contigs (>= 5000 bp)	# contigs (>= 10000 bp)	# contigs (>= 25000 bp)	# contigs (>= 50000 bp)	Total length (>= 0 bp)	Total length (>= 1000 bp)	Total length (>= 5000 bp)	Total length (>= 10000 bp)	Total length (>= 25000 bp)	Total length (>= 50000 bp)	# contigs	Largest contig	Total length	GC (%)	N50	N90	auN	L50	L90	# N's per 100 kbp
+ERR8282742.draft	4.0	4.0	4.0	4.0	4.0	4.0	6808264.0	6808264.0	6808264.0	6808264.0	6808264.0	6808264.0	4.0	6193746.0	6808264.0	61.32	6193746.0	6193746.0	5655620.4	1.0	1.0	0.0
+ERR8282742.polished	4.0	4.0	4.0	4.0	4.0	4.0	6810241.0	6810241.0	6810241.0	6810241.0	6810241.0	6810241.0	4.0	6195100.0	6810241.0	61.32	6195100.0	6195100.0	5656476.5	1.0	1.0	0.0

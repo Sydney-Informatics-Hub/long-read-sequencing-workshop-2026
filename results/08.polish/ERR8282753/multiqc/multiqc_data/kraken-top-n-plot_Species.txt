@@ -1,0 +1,2 @@
+Sample	Acinetobacter baumannii	Acinetobacter pittii	Acinetobacter lwoffii	Acinetobacter soli	Acinetobacter radioresistens	Other	Unclassified
+ERR8282753.k2report	9279.0	1236.0	83.0	45.0	33.0	180.0	153.0

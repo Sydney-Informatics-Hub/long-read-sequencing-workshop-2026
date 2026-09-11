@@ -37,11 +37,3 @@ wget ftp.sra.ebi.ac.uk/vol1/fastq/ERR828/002/ERR8282742/ERR8282742.fastq.gz
 wget ftp.sra.ebi.ac.uk/vol1/fastq/ERR828/001/ERR8282751/ERR8282751.fastq.gz
 wget ftp.sra.ebi.ac.uk/vol1/fastq/ERR828/002/ERR8282752/ERR8282752.fastq.gz
 wget ftp.sra.ebi.ac.uk/vol1/fastq/ERR828/003/ERR8282753/ERR8282753.fastq.gz
-
-# Subset large FASTQs
-module load seqkit
-for FQ in ERR828275{1,2}.fastq.gz; do
-    FQ_FULL=$(basename ${FQ} .fastq.gz).full.fastq.gz
-    mv ${FQ} ${FQ_FULL}
-    seqkit sample -p 0.5 ${FQ_FULL} -o ${FQ}
-done

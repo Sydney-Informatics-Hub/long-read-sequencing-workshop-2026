@@ -1,0 +1,2 @@
+Sample	Acinetobacter	Citrobacter	Enterobacter	Escherichia	Pseudomonas	Other	Unclassified
+ERR8282753.k2report	10789.0	25.0	11.0	10.0	7.0	14.0	153.0

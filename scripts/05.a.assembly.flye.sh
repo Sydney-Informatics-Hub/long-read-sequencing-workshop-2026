@@ -10,6 +10,6 @@ ID=$(basename ${FASTQ} .fastq)
 mkdir -p assembly/${ID}/flye
 
 flye \
-    --nano-hq ${FASTQ} \
+    --nano-raw ${FASTQ} \
     --threads 2 \
     --out-dir assembly/${ID}/flye

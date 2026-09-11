@@ -1,0 +1,3 @@
+Sample	>= 50000 bp
+ERR8282742.draft	4.0
+ERR8282742.polished	4.0
