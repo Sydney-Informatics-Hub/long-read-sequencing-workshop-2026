@@ -1,0 +1,1568 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../02.qc/">
+      
+      
+        <link rel="next" href="../04.species/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lesson 3 - Pre-processing - Long Read Sequencing Workshop 2026</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-TNWWV3HK57"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-TNWWV3HK57",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-TNWWV3HK57",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#basics-of-long-read-preprocessing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Long Read Sequencing Workshop 2026" class="md-header__button md-logo" aria-label="Long Read Sequencing Workshop 2026" data-md-component="logo">
+      
+  <img src="../assets/usyd-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Long Read Sequencing Workshop 2026
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lesson 3 - Pre-processing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Sydney-Informatics-Hub/long-read-sequencing-workshop-2026" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Sydney-Informatics-Hub/long-read-sequencing-workshop-2026
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Long Read Sequencing Workshop 2026" class="md-nav__button md-logo" aria-label="Long Read Sequencing Workshop 2026" data-md-component="logo">
+      
+  <img src="../assets/usyd-logo.png" alt="logo">
+
+    </a>
+    Long Read Sequencing Workshop 2026
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Sydney-Informatics-Hub/long-read-sequencing-workshop-2026" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Sydney-Informatics-Hub/long-read-sequencing-workshop-2026
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00.setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00.samples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Samples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Day 1
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Day 1
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01.intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1 - Introduction to long read sequencing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02.qc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2 - Quality control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3 - Pre-processing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3 - Pre-processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#does-long-read-data-need-the-same-preprocessing-as-short-reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does long-read data need the same preprocessing as short reads?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-to-check-before-deciding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What to check before deciding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What to check before deciding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adapters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage-and-read-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage and read length
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#software-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Software overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#porechop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Porechop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fastplong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fastplong
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="fastplong">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typical-command-and-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical command and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtlong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filtlong
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filtlong">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typical-command-and-options_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical command and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outputs_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04.species/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4 - Species identification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05.assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5 - Genome assembly
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Day 2
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Day 2
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06.plasmids/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6 - Plasmid assembly and recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07.assembly_qc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7 - Assembly quality control and visualisation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08.polish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8 - Genome assembly polishing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09.annotation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9 - Genome annotation and AMR screening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#does-long-read-data-need-the-same-preprocessing-as-short-reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does long-read data need the same preprocessing as short reads?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-to-check-before-deciding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What to check before deciding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What to check before deciding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adapters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage-and-read-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage and read length
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#software-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Software overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#porechop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Porechop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fastplong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fastplong
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="fastplong">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typical-command-and-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical command and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtlong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filtlong
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filtlong">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typical-command-and-options_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Typical command and options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outputs_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="basics-of-long-read-preprocessing">Basics of long read preprocessing</h1>
+<div class="admonition hint learning objectives">
+<p class="admonition-title">Hint</p>
+<ul>
+<li>Explain why long-read preprocessing is optional rather than mandatory, unlike short-read QC</li>
+<li>Decide, from a QC report, whether filtering or trimming is actually needed for a given sample</li>
+<li>Run Filtlong or fastplong to filter and trim long reads, and interpret their output</li>
+</ul>
+</div>
+<p>Once QC has told you what's actually in your reads, the next question is what — if anything — to do about it. </p>
+<h2 id="does-long-read-data-need-the-same-preprocessing-as-short-reads">Does long-read data need the same preprocessing as short reads?</h2>
+<p>For long reads, that's a genuinely open question rather than a formality: unlike short-read QC, which more or less requires trimming as a matter of course, long-read QC tools can just display the picture and leave filtering and trimming as an optional next step, not a mandatory one.</p>
+<p>!!! question To preprocess or not to preprocess?
+    For bacterial genome assembly with a modern long-read assembler, the honest answer is: often, not much. Flye, the assembler used in this training, is explicit about this — its own documentation states that preprocessing usually isn't necessary, since Flye automatically filters out chimeric reads and reads with bad ends, and adapter trimming and quality filtering aren't required either. Oxford Nanopore gives essentially the same guidance from the sequencing side: most of their own benchmarks are built on the default pass/fail cut-offs applied in MinKNOW, so pass-filtered reads straight out of basecalling should generally already be fit for analysis, without a dedicated trimming step in between.</p>
+<div class="highlight"><pre><span></span><code>That's not a blanket rule, though — it's a reasonable default, not a law. Whether preprocessing is worth doing still depends on your aim, the specific quality of your data, and which assembly tool you're using, since not every assembler handles messy ends and adapters as gracefully as Flye does.
+</code></pre></div>
+<h2 id="what-to-check-before-deciding">What to check before deciding</h2>
+<p>Before deciding whether to filter, look at what your QC reports are actually telling you: average read length, average quality, whether quality varies meaningfully across the length of a read, and whether adapter sequence is still hanging around. Each of these points to a different plot — NanoPlot's "read length vs average read quality" view for the first two, FastQC's adapter content panel for the last — but together they tell you whether preprocessing would actually change anything or just cost you time.</p>
+<h3 id="quality">Quality</h3>
+<p>A nanopore run might show a mean read quality sitting around Q9, which by itself isn't a red flag so much as a data point to weigh against your read depth: if you have plenty of reads to spare, it's reasonable to set a stricter quality threshold and filter more aggressively; if reads are scarcer, a lighter touch — or no filtering at all — may serve you better, since throwing away marginal reads costs you coverage you might actually need.</p>
+<h3 id="adapters">Adapters</h3>
+<p>Adapters are worth checking separately, since they won't show up in a length or quality summary. If your reads were basecalled with adapter trimming switched off, or run through a tool that doesn't handle this, adapter sequence can still be sitting at the ends of reads even when length and quality otherwise look fine — and it's worth trimming regardless of what the rest of your QC report says.</p>
+<h3 id="coverage-and-read-length">Coverage and read length</h3>
+<p>Of everything here, though, coverage and read length matter more than any single quality metric when it comes to whether an assembly will actually close. As a rough guide, 30x or greater coverage of ONT reads, with an N50 of several kilobases, is generally enough for a contiguous assembly; higher coverage still can help improve consensus quality on top of that. Coverage in the 20–30x range can still work reasonably well depending on the platform and the read length distribution, but datasets below 10x coverage generally aren't worth attempting to assemble. Flye specifically expects coverage above 10x and an N90 read length over 1 kb (5 kb or more is preferable), and it simply won't run on reads shorter than 1 kb.</p>
+<h2 id="software-overview">Software overview</h2>
+<p>If your QC results do point towards filtering or trimming — noisy reads, adapter contamination, or simply more reads than you need — a few tools are commonly used for long-read data. </p>
+<h3 id="porechop">Porechop</h3>
+<p>Porechop finds and removes ONT sequencing adapters from reads: adapters at the very start or end of a read are trimmed off, and if an adapter turns up in the middle of a read, that read is treated as chimeric and split into two. It also demultiplexes reads barcoded with ONT's Native Barcoding Kit, PCR Barcoding Kit, or Rapid Barcoding Kit.</p>
+<div class="admonition warning porechop is unmaintained">
+<p class="admonition-title">Warning</p>
+<p>Porechop was declared unsupported/abandonware by its author back in October 2018. It's still one of the most widely used tools in long-read pipelines — the reputation is well earned, it works — but it hasn't been actively maintained since.</p>
+</div>
+<h3 id="fastplong">fastplong</h3>
+<p>fastplong is a fast, general-purpose preprocessing and QC tool for long reads (Nanopore, PacBio, and others), built along similar lines to the popular short-read tool fastp. </p>
+<h4 id="typical-command-and-options">Typical command and options</h4>
+<p>All the filters below are enabled with sensible defaults and each can be switched off individually if you don't want it.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>fastplong<span class="w"> </span>-i<span class="w"> </span><span class="k">in</span>.fastq.gz<span class="w"> </span>-o<span class="w"> </span>out.fastq.gz
+</code></pre></div>
+<p><strong>Quality filtering</strong> — enabled by default (<code>-Q</code> / <code>--disable_quality_filtering</code> turns it off). A read can be filtered in several ways:</p>
+<ul>
+<li>
+<p><strong>Unqualified bases:</strong> <code>-q</code> / <code>--qualified_quality_phred</code> sets the quality threshold for an individual base (default Q7), and <code>-u</code> / <code>--unqualified_percent_limit</code> sets the maximum percentage of a read that may fall below that threshold (default 40%). For example, to require individual bases to meet Q7 and allow no more than 30% of bases below that threshold, use:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>fastplong<span class="w"> </span>-i<span class="w"> </span><span class="k">in</span>.fq<span class="w"> </span>-o<span class="w"> </span>out.fq<span class="w"> </span>-q<span class="w"> </span><span class="m">7</span><span class="w"> </span>-u<span class="w"> </span><span class="m">30</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Ambiguous bases:</strong> <code>--n_base_limit</code> sets the maximum number of <code>N</code> bases allowed in a read (disabled by default), while <code>-n</code> / <code>--n_percent_limit</code> sets the maximum percentage of <code>N</code> bases allowed (enabled by default). For example, to allow no more than 100 <code>N</code> bases and no more than 20% <code>N</code> bases, use:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fastplong<span class="w"> </span>-i<span class="w"> </span><span class="k">in</span>.fq<span class="w"> </span>-o<span class="w"> </span>out.fq<span class="w"> </span>--n_base_limit<span class="w"> </span><span class="m">100</span><span class="w"> </span>--n_percent_limit<span class="w"> </span><span class="m">20</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Mean read quality:</strong> <code>-m</code> / <code>--mean_qual</code> sets a minimum average quality for the whole read. Reads with an average quality score below this value are discarded; the default is 0, meaning that no minimum is required.</p>
+</li>
+</ul>
+<p><strong>Length filtering</strong> — enabled by default (<code>-L</code> / <code>--disable_length_filtering</code> turns it off). <code>-l</code> / <code>--length_required</code> sets the minimum (default 20 bp), and <code>--length_limit</code> an optional maximum (default 0, meaning no limit).</p>
+<p><strong>Adapter trimming</strong> — enabled by default (<code>-A</code> / <code>--disable_adapter_trimming</code> turns it off), and trims both read ends. If you know your adapter sequences, specify them directly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>fastplong<span class="w"> </span>-i<span class="w"> </span><span class="k">in</span>.fq<span class="w"> </span>-o<span class="w"> </span>out.fq<span class="w"> </span>-s<span class="w"> </span>AAGGATTCATTCCCACGGTAACAC<span class="w"> </span>-e<span class="w"> </span>GTGTTACCGTGGGAATGAATCCTT
+</code></pre></div>
+<p>using <code>-s</code> / <code>--start_adapter</code> for the 5′ adapter and <code>-e</code> / <code>--end_adapter</code> for the 3′ adapter — if you only give <code>-s</code>, fastplong uses its reverse complement as the end adapter. For trimming several possible adapters at once, give a FASTA file instead with <code>-a</code> / <code>--adapter_fasta</code>. If none of these are specified, fastplong tries to auto-detect adapters at each end, which works reasonably well but carries some risk of misidentification, particularly on reads with no real adapter present.</p>
+<p><strong>Poly-X trimming</strong> — disabled by default (<code>-x</code> / <code>--trim_poly_x</code> turns it on). When enabled, fastplong looks at the very end (3′) of each read for a homopolymer run — the same base repeated back-to-back, whatever that base happens to be (poly-A, poly-T, poly-G, or poly-C) — and trims it off if the run is at least <code>--poly_x_min_len</code> bases long (default 10 bp):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>fastplong<span class="w"> </span>-i<span class="w"> </span><span class="k">in</span>.fq<span class="w"> </span>-o<span class="w"> </span>out.fq<span class="w"> </span>-x<span class="w"> </span>--poly_x_min_len<span class="w"> </span><span class="m">15</span>
+</code></pre></div>
+<p>This is a much narrower check than adapter trimming: it only ever looks at the true 3′ terminus of a read, and only removes a genuine, unbroken run of one repeated base — it won't catch homopolymer-like stretches sitting anywhere else in a read, or a run that's broken up partway through by a stray sequencing error.</p>
+<p><strong>Low-complexity filtering</strong> — disabled by default (<code>-y</code> / <code>--low_complexity_filter</code> turns it on). Unlike poly-X trimming, this isn't a targeted trim — it's a whole-read filter. It scores each read by what percentage of bases differ from the base immediately following them (<code>base[i] != base[i+1]</code>), so a read that's mostly one repeated or near-repeated base scores as low complexity, and the <em>entire read</em> is discarded if that score falls below <code>-Y</code> / <code>--complexity_threshold</code> (default 30, i.e. at least 30% of consecutive base pairs must actually change):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>fastplong<span class="w"> </span>-i<span class="w"> </span><span class="k">in</span>.fq<span class="w"> </span>-o<span class="w"> </span>out.fq<span class="w"> </span>-y<span class="w"> </span>-Y<span class="w"> </span><span class="m">30</span>
+</code></pre></div>
+<p>Full option reference: <code>fastplong --help</code>, or <a href="https://github.com/OpenGene/fastpLong">github.com/OpenGene/fastplong</a>.</p>
+<h4 id="outputs">Outputs</h4>
+<p>We've run fastplong on the <code>barcode01</code> sample:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>fastplong<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">input_fastq</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--qualified_quality_phred<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>--mean_qual<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>--trim_poly_x<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span>--out<span class="w"> </span><span class="s2">"trim_filter/</span><span class="si">${</span><span class="nv">sample_id</span><span class="si">}</span><span class="s2">.trimmed.filtered.fastq"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span>--html<span class="w"> </span><span class="s2">"qc/fastplong_filter/</span><span class="si">${</span><span class="nv">sample_id</span><span class="si">}</span><span class="s2">.fastplong_report.html"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span>--json<span class="w"> </span><span class="s2">"qc/fastplong_filter/</span><span class="si">${</span><span class="nv">sample_id</span><span class="si">}</span><span class="s2">.fastplong_report.json"</span>
+</code></pre></div>
+<p>This command keeps a read only if it meets both quality criteria:</p>
+<ul>
+<li>A base is “qualified” when its Phred score is greater than or equal to Q13 (<code>--qualified_quality_phred 13</code>) and at most 40% of bases may be below Q13. This is fastplong’s default <code>--unqualified_percent_limit 40</code>.</li>
+<li>The read’s average Phred quality must also be greater than or equal to Q13 (<code>--mean_qual 13</code>).</li>
+</ul>
+<p>So a read is discarded if its mean quality is below Q13 or if more than 40% of its bases are below Q13.</p>
+<p>It also applies the default length filter, discarding reads shorter than 20 bp, trims 3′ poly-X tails, and performs adapter trimming by default.</p>
+<p>The following is printed to the standard output/error:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Trying to detect adapter sequence at read start
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Detected: TAAGGTTAACACAAAGACACCGACAACTTTCTTCAGCACCT
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>Trying to detect adapter sequence at read end
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>Found possible adapter sequence, but it's too short: AGGTGCTGAAGAA, specify -e AGGTGCTGAAGAA to force trimming using this adapter
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>Before filtering:
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>total reads: 95064
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>total bases: 1328688619
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>Q20 bases: 486836383(36.6404%)
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>Q30 bases: 149845896(11.2777%)
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>After filtering:
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>total reads: 64248
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>total bases: 900258370
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>Q20 bases: 391376080(43.4738%)
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>Q30 bases: 130104974(14.452%)
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>Filtering result:
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>reads passed filter: 64248
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>reads failed due to low quality: 30840
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>reads failed due to too many N: 0
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>reads failed due to too short: 0
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>reads with adapter trimmed: 77375
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>bases trimmed due to adapters: 5658054
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>reads with polyX in 3' end: 365
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>bases trimmed in polyX tail: 10942
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>JSON report: fastplong_filter/barcode01.fastplong_report.json
+<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>HTML report: fastplong_filter/barcode01.fastplong_report.html
+</code></pre></div>
+<p>Alongside the summary printed to the console, fastplong's <code>--html</code> report renders the same before/after comparison as a series of plots and tables. Worth knowing what each one is actually showing:</p>
+<ul>
+<li><strong>Basic statistics</strong> (before/after tables) — the same core figures as the stdout summary, plus median and N50 read length, and the percentage of bases above Q5/Q7/Q10/Q15/Q20/Q30/Q40. For barcode01, filtering barely moved the length figures at all — median length 9,018 bp → 8,975 bp, N50 24,028 bp → 24,232 bp, GC content 56.09% → 56.20% — which tells you this particular filter mostly removed low-quality reads, not particularly short or long ones.</li>
+<li><strong>Read median quality statistics</strong> (histogram, before/after) — each read is reduced to a single median quality score, and the plot shows what fraction of reads (and of total bases) fall at each score. Before filtering, this spans roughly Q6–Q25 with a broad plateau across Q13–Q20 and a long thin tail below Q10; after filtering, everything below Q13 has been cut away — exactly what <code>--mean_qual 13</code> is meant to do — leaving essentially the same Q13–Q20 plateau shape, just with its low-quality shoulder removed.</li>
+<li><strong>Density plot of read median quality and read length</strong> (before/after) — a 2D density view combining the two axes above, plotting median quality against read length for every read at once. It's the same kind of plot as NanoPlot's read-length-vs-quality view, just built into fastplong's own report.</li>
+<li><strong>Quality</strong> (per-position, before/after) — a per-position quality curve, but split out by which base was called at each position (separate lines for A, T, C, and G) rather than one combined average. Splitting it this way can reveal a systematic quality difference tied to a specific base — for instance, if one nucleotide is consistently harder for the basecaller to call confidently — that a single averaged curve would hide.</li>
+<li><strong>Base contents</strong> (per-position, before/after) — the same per-position base composition view as FastQC's "Per Base Sequence Content" plot, with the overall base percentages given directly in the legend. For barcode01: A 21.9%, T 22.0%, C 27.8%, G 28.3%, N ~0% before filtering, barely different after (A 21.9%, T 21.9%, C 27.9%, G 28.3%) — removing the lowest-quality reads didn't meaningfully shift the overall base composition.</li>
+<li><strong>KMER counting</strong> (before/after) — a heatmap of k-mer frequency bias across the read set, the same underlying idea as FastQC's k-mer content module: it flags short sequence motifs turning up more or less often than chance would predict, which can point to residual adapter fragments, systematic basecalling bias, or genuine biological signal such as a repeat-rich genome.</li>
+</ul>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>FastQC reported so many reads with poly-A tails — why did fastplong trim only a handful of them? What other filters would you use if you really wanted to get rid of poly-A-rich regions? </p>
+</div>
+<div class="admonition success solution">
+<p class="admonition-title">Success</p>
+<p>FastQC is telling you how many reads contain something A-rich <em>somewhere</em>; fastplong is only acting on the much narrower case of a genuine poly-A (or poly-X) tail sitting right at the very end of the read. The two counts were never measuring the same event, so there's no reason to expect them to agree.</p>
+<p>If the goal is to more aggressively strip out poly-A-rich sequence — not just the strict, unbroken 3′ tails <code>--trim_poly_x</code> catches — a few options are worth combining:</p>
+<ul>
+<li><strong>Supply poly-A explicitly as a custom adapter</strong>, via <code>-a</code> / <code>--adapter_fasta</code> with a poly-A entry (fastplong's own documentation gives exactly this as a worked example). Unlike <code>--trim_poly_x</code>, adapter trimming isn't restricted to a clean homopolymer run right at the 3′ end, so it can find and trim poly-A-like stretches with a few mismatches in them, wherever they sit near a read's ends.</li>
+<li><strong>Loosen <code>--poly_x_min_len</code></strong> below the default 10 bp, so <code>--trim_poly_x</code> also catches shorter poly-A runs at the 3′ end that currently fall under the length threshold.</li>
+<li><strong>Low-complexity filtering is a good instinct</strong> (<code>-y</code> / <code>--low_complexity_filter</code>, described above) — but it's worth being clear about what it actually does before reaching for it: it's a whole-read discard, not a targeted trim.</li>
+</ul>
+</div>
+<div class="admonition info preprocessing in dorado and guppy">
+<p class="admonition-title">Info</p>
+<p>Worth knowing before reaching for Porechop or fastplong: ONT's own basecallers can already handle some of this. Dorado can trim adapter/primer sequences and demultiplex barcoded reads, and supports doing both either in-line during basecalling or afterwards as a separate step on an already-basecalled dataset (<code>dorado trim</code> / <code>dorado demux</code>). Guppy is more limited: general adapter trimming only happens in-line during basecalling, with no standalone way to re-trim already-basecalled reads — but demultiplexing is available separately too, via its own <code>guppy_barcoder</code> tool, which can also trim the detected barcode sequences as part of that offline step. Since some of this can happen well upstream of QC and preprocessing, it's worth checking whether your reads have already been through it before assuming Porechop or fastplong still need to do the job.</p>
+</div>
+<h3 id="filtlong">Filtlong</h3>
+<p>Filtlong filters long reads using a combination of read length (longer is better) and read identity (higher is better), producing a smaller, better subset of your original reads. Without an external reference, it judges quality from the Phred scores already in your FASTQ file. </p>
+<h4 id="typical-command-and-options_1">Typical command and options</h4>
+<p>A typical command looks like:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>filtlong<span class="w"> </span>--min_length<span class="w"> </span>1kb<span class="w"> </span>--keep_percent<span class="w"> </span><span class="m">90</span><span class="w"> </span>--target_bases<span class="w"> </span>500mb<span class="w"> </span>input.fastq.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>gzip<span class="w"> </span>&gt;<span class="w"> </span>output.fastq.gz
+</code></pre></div>
+<ul>
+<li><code>--min_length</code> / <code>-l</code> discards anything shorter than the given threshold; <code>--max_length</code> / <code>-L</code> does the same for anything longer.</li>
+<li><code>--keep_percent</code> / <code>-p</code> throws out the worst-scoring reads by base count (not by read count) — so <code>--keep_percent 90</code> discards the worst 10% of bases.</li>
+<li><code>--target_bases</code> / <code>-t</code> trims the read set down until only the given amount of sequence remains, which is handy for very large datasets.</li>
+</ul>
+<p>Filtlong writes filtered reads to stdout in their <em>original input order</em>, not sorted by score — pipe to <code>gzip</code> (or wherever else you want the output to go), as above.</p>
+<p><strong>How reads are chosen.</strong> Filtlong first checks each read against a set of hard thresholds — <code>--min_length</code>, <code>--max_length</code>, <code>--min_mean_q</code> / <code>-q</code>, and <code>--min_window_q</code> — and any read that fails one of these is marked as failed outright, regardless of how it scores otherwise. Every read that survives is then given a final score, and if <code>--keep_percent</code> and/or <code>--target_bases</code> were used, reads are ranked by score and a cut-off applied — using whichever of the two settings is more stringent, if both are given.</p>
+<p><strong>Adjusting the balance between length and quality.</strong> By default length and mean quality are weighted equally (<code>--length_weight</code>, <code>--mean_q_weight</code>, both default 1), but this is tunable.</p>
+<p>For more detailed instructions, run <code>filtlong --help</code>, or check <a href="https://github.com/rrwick/Filtlong">github.com/rrwick/Filtlong</a>.</p>
+<h4 id="outputs_1">Outputs</h4>
+<p>Unlike fastplong, Filtlong doesn't produce its own HTML or JSON report — it just writes filtered reads to stdout. To see what it actually changed, we re-run QC on the filtered file and compare it against the raw one via MultiQC.</p>
+<p>Run on <code>ERR8282752</code>, filtering with <code>--min_length 1kb --target_bases 150mb</code> — targeting roughly 30x coverage, assuming a ~5 Mb bacterial genome — MultiQC's combined report shows:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Raw</th>
+<th>Filtered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reads</td>
+<td>122,479</td>
+<td>7,346</td>
+</tr>
+<tr>
+<td>Total bases</td>
+<td>840.5 Mb</td>
+<td>150.0 Mb</td>
+</tr>
+<tr>
+<td>Median read length</td>
+<td>4,613 bp</td>
+<td>18,379 bp</td>
+</tr>
+<tr>
+<td>Read N50</td>
+<td>10,688 bp</td>
+<td>21,213 bp</td>
+</tr>
+<tr>
+<td>Median quality</td>
+<td>Q12.6</td>
+<td>Q13.8</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="../assets/03.preprocess/err_752_nanostat_quality_dist.png" /></p>
+<p><em>Filtering all but eliminates the lowest-quality reads: the raw file has 12.2% of reads below Q10, which drops to 0% after filtering, while the Q10–15 share grows from 84.9% to 95.1% — Filtlong is doing exactly what <code>--target_bases 150mb</code> promises, keeping only enough of the best-scoring reads (by combined length and quality) to reach 150 Mb of sequence.</em></p>
+<p>The jump in median length (4,613 bp → 18,379 bp) and N50 (10,688 bp → 21,213 bp) is far larger than quality filtering alone would explain. Filtlong's score is weighted by length as well as quality, and because <code>--target_bases</code> keeps only as many of the top-scoring reads as it takes to reach 150 Mb — rather than a fixed percentage of the input — the cut here is much more aggressive than a percentage-based cutoff would be, and it disproportionately favours the longest reads.</p>
+<div class="admonition success wrap-up">
+<p class="admonition-title">Success</p>
+<p>You can now look at a QC report and make a deliberate decision about whether preprocessing is worth doing, and if so, run Filtlong or fastplong to filter and trim your reads. Next, we'll use these (optionally cleaned) reads to check what species they actually came from, before moving on to assembly.</p>
+</div>
+<h1 id="exercise">Exercise</h1>
+<p>Run Filtlong to keep only long reads longer than 1 kb and target 150 Mb of the best-scoring sequence (keep length and quality equally weighted) — roughly 30x coverage, assuming a ~5 Mb bacterial genome. Direct the standard output to a file named <code>&lt;sample&gt;.filtered.fastq.gz</code>. Run FastQC and NanoPlot on the filtered file (use the commands from the Quality control module but change the folder name from <code>raw</code> to <code>filtered</code>). And analyse how the quality statistics changed by running MultiQC together on both <code>qc</code> folders.</p>
+<div class="admonition question answer the following questions">
+<p class="admonition-title">Question</p>
+<ol>
+<li>What is the number of reads before and after filtering? How did that change?</li>
+<li>What is the median Qscore before and after filtering? How did that change?</li>
+<li>What is the median length and N50 before and after filtering? How did that change?</li>
+</ol>
+</div>
+<div class="admonition solution solution">
+<p class="admonition-title">Solution</p>
+<p>The following command will:
+- filter the reads by keeping only long reads longer than 1 kb and targeting 150 Mb of the best-scoring sequence (~30x coverage of a 5 Mb genome)
+- run FastQC and NanoPlot on the filtered reads
+- run MultiQC on all the quality control reports for raw and filtered reads</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># EDIT THIS LINE: replace with the path to your sample FASTQ file</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">input_fastq</span><span class="o">=</span>/path/to/your/sample.fastq.gz
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Create the top-level output directories</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>qc/filtered/fastqc
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>qc/filtered/nanoplot
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>qc/multiqc
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>filtered
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># Derive a clean sample ID from the file name</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="nv">sample_id</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">"</span><span class="nv">$input_fastq</span><span class="s2">"</span><span class="k">)</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="nv">sample_id</span><span class="o">=</span><span class="si">${</span><span class="nv">sample_id</span><span class="p">%.fastq.gz</span><span class="si">}</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="nv">filtered_fastq</span><span class="o">=</span><span class="s2">"filtered/</span><span class="si">${</span><span class="nv">sample_id</span><span class="si">}</span><span class="s2">.filtered.fastq.gz"</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="c1"># Filter to 150 Mb of the best-scoring reads (~30x coverage of a 5 Mb genome), minimum length of 1kb</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>filtlong<span class="w"> </span>--min_length<span class="w"> </span>1kb<span class="w"> </span>--target_bases<span class="w"> </span>150mb<span class="w"> </span><span class="s2">"</span><span class="nv">$input_fastq</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gzip<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$filtered_fastq</span><span class="s2">"</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="c1"># NanoPlot output for this sample</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>qc/filtered/nanoplot/
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>NanoPlot<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">    </span>--fastq<span class="w"> </span><span class="s2">"</span><span class="nv">$filtered_fastq</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">    </span>-p<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">sample_id</span><span class="si">}</span><span class="s2">_filtered_"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="w">    </span>--loglength<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="w">    </span>--N50<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">    </span>-o<span class="w"> </span>qc/filtered/nanoplot/
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="c1"># FastQC output for this sample</span>
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>qc/filtered/fastqc/
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>fastqc<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a><span class="w">    </span>-f<span class="w"> </span>fastq<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a><span class="w">    </span>-o<span class="w"> </span>qc/filtered/fastqc/<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="w">    </span><span class="s2">"</span><span class="nv">$filtered_fastq</span><span class="s2">"</span>
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a><span class="c1"># MultiQC report for raw and filtered reads</span>
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>multiqc<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a><span class="w">    </span>-o<span class="w"> </span>qc/multiqc/<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a><span class="w">    </span>-f<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a><span class="w">    </span>--fullnames<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-39" name="__codelineno-9-39" href="#__codelineno-9-39"></a><span class="w">    </span>qc
+</code></pre></div>
+<p>Answers will vary depending on which sample you were assigned. Reference values on three of the samples used in this training, before and after filtering:</p>
+<p>Raw vs. filtered (<code>--min_length 1kb --target_bases 150mb</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>ERR8282742 (raw)</th>
+<th>ERR8282742 (filtered)</th>
+<th>ERR8282751 (raw)</th>
+<th>ERR8282751 (filtered)</th>
+<th>ERR8282753 (raw)</th>
+<th>ERR8282753 (filtered)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Number of reads</td>
+<td>39,172</td>
+<td>9,282</td>
+<td>121,009</td>
+<td>6,936</td>
+<td>31,430</td>
+<td>11,009</td>
+</tr>
+<tr>
+<td>Total bases</td>
+<td>306.9 Mb</td>
+<td>150.0 Mb</td>
+<td>882.0 Mb</td>
+<td>150.0 Mb</td>
+<td>242.4 Mb</td>
+<td>150.0 Mb</td>
+</tr>
+<tr>
+<td>Median Qscore</td>
+<td>13.6</td>
+<td>14.4</td>
+<td>12.7</td>
+<td>13.9</td>
+<td>12.7</td>
+<td>13.5</td>
+</tr>
+<tr>
+<td>Median read length</td>
+<td>5,440 bp</td>
+<td>13,949 bp</td>
+<td>4,898 bp</td>
+<td>19,657 bp</td>
+<td>5,254 bp</td>
+<td>11,500 bp</td>
+</tr>
+<tr>
+<td>Read length N50</td>
+<td>12,290 bp</td>
+<td>17,691 bp</td>
+<td>11,490 bp</td>
+<td>22,579 bp</td>
+<td>12,333 bp</td>
+<td>16,061 bp</td>
+</tr>
+</tbody>
+</table>
+<p><strong>1. Number of reads after filtering?</strong> 9,282 / 6,936 / 11,009 — down from 39,172 / 121,009 / 31,430. Because <code>--target_bases 150mb</code> pins the <em>total output size</em>, not a fixed fraction of reads, how many reads that takes depends entirely on how deep the raw sample was to begin with: the read count drops by 76% for ERR8282742, 94% for ERR8282751 (the deepest raw sample, at 882.0 Mb), and 65% for ERR8282753 (the shallowest, at 242.4 Mb).</p>
+<p><strong>2. Median Qscore after filtering?</strong> Q14.4 / Q13.9 / Q13.5 — up from Q13.6 / Q12.7 / Q12.7, a gain of roughly 0.8–1.2 points across all three samples.</p>
+<p><strong>3. Median length and N50 after filtering?</strong> Median length 13,949 / 19,657 / 11,500 bp and N50 17,691 / 22,579 / 16,061 bp — median length roughly 2.2–4x higher, and N50 up by 40–95%. That's because Filtlong's score is weighted by length as well as quality, and <code>--target_bases</code> fills the 150 Mb quota with the highest-scoring reads first, so it disproportionately keeps the longest reads too, not just the highest-quality ones.</p>
+</div>
+<div class="admonition hint discussion points">
+<p class="admonition-title">Hint</p>
+<p>Why would it be not the best idea to keep using Porechop?</p>
+</div>
+<div class="admonition solution solution">
+<p class="admonition-title">Solution</p>
+<p>Porechop was declared unsupported/abandonware by its author back in October 2018 and hasn't been updated since (see the warning above) — it still works and is still widely used, but relying on an unmaintained tool means no bug fixes, no support for newer chemistries or adapter sequences, and no guarantee it keeps working as basecallers and library kits evolve.</p>
+</div>
+<h1 id="references">References</h1>
+<p>TO DO</p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../02.qc/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Lesson 2 - Quality control">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Lesson 2 - Quality control
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../04.species/" class="md-footer__link md-footer__link--next" aria-label="Next: Lesson 4 - Species identification">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Lesson 4 - Species identification
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.footer", "content.code.copy", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
