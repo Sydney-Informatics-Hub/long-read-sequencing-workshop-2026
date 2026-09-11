@@ -136,7 +136,7 @@ flye \
 log "Step 4.1: Flye plasmid search against PLSDB"
 
 # Split FASTA into separate sequence files
-"$(dirname "$(realpath "$0")")/vm/search_plsdb" \
+"$(dirname "$(realpath "$0")")/../vm/search_plsdb" \
     --fasta flye/assembly.fasta \
     --db ${PLASSEMBLER_DB} \
     --output flye/assembly.plsdb.txt
@@ -159,7 +159,7 @@ plassembler_plasmids=(plassembler/*_plasmids.fasta)
 # === Step 5.1 - Combine Flye and Plassembler FASTA files =======================
 # Get chromosome ID from flye output (longest contig)
 CHROM=$(awk -v FS="\t" 'NR > 1 { if ($2 > l) { l = $2; c = $1 } } END { print c }' flye/assembly_info.txt)
-"$(dirname "$(realpath "$0")")/vm/merge_contigs" \
+"$(dirname "$(realpath "$0")")/../vm/merge_contigs" \
     --flye flye/assembly.fasta \
     --plassembler "${plassembler_plasmids[0]}" \
     --chromosome "${CHROM}" \
