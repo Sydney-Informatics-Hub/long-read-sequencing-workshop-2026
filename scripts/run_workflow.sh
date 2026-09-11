@@ -15,7 +15,6 @@ K2DB=${HOME}/data/ref/kalamari                          # Kraken2 Kalamari datab
 PLASSEMBLER_DB=${HOME}/data/ref/plasmid_db_plassembler   # Plassembler plasmid database
 BUSCO_DB=${HOME}/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
 AMRFINDER_DB=${HOME}/data/ref/amrfinderplus_db/latest
-# MEDAKA_IMAGE_PATH=${HOME}/sing_images/medaka_1.3.3--py38h130def0_0
 MEDAKA_MODEL=r941_min_high_g360
 
 # === Thread count ================================================================
@@ -143,24 +142,10 @@ flye \
 log "Step 4.1: Flye plasmid search against PLSDB"
 
 # Split FASTA into separate sequence files
-seqkit split flye/assembly.fasta --by-id
-SPLIT_CONTIG_DIR=flye/assembly.fasta.split
-
-# Run mash screen using Plassembler database (PLSDB)
-for CONTIG in ${SPLIT_CONTIG_DIR}/assembly.part_*.fasta; do
-    PLSDB_RESULTS=${SPLIT_CONTIG_DIR}/$(basename ${CONTIG} .fasta).plsdb_results.tsv
-    echo -e "Identity\tShared Hashes\tMedian Multiplicity\tP-value\tNUCCORE_ACC\tDescription" > ${PLSDB_RESULTS}
-    mash screen \
-        -i 0.99 \
-        -v 0.1 \
-        ${PLASSEMBLER_DB}/plsdb_2023_11_03_v2.msh \
-        ${CONTIG} >> ${PLSDB_RESULTS}
-    echo "====================" >> ${PLSDB_RESULTS}
-    head -n 1 ${PLASSEMBLER_DB}/plsdb_2023_11_03_v2.tsv | cut -f 2-9 >> ${PLSDB_RESULTS}
-    cut -f 5 ${PLSDB_RESULTS} | while read PLASMID; do
-        grep -P "\t${PLASMID}\t" ${PLASSEMBLER_DB}/plsdb_2023_11_03_v2.tsv | cut -f 2-9 >> ${PLSDB_RESULTS}
-    done
-done
+search_plsdb \
+    --fasta flye/assembly.fasta \
+    --db ${PLASSEMBLER_DB} \
+    --output flye/assembly.plsdb.txt
 
 # === Step 5 - Plasmid recovery (Plassembler) ===================================
 log "Step 5: Plasmid recovery with Plassembler"
@@ -177,11 +162,14 @@ plassembler long \
 draft_assembly="draft_assembly.fasta"
 plassembler_plasmids=(plassembler/*_plasmids.fasta)
 
-if [[ -s "${plassembler_plasmids[0]}" ]]; then
-    cat flye/assembly.fasta "${plassembler_plasmids[0]}" > "${draft_assembly}"
-else
-    cp flye/assembly.fasta "${draft_assembly}"
-fi
+# === Step 5.1 - Combine Flye and Plassembler FASTA files =======================
+# Get chromosome ID from flye output (longest contig)
+CHROM=$(awk -v FS="\t" 'NR > 1 { if ($2 > l) { l = $2; c = $1 } } END { print c }' flye/assembly_info.txt)
+merge_contigs \
+    --flye flye/assembly.fasta \
+    --plassembler "${plassembler_plasmids[0]}" \
+    --chromosome "${CHROM}" \
+    --output "${draft_assembly}"
 
 # === Step 6 - Assembly QC on the draft assembly ================================
 log "Step 6: Assembly QC (QUAST + BUSCO + Bandage) on the draft assembly"

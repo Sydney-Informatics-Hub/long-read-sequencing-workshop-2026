@@ -21,3 +21,4 @@ shelley build medaka/1.3.3--py38h130def0_0
 shelley build bakta/1.12.0--pyhdfd78af_0
 shelley build ncbi-amrfinderplus/4.2.7--hf69ffd2_0
 shelley build autocycler/0.5.2--h3ab6199_0
+shelley build pygenomeviz/0.4.4--pyhdfd78af_0
