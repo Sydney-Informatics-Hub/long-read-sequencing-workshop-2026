@@ -1,0 +1,2 @@
+Sample	Escherichia coli	Klebsiella pneumoniae	Escherichia fergusonii	Escherichia albertii	Citrobacter freundii	Other	Unclassified
+ERR8282751.k2report	6613.0	93.0	75.0	64.0	30.0	60.0	1.0

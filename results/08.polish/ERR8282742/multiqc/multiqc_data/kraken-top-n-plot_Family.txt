@@ -1,0 +1,2 @@
+Sample	Pseudomonadaceae	Comamonadaceae	Enterobacteriaceae	Burkholderiaceae	Yersiniaceae	Other	Unclassified
+ERR8282742.k2report	8633.0	160.0	107.0	22.0	16.0	115.0	229.0

@@ -1,0 +1,2 @@
+Sample	Bacteria	Unclassified
+ERR8282742.k2report	9053.0	229.0

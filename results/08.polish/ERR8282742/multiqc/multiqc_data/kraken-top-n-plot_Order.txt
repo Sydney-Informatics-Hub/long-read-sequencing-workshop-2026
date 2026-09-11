@@ -1,0 +1,2 @@
+Sample	Pseudomonadales	Burkholderiales	Enterobacterales	Xanthomonadales	Aeromonadales	Other	Unclassified
+ERR8282742.k2report	8636.0	208.0	131.0	13.0	10.0	55.0	229.0

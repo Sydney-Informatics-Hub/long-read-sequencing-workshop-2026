@@ -1,0 +1,2 @@
+Sample	Gammaproteobacteria	Unclassified
+ERR8282751.k2report	6935.0	1.0

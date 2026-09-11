@@ -1,0 +1,2 @@
+Sample	Proteobacteria	Other	Unclassified
+ERR8282742.k2report	9052.0	1.0	229.0

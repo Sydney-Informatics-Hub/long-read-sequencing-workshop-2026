@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+QUAST	all_sections	ERR8282751.draft	/home/tdev3/analysis_751_150/quast/draft/report.tsv
+QUAST	all_sections	ERR8282751.polished	/home/tdev3/analysis_751_150/quast/polished/report.tsv
+BUSCO	all_sections	short_summary.specific.bacteria_odb12.2.draft.txt	/home/tdev3/analysis_751_150/busco/draft/short_summary.specific.bacteria_odb12.2.draft.txt
+BUSCO	all_sections	short_summary.specific.bacteria_odb12.2.polished.txt	/home/tdev3/analysis_751_150/busco/polished/short_summary.specific.bacteria_odb12.2.polished.txt
+BUSCO	all_sections	short_summary.txt	/home/tdev3/analysis_751_150/busco/polished/run_bacteria_odb12.2/short_summary.txt
+NanoStat	all_sections	ERR8282751_filtered_NanoStats.txt	/home/tdev3/analysis_751_150/qc/ERR8282751/nanoplot/filtered/ERR8282751_filtered_NanoStats.txt
+NanoStat	all_sections	ERR8282751_raw_NanoStats.txt	/home/tdev3/analysis_751_150/qc/ERR8282751/nanoplot/raw/ERR8282751_raw_NanoStats.txt
+Kraken	all_sections	ERR8282751.k2report	/home/tdev3/analysis_751_150/kraken2/ERR8282751.k2report
+FastQC	all_sections	ERR8282751.filtered.fastq.gz	/home/tdev3/analysis_751_150/qc/ERR8282751/fastqc/filtered/ERR8282751.filtered_fastqc.zip
+FastQC	all_sections	ERR8282751.fastq.gz	/home/tdev3/analysis_751_150/qc/ERR8282751/fastqc/raw/ERR8282751_fastqc.zip
