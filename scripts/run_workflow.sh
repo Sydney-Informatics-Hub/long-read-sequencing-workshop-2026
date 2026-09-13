@@ -1,6 +1,7 @@
 #!/bin/bash
 
 shopt -s expand_aliases
+[[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
 
 set -euo pipefail
 
@@ -16,7 +17,7 @@ PLASSEMBLER_DB=${HOME}/data/ref/plasmid_db_plassembler   # Plassembler plasmid d
 BUSCO_DB=${HOME}/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset (offline)
 AMRFINDER_DB=${HOME}/data/ref/amrfinderplus_db/2026-08-07.1
 MEDAKA_MODEL=r941_min_high_g360
-UTILITY_SCRIPT_DIR="${HOME}/scripts/utilities"
+UTILITY_SCRIPT_DIR=${HOME}/git_repo/scripts/utilities
 AMR_CASSETTE_DIAGRAM_SCRIPT="${UTILITY_SCRIPT_DIR}/amr_cassette_diagram.py"
 COMBINE_BANDAGE_GRAPHS_SCRIPT="${UTILITY_SCRIPT_DIR}/combine_bandage_graphs.sh"
 SEARCH_PLSDB_SCRIPT="${UTILITY_SCRIPT_DIR}/search_plsdb.sh"
@@ -155,12 +156,15 @@ plassembler long \
     -t "${THREADS}" \
     -o plassembler
 
+log "Step 5.1: Combine Flye and Plassembler assemblies into the draft assembly"
+
 # Fold any additional plasmid contigs Plassembler found into a single draft assembly
 draft_assembly="draft_assembly.fasta"
 plassembler_plasmids=(plassembler/*_plasmids.fasta)
 
 # === Step 5.1 - Combine Flye and Plassembler FASTA files =======================
 # Get chromosome ID from flye output (longest contig)
+log "Step 5.1: Combining Flye and Plassembler FASTA files"
 CHROM=$(awk -v FS="\t" 'NR > 1 { if ($2 > l) { l = $2; c = $1 } } END { print c }' flye/assembly_info.txt)
 "${MERGE_CONTIGS_SCRIPT}" \
     --flye flye/assembly.fasta \
@@ -198,13 +202,16 @@ if [[ -s "${plassembler_plasmids[0]}" ]]; then
         "${plassembler_gfa[0]}" \
         "assembly_qc/bandage/${sample_id}.plassembler_plasmids_graph.svg"
 
-    # Combined Flye + Plassembler graph, contigs labelled by source program,
-    # name, and length (see utilities/combine_bandage_graphs.sh for how). Best-effort:
-    # a failure here shouldn't take down the rest of the pipeline over what
-    # is just an extra visualisation on top of the two Bandage images above.
+    # Combined Flye + Plassembler graph, contigs labelled with the same
+    # chromosome/plasmid_N names and lengths used everywhere else in the
+    # draft assembly (see "${draft_assembly}.id_map.txt" from Step 5.1 and
+    # utilities/combine_bandage_graphs.sh for how). Best-effort: a failure
+    # here shouldn't take down the rest of the pipeline over what is just an
+    # extra visualisation on top of the two Bandage images above.
     "${COMBINE_BANDAGE_GRAPHS_SCRIPT}" \
         flye/assembly_graph.gfa \
         "${plassembler_gfa[0]}" \
+        "${draft_assembly}.id_map.txt" \
         "assembly_qc/bandage/${sample_id}.combined_assembly_graph.svg" \
         || log "Warning: combined Bandage graph failed, continuing without it"
 fi
