@@ -412,7 +412,7 @@ def render_cassette_panel(contig: str, hits: list[Hit], class_colours: dict[str,
         linewidth=BACKBONE_LW, linecolor="grey",
     )
     track.set_sublabel(
-        f"{lo + 1:,}-{hi:,} bp excerpt (cluster span {cassette_span:,} bp)",
+        f"{gene_lo:,}-{gene_hi:,} bp ({cassette_span:,} bp span)",
         size=SUBLABEL_SIZE,
     )
 
