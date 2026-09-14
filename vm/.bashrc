@@ -137,3 +137,4 @@ module load medaka/1.3.3--py38h130def0_0
 module load bakta
 module load ncbi-amrfinderplus
 module load autocycler
+module load pygenomeviz
