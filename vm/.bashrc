@@ -131,9 +131,7 @@ module load raven-assembler
 module load canu
 module load seqkit
 module load seqtk
-# module load plassembler
 module load quast
-# module load busco
 module load bandage
 module load medaka/1.3.3--py38h130def0_0
 module load bakta

@@ -1,4 +1,3 @@
-# alias plassembler='plassembler-exec plassembler'
 alias plassembler='singularity exec /cvmfs/singularity.galaxyproject.org/all/plassembler:1.8.2--pyhdfd78af_0 plassembler'
 alias Bandage='bandage-exec Bandage'
 alias mash='singularity exec /cvmfs/singularity.galaxyproject.org/all/plassembler:1.8.2--pyhdfd78af_0 mash'

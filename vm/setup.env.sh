@@ -28,10 +28,10 @@ cd ${HOME}
 
 rm -rf scripts
 
-git clone https://github.com/Sydney-Informatics-Hub/long-read-sequencing-workshop-2026.git
+SCRIPTPATH=$(realpath "$0")
+SCRIPTDIR=$(dirname "${SCRIPTPATH}")
+REPODIR=$(dirname "${SCRIPTDIR}")
 
-cp -r long-read-sequencing-workshop-2026/scripts .
-cp long-read-sequencing-workshop-2026/vm/.bashrc .
-cp long-read-sequencing-workshop-2026/vm/.bash_aliases .
-
-rm -rf long-read-sequencing-workshop-2026
+cp "${SCRIPTDIR}/.bashrc" .
+cp "${SCRIPTDIR}/.bash_aliases" .
+cp -r "${REPODIR}/scripts" .
