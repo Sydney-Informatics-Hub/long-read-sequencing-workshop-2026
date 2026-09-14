@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Get script path
+SCRIPTPATH=$(realpath "$0")
+SCRIPTDIR=$(dirname "${SCRIPTPATH}")
+REPODIR=$(dirname "${SCRIPTDIR}")
+
 # Install all modules required for workshop
 shelley build multiqc/1.35--pyhdfd78af_1
 shelley build nanoplot/1.47.0--pyhdfd78af_0
@@ -24,14 +29,8 @@ shelley build autocycler/0.5.2--h3ab6199_0
 shelley build pygenomeviz/0.4.4--pyhdfd78af_0
 
 # Setup scripts and .bashrc/.bash_aliases files
-cd ${HOME}
+rm -rf ${HOME}/scripts
 
-rm -rf scripts
-
-SCRIPTPATH=$(realpath "$0")
-SCRIPTDIR=$(dirname "${SCRIPTPATH}")
-REPODIR=$(dirname "${SCRIPTDIR}")
-
-cp "${SCRIPTDIR}/.bashrc" .
-cp "${SCRIPTDIR}/.bash_aliases" .
-cp -r "${REPODIR}/scripts" .
+cp "${SCRIPTDIR}/.bashrc" ${HOME}/
+cp "${SCRIPTDIR}/.bash_aliases" ${HOME}/
+cp -r "${REPODIR}/scripts" ${HOME}/
