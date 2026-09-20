@@ -10,6 +10,7 @@ ln -s /cvmfs/data.galaxyproject.org/byhand/bakta_database/10522951 bakta
 
 # Download non-CVMFS databases
 shopt -s expand_aliases
+module load singularity
 module load plassembler
 module load ncbi-amrfinderplus
 module load busco
