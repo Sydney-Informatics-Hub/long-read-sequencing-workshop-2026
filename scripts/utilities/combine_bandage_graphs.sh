@@ -41,6 +41,11 @@ set -euo pipefail
 #
 # Usage: combine_bandage_graphs.sh <flye_assembly_graph.gfa> <plassembler_plasmids.gfa> <id_map.txt> <output.svg>
 
+if [[ $# -ne 4 ]]; then
+    echo "Usage: $(basename "$0") <flye_assembly_graph.gfa> <plassembler_plasmids.gfa> <id_map.txt> <output.svg>" >&2
+    exit 1
+fi
+
 flye_gfa="${1}"
 plassembler_gfa="${2}"
 id_map="${3}"
