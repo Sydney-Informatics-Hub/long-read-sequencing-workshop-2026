@@ -4,13 +4,18 @@ shopt -s expand_aliases
 
 set -euo pipefail
 
-# --- Defaults -----------------------------------------------------------
+# --- Defaults -------------------------------------------------------------
 FLYE=""
 PLASSEMBLER=""
 KEEP=""
 EXCLUDE=""
 CHROM=""
 OUTPUT=""
+
+# --- Script paths ---------------------------------------------------------
+SCRIPT=$(realpath "${0}")
+SCRIPTDIR=$(dirname "${SCRIPT}")
+GFAFILTERSCRIPT="${SCRIPTDIR}/filter_assembly_graph.py"
 
 # --- Flag parsing ---------------------------------------------------------
 while [[ $# -gt 0 ]]; do
@@ -111,21 +116,64 @@ else
     mv "${TEMP_DIR}/concat.fasta" "${TEMP_DIR}/filtered.fasta"
 fi
 
-# Step 3 - extract chromosome
+# Step 3 - strip unwanted contigs from GFA files and concatenate them
+FLYEDIR="$(dirname "${FLYE}")"
+PLASDIR="$(dirname "${PLASSEMBLER}")"
+FLYEGFA="${FLYEDIR}/assembly_graph.gfa"
+FLYEINFO="${FLYEDIR}/assembly_info.txt"
+PLASGFA="${PLASDIR}/plassembler_plasmids.gfa"
+PLASINFO="${PLASDIR}/plassembler_summary.tsv"
+if [ -n "${KEEP}" ]; then
+    echo "Step 2: Strip unwanted contigs"
+    # Filter GFA files
+    python3 "${GFAFILTERSCRIPT}" -g "${FLYEGFA}" -i "${FLYEINFO}" --ids "${KEEP}" -o "${TEMP_DIR}/flye_filtered_graph.gfa"
+    if [ -s "${PLASGFA}" ]; then
+        python3 "${GFAFILTERSCRIPT}" -g "${PLASGFA}" -i "${PLASINFO}" --ids "${KEEP}" -o "${TEMP_DIR}/plassembler_filtered_graph.gfa"
+    else
+        touch "${TEMP_DIR}/plassembler_filtered_graph.gfa"
+    fi
+    # Concatenate GFA files
+    cat "${TEMP_DIR}/flye_filtered_graph.gfa" "${TEMP_DIR}/plassembler_filtered_graph.gfa" > "${OUTPUT}.gfa"
+elif [ -n "${EXCLUDE}" ]; then
+    echo "Step 2: Strip unwanted contigs"
+    # Get all contig IDs
+    cut -f 1 "${FLYEINFO}" | sed 1d > "${TEMP_DIR}/flye_all_contigs.txt"
+    cut -f 1 "${PLASINFO}" | grep -Ev 'contig|chromosome' > "${TEMP_DIR}/plassembler_all_contigs.txt"
+    cat "${TEMP_DIR}/flye_all_contigs.txt" "${TEMP_DIR}/plassembler_all_contigs.txt" > "${TEMP_DIR}/all_contigs.txt"
+    # Split contigs to exclude by commas and save to file
+    echo "${EXCLUDE}" | tr , '\n' > "${TEMP_DIR}/contigs_to_exclude.txt"
+    # Remove from all plassembler contigs
+    KEEP_CONTIGS=$(grep -Fxvf "${TEMP_DIR}/contigs_to_exclude.txt" "${TEMP_DIR}/all_contigs.txt" | tr '\n' , | sed -E -e 's|,$||g')
+    # Filter GFA files
+    python3 "${GFAFILTERSCRIPT}" -g "${FLYEGFA}" -i "${FLYEINFO}" --ids "${KEEP_CONTIGS}" -o "${TEMP_DIR}/flye_filtered_graph.gfa"
+    if [ -s "${PLASGFA}" ]; then
+        python3 "${GFAFILTERSCRIPT}" -g "${PLASGFA}" -i "${PLASINFO}" --ids "${KEEP_CONTIGS}" -o "${TEMP_DIR}/plassembler_filtered_graph.gfa"
+    else
+        touch "${TEMP_DIR}/plassembler_filtered_graph.gfa"
+    fi
+    # Concatenate GFA files
+    cat "${TEMP_DIR}/flye_filtered_graph.gfa" "${TEMP_DIR}/plassembler_filtered_graph.gfa" > "${OUTPUT}.gfa"
+else
+    echo "SKIPPING: Step 2: Strip unwanted contigs"
+    # Concatenate GFA files
+    cat "${FLYEGFA}" "${PLASGFA}" > "${OUTPUT}.gfa"
+fi
+
+# Step 4 - extract chromosome
 echo "Step 3: Extract chromosome"
 seqkit grep -p "${CHROM}" "${TEMP_DIR}/filtered.fasta" > "${TEMP_DIR}/chromosome.fasta"
 seqkit grep -v -p "${CHROM}" "${TEMP_DIR}/filtered.fasta" > "${TEMP_DIR}/plasmids.fasta"
 
-# Step 4 - rename contigs
+# Step 5 - rename contigs
 echo "Step 4: Rename contigs"
 seqkit replace -p "(.+)" -r "chromosome" "${TEMP_DIR}/chromosome.fasta" > "${TEMP_DIR}/chromosome.renamed.fasta"
 seqkit replace -p "(.+)" -r "plasmid_{nr}" "${TEMP_DIR}/plasmids.fasta" > "${TEMP_DIR}/plasmids.renamed.fasta"
 
-# Step 5 - assemble final FASTA
+# Step 6 - assemble final FASTA
 echo "Step 5: Assemble final FASTA"
 cat "${TEMP_DIR}/chromosome.renamed.fasta" "${TEMP_DIR}/plasmids.renamed.fasta" > "${OUTPUT}"
 
-# Step 6 - generate map of old to new IDs
+# Step 7 - generate map of old to new IDs
 echo "Step 6: Generate map of old to new IDs"
 MAPFILE="${OUTPUT}.id_map.txt"
 set +e
