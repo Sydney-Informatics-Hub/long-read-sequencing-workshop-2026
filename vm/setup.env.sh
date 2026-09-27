@@ -34,3 +34,8 @@ rm -rf ${HOME}/scripts
 cp "${SCRIPTDIR}/.bashrc" ${HOME}/
 cp "${SCRIPTDIR}/.bash_aliases" ${HOME}/
 cp -r "${REPODIR}/scripts" ${HOME}/
+
+# Example HTML report, so participants can practice opening a report with
+# Live Server before they generate their own in the QC module
+mkdir -p "${HOME}/example_report"
+cp "${REPODIR}/docs/assets/02.qc/fastqc/barcode01_fastqc.html" "${HOME}/example_report/"
