@@ -21,7 +21,7 @@ nav:
     - Lesson 7 - Assembly quality control and visualisation: 07.assembly_qc.md
     - Lesson 8 - Genome assembly polishing: 08.polish.md
     - Lesson 9 - Genome annotation and AMR screening: 09.annotation.md
-  # - Tips and recommendations: 00.tips.md
+  - Tips and recommendations: 00.tips.md
   # Example nested page
   # - Part 1:
   #   - Introduction: part1/intro.md
