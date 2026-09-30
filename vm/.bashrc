@@ -127,8 +127,6 @@ module load fastplong
 module load filtlong
 module load kraken2
 module load flye
-module load raven-assembler
-module load canu
 module load seqkit
 module load seqtk
 module load quast

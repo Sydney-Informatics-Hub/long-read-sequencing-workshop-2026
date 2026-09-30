@@ -13,8 +13,6 @@ shelley build fastplong/0.4.1--h224cc79_0
 shelley build filtlong/0.3.1--h077b44d_0
 shelley build kraken2/2.17.1--pl5321h077b44d_0
 shelley build flye/2.9.6--py313h7fbb527_1
-shelley build raven-assembler/1.8.3--h5ca1c30_3
-shelley build canu/2.3--h636b4d1_3
 shelley build seqkit/2.13.0--he881be0_0
 shelley build seqtk/1.4--h577a1d6_3
 shelley build plassembler/1.8.2--pyhdfd78af_0
