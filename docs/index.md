@@ -6,9 +6,9 @@ The workshop has been designed around a dataset of sequencing data obtained from
 
 ## Lesson plan
 
-The 2026 delivery of this workshop will be as 2 half-day sessions, delivered online through Zoom. The first day will introduce participants to long read sequencing concepts and guide them through quality control, read filtering and pre-processing, and species identification and contamination detection. The second day will explore *de novo* genome assembly, assembly quality control, and downstream genome annotation. **Note** that not all of the lessons present in these materials will be covered during the workshop. Instead, the most vital concepts will be covered, while other lessons will be left for participants to complete at their leisure.
+The 2026 delivery of this workshop will be as 2 half-day sessions, delivered online through Zoom. The first day will introduce participants to long read sequencing concepts and guide them through quality control, read filtering and pre-processing, and species identification and contamination detection. The second day will explore *de novo* genome assembly, assembly quality control, and downstream genome annotation.
 
-The following table lists the lessons and their planned delivery during the workshop. Lessons with `N/A` listed under the `Day` column are additional content that won't be covered on the day but can be completed in your own time.
+The following table lists the lessons and their planned delivery during the workshop. 
 
 | Lesson # | Title | Day | Description |
 | -------- | ----- | --- | ----------- |
@@ -16,24 +16,21 @@ The following table lists the lessons and their planned delivery during the work
 | 2 | Quality control | 1 | Explore different tools to assess the quality of a long read sequencing run and the sequencing reads |
 | 3 | Read pre-processing | 1 | Trimming reads to remove adapters and filtering to remove low-quality reads |
 | 4 | Species identification | 1 | Using public databases for rapid identification of species from long read sequences |
-| 5 | Contamination removal | N/A | Methods for removing contaminating sequences (additional content) |
-| 6 | *De novo* genome assembly | 2 | Assembling bacterial genomes from long read sequences |
-| 7 | *De novo* plasmid assembly | N/A | Exploring tools for specifically assembling plasmids from long read sequences (additional content) |
-| 8 | Consensus genome assembly | N/A | Using multiple genome assemblies to construct higher-quality consensus assemblies (additional content) |
+| 6 | *De novo* genome assembly | 1 | Assembling bacterial genomes from long read sequences |
+| 6 | *De novo* plasmid assembly | 2 | Exploring tools for specifically assembling plasmids from long read sequences |
+| 7 | Assembly quality control | 2 | Interpreting standard quality control metrics for *de novo* genome assembly |
 | 9 | Assembly polishing | 2 | Polishing *de novo* assemblies to remove common long read sequencing artefacts |
-| 10 | Alternative polishing methods | N/A | Exploring other methods for *de novo* assembly polishing (additional content) |
-| 11 | Assembly quality control | 2 | Interpreting standard quality control metrics for *de novo* genome assembly |
 | 12 | Genome annotation and AMR gene detection | 2 | Annotating *de novo* bacterial genome assemblies to identify antimicrobial resistance (AMR) genes |
-| 13 | Comparative genomics | N/A | Phylogenetic and sequence similarity comparisons of assemblies (additional content) |
 
 ## Trainers
 
-- Dr Magda Antczak, Queensland Cyber Infrastructure Foundation (QCIF)
+- Dr Magdalena (Magda) Antczak, QCIF Digital Research (hosted by QUT)
 - Dr Michael Geaghan, Sydney Informatics Hub, The University of Sydney
 
 ## Facilitators
 
-TODO
+- Claire Herne, QCIF Digital Research
+- Dr Mitchell O'Brien, Sydney Informatics Hub, The University of Sydney
 
 ## Setup instructions and prerequisites
 
@@ -59,11 +56,12 @@ Please fill out our [course survey](#) before you leave.
 
 ## Credits and acknowledgements
 
-This workshop event and accompanying materials were jointly developed by the Sydney Informatics Hub, University of Sydney and the Queensland Cyber Infrastructure Foundation (QCIF). The workshop was enabled through the Australian BioCommons (Australian Research Data Commons and NCRIS via Bioplatforms Australia).
+This workshop event and accompanying materials were jointly developed by the Sydney Informatics Hub, University of Sydney and QCIF Digital Research. The workshop was enabled through the Australian BioCommons (Australian Research Data Commons and NCRIS via Bioplatforms Australia).
 
 Developers
-- Dr Magda Antczak, Queensland Cyber Infrastructure Foundation (QCIF)
+- Dr Magdalena (Magda) Antczak, QCIF Digital Research (hosted by QUT)
 - Dr Michael Geaghan, Sydney Informatics Hub, The University of Sydney
 
 ![](./assets/0.0_biocommons_logo.png){width=40%; style="margin-right: 50px"}
 ![](./assets/0.0_sih_logo.png){width=25%}
+![](./assets/0.0_qcif_logo.png){width=25%}
