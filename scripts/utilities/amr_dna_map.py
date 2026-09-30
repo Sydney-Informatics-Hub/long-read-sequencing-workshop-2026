@@ -116,7 +116,7 @@ MAX_ALPHA = 1.0
 
 CARBAPENEMASE_SUBCLASS_KEYWORD = "CARBAPENEM"
 CARBAPENEMASE_EDGECOLOR = "red"
-CARBAPENEMASE_LINEWIDTH = 3.2
+CARBAPENEMASE_LINEWIDTH = 1.6
 DEFAULT_EDGECOLOR = "black"
 DEFAULT_LINEWIDTH = 1.6
 
@@ -130,6 +130,14 @@ RING_WIDTH_FRAC = 0.18        # ring thickness as a fraction of the circle's rad
 MIN_GENE_ANGLE_FRAC = 0.012   # minimum angular width (as a fraction of full circle) so a
                                # tiny/partial gene still shows up as a visible sliver
 MIN_GENE_LINEAR_FRAC = 0.012  # same idea, for the linear backbone
+MIN_GENE_LINEAR_GAP_FRAC = 0.006  # minimum gap between adjacent linear gene boxes,
+                                    # so a tight cluster (e.g. an operon) doesn't
+                                    # render as one overlapping, indistinguishable blob
+LABEL_RADIUS_NEAR = 1.14      # circular label tiers (as a multiple of ring radius R):
+LABEL_RADIUS_FAR = 1.32       # alternating near/far keeps adjacent labels from
+                               # overlapping when hits sit close together (e.g. an operon)
+MIN_GENE_LABEL_GAP_FRAC = 0.025  # minimum angular gap between adjacent circular labels,
+                                   # as a fraction of the full circle (~9 degrees)
 LABEL_FONTSIZE = 9
 TITLE_FONTSIZE = 12
 LEADER_LW = 0.8
@@ -358,11 +366,26 @@ def draw_circular_dna(ax, dna: DNA, hits: list[Hit],
     ax.add_patch(Wedge((0, 0), R, 0, 360, width=width,
                         facecolor=BACKBONE_COLOUR, edgecolor="none", zorder=1))
 
-    for h in hits:
+    # Label angular positions are spread apart independently of the wedges
+    # they belong to: a tight cluster of hits (e.g. an operon) has near-
+    # identical true angles, so alternating radius tiers alone isn't enough
+    # to keep their labels legible -- this nudges each label's angle just
+    # far enough from its neighbours, while the wedge itself stays at the
+    # true position and the leader line bends to connect the two.
+    true_mid_fracs = [
+        ((h.start / dna.length) + (h.stop / dna.length)) / 2 for h in hits
+    ]
+    label_mid_fracs = [
+        x0 for x0, _ in _spread_intervals(
+            [(m, m) for m in true_mid_fracs], MIN_GENE_LABEL_GAP_FRAC,
+        )
+    ]
+
+    far = False
+    for h, mid_frac, label_mid_frac in zip(hits, true_mid_fracs, label_mid_fracs):
         start_frac = h.start / dna.length
         stop_frac = h.stop / dna.length
         span_frac = max(stop_frac - start_frac, MIN_GENE_ANGLE_FRAC)
-        mid_frac = (start_frac + stop_frac) / 2
         angle_a = 90 - 360 * (mid_frac - span_frac / 2)
         angle_b = 90 - 360 * (mid_frac + span_frac / 2)
         theta1, theta2 = sorted((angle_a, angle_b))
@@ -375,10 +398,12 @@ def draw_circular_dna(ax, dna: DNA, hits: list[Hit],
             alpha=style["alpha"], linestyle=style["linestyle"], zorder=2,
         ))
 
-        label_angle_deg = 90 - 360 * mid_frac
+        anchor_angle_rad = math.radians(90 - 360 * mid_frac)
+        anchor_x, anchor_y = R * math.cos(anchor_angle_rad), R * math.sin(anchor_angle_rad)
+        label_angle_deg = 90 - 360 * label_mid_frac
         label_angle_rad = math.radians(label_angle_deg)
-        anchor_x, anchor_y = R * math.cos(label_angle_rad), R * math.sin(label_angle_rad)
-        label_r = R + 0.14
+        label_r = LABEL_RADIUS_FAR if far else LABEL_RADIUS_NEAR
+        far = not far
         label_x, label_y = label_r * math.cos(label_angle_rad), label_r * math.sin(label_angle_rad)
         ax.plot([anchor_x, label_x], [anchor_y, label_y], color="grey", lw=LEADER_LW, zorder=1)
 
@@ -388,10 +413,28 @@ def draw_circular_dna(ax, dna: DNA, hits: list[Hit],
         ax.text(label_x, label_y, gene_label(h), fontsize=LABEL_FONTSIZE,
                 rotation=rot, rotation_mode="anchor", ha=ha, va="center", zorder=3)
 
-    ax.set_xlim(-1.9, 1.9)
-    ax.set_ylim(-1.9, 1.9)
+    ax.set_xlim(-2.1, 2.1)
+    ax.set_ylim(-2.1, 2.1)
     ax.set_aspect("equal")
     ax.axis("off")
+
+
+def _spread_intervals(spans: list[tuple[float, float]], min_gap: float) -> list[tuple[float, float]]:
+    """Nudge a start-sorted list of (x0, x1) spans rightward just enough that
+    none overlap or sit closer than min_gap apart. Without this, a tight
+    cluster of hits (e.g. an operon) whose minimum-width boxes overlap draws
+    as a single indistinguishable blob -- this keeps each one individually
+    legible while preserving order and true relative position as closely as
+    the minimum spacing allows."""
+    out: list[tuple[float, float]] = []
+    prev_x1 = -math.inf
+    for x0, x1 in spans:
+        if x0 < prev_x1 + min_gap:
+            shift = (prev_x1 + min_gap) - x0
+            x0, x1 = x0 + shift, x1 + shift
+        out.append((x0, x1))
+        prev_x1 = x1
+    return out
 
 
 def draw_linear_dna(ax, dna: DNA, hits: list[Hit],
@@ -402,12 +445,16 @@ def draw_linear_dna(ax, dna: DNA, hits: list[Hit],
             linewidth=14, solid_capstyle="butt", zorder=1)
 
     min_span = dna.length * MIN_GENE_LINEAR_FRAC
-    above = True
+    min_gap = dna.length * MIN_GENE_LINEAR_GAP_FRAC
+    raw_spans = []
     for h in hits:
         span = max(h.stop - h.start, min_span)
         mid = (h.start + h.stop) / 2
-        x0, x1 = mid - span / 2, mid + span / 2
+        raw_spans.append((mid - span / 2, mid + span / 2))
+    spans = _spread_intervals(raw_spans, min_gap)
 
+    above = True
+    for h, (x0, x1) in zip(hits, spans):
         style = feature_style_kwargs(h)
         ax.add_patch(Rectangle(
             (x0, -7), x1 - x0, 14,
@@ -416,6 +463,7 @@ def draw_linear_dna(ax, dna: DNA, hits: list[Hit],
             alpha=style["alpha"], linestyle=style["linestyle"], zorder=2,
         ))
 
+        mid = (x0 + x1) / 2
         label_y = 16 if above else -16
         va = "bottom" if above else "top"
         ax.plot([mid, mid], [7 if above else -7, label_y], color="grey", lw=LEADER_LW, zorder=1)
@@ -424,7 +472,8 @@ def draw_linear_dna(ax, dna: DNA, hits: list[Hit],
         above = not above
 
     pad = max(dna.length * 0.05, 1)
-    ax.set_xlim(-pad, dna.length + pad)
+    rightmost = max(dna.length, spans[-1][1] if spans else dna.length)
+    ax.set_xlim(-pad, rightmost + pad)
     ax.set_ylim(-45, 45)
     ax.axis("off")
 
