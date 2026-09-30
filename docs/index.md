@@ -64,4 +64,4 @@ Developers
 
 ![](./assets/0.0_biocommons_logo.png){width=40%; style="margin-right: 50px"}
 ![](./assets/0.0_sih_logo.png){width=25%}
-![](./assets/0.0_qcif_logo.png){width=25%}
+![](./assets/0.0_qcif_logo.png){width=40%}
