@@ -18,7 +18,7 @@ BUSCO_DB=${HOME}/data/ref/busco/bacteria_odb12.2         # BUSCO lineage dataset
 AMRFINDER_DB=${HOME}/data/ref/amrfinderplus_db/2026-08-07.1
 MEDAKA_MODEL=r941_min_high_g360
 UTILITY_SCRIPT_DIR=${HOME}/scripts/utilities
-AMR_CASSETTE_DIAGRAM_SCRIPT="${UTILITY_SCRIPT_DIR}/amr_cassette_diagram.py"
+AMR_DNA_MAP_SCRIPT="${UTILITY_SCRIPT_DIR}/amr_dna_map.py"
 COMBINE_BANDAGE_GRAPHS_SCRIPT="${UTILITY_SCRIPT_DIR}/combine_bandage_graphs.sh"
 SEARCH_PLSDB_SCRIPT="${UTILITY_SCRIPT_DIR}/search_plsdb.sh"
 MERGE_CONTIGS_SCRIPT="${UTILITY_SCRIPT_DIR}/merge_contigs.sh"
@@ -264,15 +264,22 @@ amrfinder \
     --threads "${THREADS}" \
     > "amrfinder/${sample_id}.amrfinder_plus.tsv"
 
-# === Step 9 - AMR gene-cassette diagram (pyGenomeViz) ==========================
-log "Step 9: AMR gene-cassette diagram"
+# === Step 9 - AMR chromosome/plasmid maps =======================================
+log "Step 9: AMR chromosome/plasmid maps"
 
-pygenomeviz-exec python3 "${AMR_CASSETTE_DIAGRAM_SCRIPT}" \
-    --amrfinder-tsv "amrfinder/${sample_id}.amrfinder_plus.tsv"
+# --id-map translates the TSV's merge_contigs.sh-renamed contig ids (chromosome,
+# plasmid_1, ...) back to Flye/Plassembler's own raw ids, so contig length and
+# circularity can be looked up in --flye-info / --plassembler-summary.
+python3 "${AMR_DNA_MAP_SCRIPT}" \
+    --amrfinder-tsv "amrfinder/${sample_id}.amrfinder_plus.tsv" \
+    --flye-info flye/assembly_info.txt \
+    --plassembler-summary plassembler/plassembler_summary.tsv \
+    --id-map "${draft_assembly}.id_map.txt" \
+    --outdir amrfinder
 
 # === Done ===================================================================
 log "Pipeline completed for ${sample_id}"
 log "Draft assembly    : ${draft_assembly}"
 log "Polished assembly : ${polished_assembly}"
 log "AMRFinderPlus      : amrfinder/${sample_id}.amrfinder_plus.tsv"
-log "AMR cassette plots : amrfinder/${sample_id}.amrfinder_plus.<contig>.png"
+log "AMR chromosome/plasmid maps : amrfinder/${sample_id}.amrfinder_plus.chromosome_map.png, .plasmid_map.png"
