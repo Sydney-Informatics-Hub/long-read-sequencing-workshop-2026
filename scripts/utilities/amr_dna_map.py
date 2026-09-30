@@ -17,8 +17,23 @@ script's pinned-to-0.4.4 constraint, see amr_cassette_diagram.py's
 docstring). If you ever change a colour or style rule in one script,
 change it in the other too.
 
-DNA length and circularity are looked up by contig id, checking two
-possible sources in turn:
+The AMRFinderPlus TSV's "Contig id" is whatever the assembly FASTA it was
+run on actually calls each sequence. If that assembly went through
+merge_contigs.sh, the contigs were renamed (chromosome, plasmid_1,
+plasmid_2, ...) -- names that appear nowhere in Flye's assembly_info.txt
+(contig_1, contig_6, ...) or Plassembler's summary (its own numeric
+plasmid ids), and Plassembler's numbering doesn't even line up with the
+final plasmid_N suffixes, since merge_contigs.sh's numbering runs across
+*all* plasmid-classified contigs (Flye's leftover circular repeats
+included), not just Plassembler's. Pass that renaming with --id-map
+(merge_contigs.sh writes it next to the draft assembly, as
+"<draft_assembly>.id_map.txt") and every TSV contig id is translated back
+to its raw Flye/Plassembler id before either file is consulted. Without
+--id-map, TSV contig ids are assumed to already match the raw ids (true
+only if the assembly was never renamed).
+
+DNA length and circularity are then looked up by (translated) contig id,
+checking two possible sources in turn:
     1. plassembler's *_summary.tsv (the final recovered plasmids, and the
        'chromosome' row plassembler carries through from the input flye
        assembly)
@@ -30,11 +45,12 @@ file, its length is inferred from the AMR hits' own coordinates (printed
 as a warning) and it is assumed non-circular, since neither is knowable
 without a real source.
 
-One contig is treated as "the chromosome": either the one explicitly
-named 'chromosome' (as plassembler's summary names it), or -- if no
-contig has that name -- whichever resolved DNA molecule is both the
-largest one referenced in the TSV and at least --chromosome-min-length bp
-(override either behaviour with --chromosome-name). Every other contig
+One contig is treated as "the chromosome": either the one whose
+AMRFinderPlus TSV contig id is literally 'chromosome' (as merge_contigs.sh
+and plassembler's summary both name it), or -- if no contig has that id --
+whichever resolved DNA molecule is both the largest one referenced in the
+TSV and at least --chromosome-min-length bp (override either behaviour
+with --chromosome-name). Every other contig
 referenced in the TSV is drawn as a plasmid. The chromosome (if any hits
 land on it) is written to its own PNG; every plasmid contig (if any) goes
 into a second PNG as a small-multiples grid, one subplot per contig.
@@ -44,6 +60,7 @@ Usage:
         --amrfinder-tsv ERR8282752.amrfinder_150.tsv \\
         --flye-info flye/assembly_info.txt \\
         --plassembler-summary plassembler/plassembler_summary.tsv \\
+        --id-map draft_assembly.fasta.id_map.txt \\
         --outdir .
 """
 
@@ -220,20 +237,42 @@ def load_plassembler_summary(path: str) -> dict[str, DNA]:
     return out
 
 
+def load_id_map(path: str) -> dict[str, str]:
+    """Read merge_contigs.sh's <draft_assembly>.id_map.txt (old_id<TAB>new_id,
+    no header) and return the reverse mapping: new_id (the renamed contig id
+    that actually appears in the AMRFinderPlus TSV, e.g. 'chromosome',
+    'plasmid_1') -> old_id (the raw Flye/Plassembler contig id used in
+    --flye-info / --plassembler-summary)."""
+    out: dict[str, str] = {}
+    with open(path, newline="") as fh:
+        for row in csv.reader(fh, delimiter="\t"):
+            if not row:
+                continue
+            old_id, new_id = row[0], row[1]
+            out[new_id] = old_id
+    return out
+
+
 def resolve_dna(contig_id: str, hits: list[Hit],
                  plassembler: dict[str, DNA],
-                 flye: dict[str, DNA]) -> DNA:
+                 flye: dict[str, DNA],
+                 id_map: dict[str, str]) -> DNA:
     """plassembler's summary wins when a contig id appears in both (it's
     the more specific, post-reassembly source); flye's assembly_info is
-    the fallback for anything plassembler didn't touch."""
-    if contig_id in plassembler:
-        return plassembler[contig_id]
-    if contig_id in flye:
-        return flye[contig_id]
+    the fallback for anything plassembler didn't touch. contig_id is first
+    translated to its raw Flye/Plassembler id via --id-map, since it may be
+    a merge_contigs.sh-renamed id (chromosome, plasmid_1, ...) that appears
+    in neither source file directly."""
+    raw_id = id_map.get(contig_id, contig_id)
+    if raw_id in plassembler:
+        return plassembler[raw_id]
+    if raw_id in flye:
+        return flye[raw_id]
     inferred_length = max(h.stop for h in hits)
+    raw_note = f" (raw id '{raw_id}')" if raw_id != contig_id else ""
     print(
-        f"Warning: contig '{contig_id}' not found in --plassembler-summary or "
-        f"--flye-info -- inferring length {inferred_length:,} bp from this "
+        f"Warning: contig '{contig_id}'{raw_note} not found in --plassembler-summary "
+        f"or --flye-info -- inferring length {inferred_length:,} bp from this "
         "contig's own AMR hit coordinates and assuming it is non-circular.",
         file=sys.stderr,
     )
@@ -250,7 +289,7 @@ def classify_dna(contigs: dict[str, DNA], chromosome_name: str | None,
             )
         chrom = chromosome_name
     else:
-        named = [n for n, r in contigs.items() if r.name.lower() == "chromosome"]
+        named = [n for n in contigs if n.lower() == "chromosome"]
         if named:
             chrom = named[0]
         else:
@@ -596,6 +635,11 @@ def main() -> None:
     p.add_argument("--plassembler-summary", default=None,
                     help="plassembler's *_summary.tsv (for contig length/circularity; "
                          "takes precedence over --flye-info when a contig id is in both)")
+    p.add_argument("--id-map", default=None,
+                    help="merge_contigs.sh's <draft_assembly>.id_map.txt (old_id<TAB>new_id, "
+                         "no header). Required whenever the AMRFinderPlus TSV's contig ids "
+                         "(e.g. chromosome, plasmid_1) were renamed by merge_contigs.sh and so "
+                         "differ from the raw ids in --flye-info / --plassembler-summary.")
     p.add_argument("--chromosome-name", default=None,
                     help="Force this contig id to be treated as the chromosome (default: "
                          "a contig literally named 'chromosome', else the largest contig "
@@ -616,9 +660,10 @@ def main() -> None:
     hits_by_contig = load_all_contigs(args.amrfinder_tsv)
     plassembler = load_plassembler_summary(args.plassembler_summary) if args.plassembler_summary else {}
     flye = load_flye_info(args.flye_info) if args.flye_info else {}
+    id_map = load_id_map(args.id_map) if args.id_map else {}
 
     contigs: dict[str, DNA] = {
-        contig_id: resolve_dna(contig_id, hits, plassembler, flye)
+        contig_id: resolve_dna(contig_id, hits, plassembler, flye, id_map)
         for contig_id, hits in hits_by_contig.items()
     }
 
