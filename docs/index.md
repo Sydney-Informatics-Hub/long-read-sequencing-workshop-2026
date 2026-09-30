@@ -59,6 +59,7 @@ Please fill out our [course survey](#) before you leave.
 This workshop event and accompanying materials were jointly developed by the Sydney Informatics Hub, University of Sydney and QCIF Digital Research. The workshop was enabled through the Australian BioCommons (Australian Research Data Commons and NCRIS via Bioplatforms Australia).
 
 Developers
+
 - Dr Magdalena (Magda) Antczak, QCIF Digital Research (hosted by QUT)
 - Dr Michael Geaghan, Sydney Informatics Hub, The University of Sydney
 
