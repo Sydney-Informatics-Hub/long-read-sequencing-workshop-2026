@@ -137,4 +137,69 @@ set -e
 paste "${TEMP_DIR}/chromosome.old" "${TEMP_DIR}/chromosome.new" > "${MAPFILE}"
 paste "${TEMP_DIR}/plasmids.old" "${TEMP_DIR}/plasmids.new" >> "${MAPFILE}"
 
+# Step 7 - merge graphs
+echo "Step 7: Merge graphs"
+## contig_N / bare Plassembler N -> final name, e.g. chromosome, plasmid_1
+FLYE_GFA="$(dirname "${FLYE}")/assembly_graph.gfa"
+PLASSEMBLER_GFA="$(dirname "${PLASSEMBLER}")/plassembler_plasmids.gfa"
+# edge_N -> contig_N, read straight off the Flye graph's own P lines
+awk 'BEGIN{FS="\t"; OFS="\t"} $1=="P"{
+    n = split($3, edges, ",");
+    for (i=1; i<=n; i++) {
+        edge = edges[i];
+        sub(/[+-]$/, "", edge);
+        print edge, $2;
+    }
+}' "${FLYE_GFA}" > "${TEMP_DIR}/edge_to_contig.tsv"
+
+rename_awk='
+    BEGIN {
+        while ((getline line < idmap) > 0) { split(line, a, "\t"); final[a[1]] = a[2] }
+        while ((getline line < edgemap) > 0) { split(line, a, "\t"); contig[a[1]] = a[2] }
+    }
+    function known(id,    c) {
+        if (id in final) return 1;
+        c = (id in contig) ? contig[id] : id;
+        return (c in final);
+    }
+    function rename(id,    c) {
+        if (id in final) return final[id];
+        c = (id in contig) ? contig[id] : id;
+        return final[c];
+    }
+    $1=="S" {
+        if (!known($2)) next;
+        $2=rename($2); print; next
+    }
+    $1=="L" {
+        if (!known($2) || !known($4)) next;
+        $2=rename($2); $4=rename($4); print; next
+    }
+    $1=="P" {
+        n=split($3, arr, ",");
+        out="";
+        drop=0;
+        for (i=1; i<=n; i++) {
+            orient=substr(arr[i], length(arr[i]), 1);
+            id=substr(arr[i], 1, length(arr[i])-1);
+            if (!known(id)) { drop=1; break }
+            out=out (i>1?",":"") rename(id) orient;
+        }
+        if (drop) next;
+        $2=rename($2);
+        $3=out;
+        print;
+        next
+    }
+    $1=="H" { next }
+    { print }
+'
+
+{
+    echo -e "H\tVN:Z:1.0"
+    awk -F'\t' -v OFS='\t' -v idmap="${OUTPUT}.id_map.txt" -v edgemap="${TEMP_DIR}/edge_to_contig.tsv" "${rename_awk}" "${FLYE_GFA}"
+    awk -F'\t' -v OFS='\t' -v idmap="${OUTPUT}.id_map.txt" -v edgemap=/dev/null "${rename_awk}" "${PLASSEMBLER_GFA}"
+} > "${OUTPUT}.gfa"
+
+
 rm -r "${TEMP_DIR}"

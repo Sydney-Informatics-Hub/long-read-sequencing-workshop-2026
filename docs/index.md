@@ -52,7 +52,7 @@ Our full code of conduct, with incident reporting guidelines, is available [here
 
 ## Course survey
 
-Please fill out our [course survey](#) before you leave.
+Please fill out our [course survey](https://q.surveys.unimelb.edu.au/jfe/form/SV_1ENxxZJadpup2e2) before you leave.
 
 ## Credits and acknowledgements
 

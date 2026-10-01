@@ -71,6 +71,7 @@ SPLIT_CONTIG_DIR="${FASTA}.split"
 # Run mash screen
 rm -f "${OUTPUT}"
 rm -f "${OUTPUT}.tmp"{1,2}
+echo -e "Contig\tIdentity\tShared Hashes\tMedian Multiplicity\tP-value\tNUCCORE_ACC\tDescription\t$(head -n 1 ${DB_TSV_FILE} | cut -f 4-9)" >> "${OUTPUT}"
 for CONTIG in ${SPLIT_CONTIG_DIR}/*.fasta; do
     singularity exec /cvmfs/singularity.galaxyproject.org/all/plassembler:1.8.2--pyhdfd78af_0 \
     mash screen \
@@ -79,15 +80,14 @@ for CONTIG in ${SPLIT_CONTIG_DIR}/*.fasta; do
         ${DB_MSH_FILE} \
         ${CONTIG} >> "${OUTPUT}.tmp1"
     if [ -s "${OUTPUT}.tmp1" ]; then
-        awk -v FS="\t" -v OFS="\t" 'NR == FNR { db[$2] = ($4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $9) } NR > FNR { l = $0; if ($5 in db) { m = db[$5] } else { m = "" }; print l, m }' ${DB_TSV_FILE} "${OUTPUT}.tmp1" > "${OUTPUT}.tmp2"
+        awk -v FS="\t" -v OFS="\t" -v contig="$(basename "${CONTIG}")" 'NR == FNR { db[$2] = ($4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $9) } NR > FNR { l = $0; if ($5 in db) { m = db[$5] } else { m = "" }; print contig, l, m }' ${DB_TSV_FILE} "${OUTPUT}.tmp1" > "${OUTPUT}.tmp2"
         # cut -f 5 "${OUTPUT}.tmp1" | while read PLASMID; do
         #     grep -P "\t${PLASMID}\t" ${DB_TSV_FILE} | cut -f 2-9 >> "${OUTPUT}.tmp2"
         # done
     else
         touch "${OUTPUT}.tmp2"
     fi
-    echo -e "\n===== "$(basename "${CONTIG}")" =====\n" >> "${OUTPUT}"
-    echo -e "Identity\tShared Hashes\tMedian Multiplicity\tP-value\tNUCCORE_ACC\tDescription\t$(head -n 1 ${DB_TSV_FILE} | cut -f 4-9)" >> "${OUTPUT}"
+    # echo -e "\n===== "$(basename "${CONTIG}")" =====\n" >> "${OUTPUT}"
     # cat "${OUTPUT}.tmp1" >> "${OUTPUT}"
     # echo -e "\n====================\n" >> "${OUTPUT}"
     # head -n 1 ${DB_TSV_FILE} | cut -f 2-9 >> "${OUTPUT}"
